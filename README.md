@@ -1,7 +1,7 @@
 # project2_PDA
 나중에 수정 부탁드립니다
 
-##DB
+## DB
 도커를 통해 구축을 했습니다.
 
   docker pull mysql:latest
