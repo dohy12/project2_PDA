@@ -24,5 +24,5 @@ __2. api 콜 추가 없이 테스트 해보려면 HTML 폴더 안에 html 파일
 + Url형태는 다음과 같습니다  
    + <u>"https://dohy12.github.io/project2_PDA/HTML/파일이름.html"</u>  
 
-+ URL을 WebView 객체의 loadUrl() 메소드에 인자로 전달하면 html 파일과 연결 가능합니다.__
++ URL을 WebView 객체의 loadUrl() 메소드에 인자로 전달하면 html 파일과 연결 가능합니다.
   + ex) payWebView.loadUrl("https://dohy12.github.io/project2_PDA/HTML/Payment.html");
