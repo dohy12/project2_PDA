@@ -14,12 +14,15 @@ class ServerApplicationTests
     private String PW;
     @Value("${jasypt.encryptor.password}")
     private String KEY;
+    @Value("${spring.jwt.secret}")
+    private String sk;
 
     @Test
     void pw()
     {
         System.out.println(PW);
         System.out.println(KEY);
+        System.out.println(sk);
         // 创建加密对象，默认 PBEWithMD5AndDES
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
         // 加密所需的密钥 6iJ2Qaih28JypTElPmiRgQ==
