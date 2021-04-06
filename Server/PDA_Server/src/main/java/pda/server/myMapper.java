@@ -13,6 +13,7 @@ public interface myMapper {
     //@Select("SELECT pass_Hash, pass_Salt FROM user WHERE ID = #{id}")
     //Map<String, Object> getHashAndSalt(String id);
 
+    //test용 쿼리문
     @Select("SELECT * FROM test")
-    String test();
+    Map<String, Object> test();
 }

@@ -2,13 +2,12 @@ package pda.server;
 
 import org.springframework.util.Assert;
 
-public class RoutingDatabaseContextHolder {
+public class RoutingDataSourceContextHolder {
 
     private static ThreadLocal<String> CONTEXT = new ThreadLocal<>();
 
 
     public static void set(String clientDatabase) {
-
         Assert.notNull(clientDatabase, "RoutingDatabase cannot be null");
         CONTEXT.set(clientDatabase);
     }
