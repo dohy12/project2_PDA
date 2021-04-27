@@ -12,7 +12,6 @@ public class ServerApplication
 
     public static void main(String[] args)
     {
-        RoutingDataSourceContextHolder.set("main");
         SpringApplication.run(ServerApplication.class, args);
     }
 }

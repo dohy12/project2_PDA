@@ -3,7 +3,6 @@ package pda.server.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pda.server.RoutingDataSourceContextHolder;
 import pda.server.myMapper;
 
 
@@ -25,7 +24,6 @@ public class ConnectTest
     @RequestMapping("/Test/{id}")
     public String CT(@PathVariable String id)
     {
-        RoutingDataSourceContextHolder.set(id);
-        return String.format("DB: %s", mapper.test());
+        return String.format("DB: %s", mapper.test(id));
     }
 }

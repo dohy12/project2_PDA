@@ -14,6 +14,6 @@ public interface myMapper {
     //Map<String, Object> getHashAndSalt(String id);
 
     //test용 쿼리문
-    @Select("SELECT * FROM test")
-    Map<String, Object> test();
+    @Select("SELECT * FROM ${dbname}.test")
+    Map<String, Object> test(String dbname);
 }
