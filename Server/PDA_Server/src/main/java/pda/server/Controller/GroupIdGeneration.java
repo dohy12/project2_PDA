@@ -17,6 +17,8 @@ import java.util.UUID;
  *  메소드 단체 이름 받고 --> 단체 이름 중복 검색 확인
  *  --->  UUID 생선  ---> UUID의'-' 기호를 삭제 --->UUID를 GroupID로 설정합니다
  *  ---> 단체 이름 랑 GroupID로 기록  --->  GroupID로 스키마를 만듭니다
+ *
+ *  반환 값 Code 의미 :  Code 200 : 조작 성공한다.   Code 301 : 단체 이름 중복.   Code 302 : SQL 구문 실행 시패
  */
 
 @RestController
