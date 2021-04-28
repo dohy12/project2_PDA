@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 
+import java.util.UUID;
+
 @SpringBootTest
 class ServerApplicationTests
 {
@@ -25,7 +27,7 @@ class ServerApplicationTests
         System.out.println(sk);
         // 创建加密对象，默认 PBEWithMD5AndDES
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
-        // 加密所需的密钥 6iJ2Qaih28JypTElPmiRgQ==
+        // 加密所需的密钥
         textEncryptor.setPassword("PDA_Server");
         // 加密后的数据（数据库的用户名或密码）
         String encData = textEncryptor.encrypt(PW);
@@ -45,5 +47,16 @@ class ServerApplicationTests
     {
         System.out.println(mysqlPW);
     }
+
+    @Test
+    void groupIdGeneration()
+    {
+        UUID uuid = UUID.randomUUID();
+        String str = uuid.toString();
+        String temp = str.substring(0, 8) + str.substring(9, 13) + str.substring(14, 18) + str.substring(19, 23) + str.substring(24); //'-' 기호를 삭제
+        System.out.println(temp);
+    }
+
+
 }
 
