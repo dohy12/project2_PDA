@@ -22,6 +22,7 @@ public interface GroupGeneration
              "  `U_ID` INT NOT NULL AUTO_INCREMENT," +
              "  `ID` VARCHAR(45) NOT NULL," +
              "  `isAdmin` TINYINT NULL DEFAULT NULL," +
+             "   JoinTime timestamp default null," +
              "  `introduction` VARCHAR(2048) NULL DEFAULT NULL," +
              "  PRIMARY KEY (`U_ID`))" +
             "\n" +
