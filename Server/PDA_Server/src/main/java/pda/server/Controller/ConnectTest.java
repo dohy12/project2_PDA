@@ -1,19 +1,17 @@
 package pda.server.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pda.server.myMapper;
+import pda.server.DAO.testMapper;
 
 
 @RestController
 public class ConnectTest
 {
-    private final myMapper mapper;
-
-    public ConnectTest(myMapper mapper) {
-        this.mapper = mapper;
-    }
+    @Autowired
+    testMapper mapper;
 
     @RequestMapping("/connectTest")
     public String test()
