@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
+import pda.server.Auth.RSADecoder;
+import pda.server.Auth.RSAKey;
 
+import javax.crypto.Cipher;
+import java.util.Base64;
 import java.util.UUID;
 
 @SpringBootTest
@@ -57,6 +61,17 @@ class ServerApplicationTests
         System.out.println(temp);
     }
 
+    @Test
+    void RSATest() throws Exception {
+        RSAKey key = new RSAKey();
 
+        System.out.println(key.getpri("private.der").toString());
+        System.out.println(key.getpub("public.der").toString());
+        Cipher cip = Cipher.getInstance("RSA");
+        cip.init(Cipher.ENCRYPT_MODE, key.getpub("public.der"));
+        byte[] en = cip.doFinal("테스트입니다".getBytes());
+
+        System.out.println(new RSADecoder().decryptRSA(Base64.getEncoder().encodeToString(en)));
+    }
 }
 
