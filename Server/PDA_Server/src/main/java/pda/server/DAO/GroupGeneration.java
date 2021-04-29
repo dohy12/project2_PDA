@@ -20,16 +20,7 @@ public interface GroupGeneration
             "USE ${GroupId};" +
             "CREATE TABLE IF NOT EXISTS ${GroupId}.`user` (" +
              "  `U_ID` INT NOT NULL AUTO_INCREMENT," +
-             "  `name` VARCHAR(20) NOT NULL," +
              "  `ID` VARCHAR(45) NOT NULL," +
-             "  `pass_Hash` VARCHAR(45) NOT NULL," +
-             "  `pass_Salt` VARCHAR(45) NOT NULL," +
-             "  `age` INT NULL DEFAULT NULL," +
-             "  `birth` DATE NULL DEFAULT NULL," +
-             "  `email` VARCHAR(45) NULL DEFAULT NULL," +
-             "  `kakao` VARCHAR(45) NULL DEFAULT NULL," +
-             "  `phone` VARCHAR(45) NULL DEFAULT NULL," +
-             "  `profileImg` VARCHAR(45) NULL DEFAULT NULL," +
              "  `isAdmin` TINYINT NULL DEFAULT NULL," +
              "  `introduction` VARCHAR(2048) NULL DEFAULT NULL," +
              "  PRIMARY KEY (`U_ID`))" +
