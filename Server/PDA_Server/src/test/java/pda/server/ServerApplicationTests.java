@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import pda.server.Auth.RSADecoder;
 import pda.server.Auth.RSAKey;
-
+import pda.server.Controller.AuthCon;
 import javax.crypto.Cipher;
 import java.util.Base64;
 import java.util.UUID;
@@ -34,7 +34,7 @@ class ServerApplicationTests
         // 加密所需的密钥
         textEncryptor.setPassword("PDA_Server");
         // 加密后的数据（数据库的用户名或密码）
-        String encData = textEncryptor.encrypt(PW);
+        String encData = textEncryptor.encrypt(sk);
         // 解密后的数据（原数据）
         String decData = textEncryptor.decrypt(encData);
         System.out.println("encData: " + encData);
@@ -72,6 +72,14 @@ class ServerApplicationTests
         byte[] en = cip.doFinal("테스트입니다".getBytes());
 
         System.out.println(new RSADecoder().decryptRSA(Base64.getEncoder().encodeToString(en)));
+    }
+
+    @Test
+    void hashing()
+    {
+        AuthCon hash = new AuthCon();
+
+        System.out.println(hash.HashingF("test", "test"));
     }
 }
 
