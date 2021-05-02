@@ -1,13 +1,17 @@
 package pda.server.Filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import pda.server.Auth.JwtTokenUtil;
+import pda.server.Controller.RestException;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/connectTest/*"})
+@WebFilter(urlPatterns = {"/connectTest/*", "/message/*", "/user/*", "/Community/*"})
 public class JWTFilter implements Filter {
 
     @Autowired
@@ -20,11 +24,18 @@ public class JWTFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String tk = ((HttpServletRequest)servletRequest).getHeader("JWT");
-        if(!token.isTokenExpired(tk))
-        {
-            servletRequest.setAttribute("U_ID", token.getUIDFromToken(tk));
+
+        try {
+            if (!token.isTokenExpired(tk)) {
+                servletRequest.setAttribute("U_ID", token.getUIDFromToken(tk));
+            } else {
+                throw new Exception();
+            }
+            filterChain.doFilter(servletRequest,servletResponse);
         }
-        filterChain.doFilter(servletRequest,servletResponse);
+        catch (Exception e) {
+            ((HttpServletResponse)servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        }
     }
 
     @Override
