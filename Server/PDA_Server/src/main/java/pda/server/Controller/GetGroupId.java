@@ -20,6 +20,7 @@ public class GetGroupId {
     @GetMapping("/groups")
     public List<group> GetGroups()
     {
-        return groups.get();
+        return groups.getAllGroups();
     }
+
 }

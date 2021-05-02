@@ -15,7 +15,7 @@ public interface MemberOperation
     public Member[] MemberList(@Param("GroupID") String GroupID);
 
     @Select("select * from main.user${Num} where U_ID = #{UID}")
-    public User details(@Param("Num") int Num, @Param("UID") int UID);
+    public UserInfo details(@Param("Num") int Num, @Param("UID") int UID);
 
     @Select("select isAdmin from ${GroupID}.user where U_ID = #{UID} ")
     public int isAdmin(@Param("GroupID") String GroupID, @Param("UID") int UID);

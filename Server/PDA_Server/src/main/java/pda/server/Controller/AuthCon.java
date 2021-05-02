@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pda.server.Auth.JwtTokenUtil;
-import pda.server.DAO.User;
+import pda.server.DAO.UserInfo;
+import pda.server.DTO.User;
 import pda.server.DTO.UserPW;
 import java.security.MessageDigest;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class AuthCon {
 
     @Autowired
-    User usr;
+    UserInfo usr;
     @Autowired
     JwtTokenUtil token;
 
@@ -43,10 +44,23 @@ public class AuthCon {
     }
 
     @PostMapping()
-    public boolean UserCreate(@PathVariable String Groupid)
+    public Map<String, Object> UserCreate(@RequestBody User user)
     {
+        Map<String, Object> result = new HashMap<>();
 
-        return true;
+        usr.mainGenerate(user.getId().hashCode()%10, user);
+        result.put("result", "성공적으로 만들었습니다.");
+        return result;
+    }
+
+    @GetMapping("/{ID}")
+    public Map<String, Object> IDCheck(@PathVariable String ID)
+    {
+        if(usr.CheckID(ID.hashCode(), ID) == 0) {
+            return (Map<String, Object>) new HashMap<>().put("result","ok");
+        }
+        else
+            return (Map<String, Object>) new HashMap<>().put("result","no");
     }
 
     public String HashingF(String pw, String salt)
