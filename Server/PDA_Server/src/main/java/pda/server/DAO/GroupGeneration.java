@@ -19,7 +19,7 @@ public interface GroupGeneration
     @Select("CREATE DATABASE ${GroupId}; " +
             "USE ${GroupId};" +
             "CREATE TABLE IF NOT EXISTS ${GroupId}.`user` (" +
-             "  `U_ID` INT UNSIGNED NOT NULL AUTO_INCREMENT," +
+             "  `U_ID` INT NOT NULL AUTO_INCREMENT," +
              "  `ID` VARCHAR(45) NOT NULL," +
              "  `isAdmin` TINYINT NULL DEFAULT NULL," +
              "   JoinTime timestamp default null," +
@@ -38,7 +38,7 @@ public interface GroupGeneration
             "\n" + "  `title` VARCHAR(45) NOT NULL," +
             "\n" + "  `date` DATETIME NULL DEFAULT NULL," +
             "\n" + "  `contents` LONGTEXT NULL DEFAULT NULL," +
-            "\n" + "  `U_ID` INT UNSIGNED NOT NULL," +
+            "\n" + "  `U_ID` INT NOT NULL," +
             "\n" + "  PRIMARY KEY (`B_ID`)," +
             "\n" + "  INDEX `fk_board_user1_idx` (`U_ID` ASC) VISIBLE," +
             "\n" + "  CONSTRAINT `fk_board_user1`" +
@@ -94,7 +94,7 @@ public interface GroupGeneration
             "\n" + "  `Date` DATETIME NOT NULL," +
             "\n" + "  `contents` VARCHAR(2048) NOT NULL," +
             "\n" + "  `B_ID` INT NOT NULL," +
-            "\n" + "  `U_ID` INT UNSIGNED NOT NULL," +
+            "\n" + "  `U_ID` INT NOT NULL," +
             "\n" + "  `R_CID` INT NULL," +
             "\n" + "  PRIMARY KEY (`C_ID`)," +
             "\n" + "  INDEX `fk_board_comment_board1_idx` (`B_ID` ASC) VISIBLE," +
@@ -123,7 +123,7 @@ public interface GroupGeneration
             "\n" + "  `title` VARCHAR(128) NOT NULL," +
             "\n" + "  `content` VARCHAR(128) NULL DEFAULT NULL," +
             "\n" + "  `date` DATETIME NULL DEFAULT NULL," +
-            "\n" + "  `U_ID` INT UNSIGNED NOT NULL," +
+            "\n" + "  `U_ID` INT NOT NULL," +
             "\n" + "  PRIMARY KEY (`S_ID`)," +
             "\n" + "  INDEX `fk_calender_user1_idx` (`U_ID` ASC) VISIBLE," +
             "\n" + "  CONSTRAINT `fk_calender_user1`" +
@@ -141,7 +141,7 @@ public interface GroupGeneration
             "\n" + "  `read_Date` DATETIME NULL DEFAULT NULL," +
             "\n" + "  `title` VARCHAR(128) NOT NULL," +
             "\n" + "  `contents` VARCHAR(2048) NULL DEFAULT NULL," +
-            "\n" + "  `send_UID` INT UNSIGNED NOT NULL," +
+            "\n" + "  `send_UID` INT NOT NULL," +
             "\n" + "  PRIMARY KEY (`M_ID`)," +
             "\n" + "  INDEX `fk_message_user1_idx` (`send_UID` ASC) VISIBLE," +
             "\n" + "  CONSTRAINT `fk_message_user1`" +
@@ -163,7 +163,7 @@ public interface GroupGeneration
             "\n" + "DEFAULT CHARACTER SET = utf8mb4" +
             "\n" + "COLLATE = utf8mb4_0900_ai_ci;"+"CREATE TABLE IF NOT EXISTS ${GroupId}.`payments_check` (" +
             "\n" + "  `P_ID` INT NOT NULL," +
-            "\n" + "  `U_ID` INT UNSIGNED NOT NULL," +
+            "\n" + "  `U_ID` INT NOT NULL," +
             "\n" + "  `payment` INT NULL DEFAULT NULL," +
             "\n" + "  INDEX `fk_payments_check_payments1_idx` (`P_ID` ASC) VISIBLE," +
             "\n" + "  INDEX `fk_payments_check_user1_idx` (`U_ID` ASC) VISIBLE," +
@@ -185,7 +185,7 @@ public interface GroupGeneration
             "\n" + "  `location` VARCHAR(128) NULL DEFAULT NULL," +
             "\n" + "  `title` VARCHAR(128) NULL DEFAULT NULL," +
             "\n" + "  `participants` VARCHAR(128) NULL DEFAULT NULL," +
-            "\n" + "  `U_ID` INT UNSIGNED NOT NULL," +
+            "\n" + "  `U_ID` INT NOT NULL," +
             "\n" + "  PRIMARY KEY (`P_ID`)," +
             "\n" + "  INDEX `fk_picture_list_user1_idx` (`U_ID` ASC) VISIBLE," +
             "\n" + "  CONSTRAINT `fk_picture_list_user1`" +
@@ -215,7 +215,7 @@ public interface GroupGeneration
             "\n" + "  `comment` VARCHAR(2048) NOT NULL," +
             "\n" + "  `pictures_P_ID` INT NOT NULL," +
             "\n" + "  `I_ID` INT NOT NULL," +
-            "\n" + "  `U_ID` INT UNSIGNED NOT NULL," +
+            "\n" + "  `U_ID` INT NOT NULL," +
             "\n" + "  PRIMARY KEY (`C_ID`)," +
             "\n" + "  INDEX `fk_picture_comment_pictures1_idx` (`I_ID` ASC) VISIBLE," +
             "\n" + "  INDEX `fk_picture_comment_user1_idx` (`U_ID` ASC) VISIBLE," +
