@@ -1,10 +1,7 @@
 package pda.server.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pda.server.DAO.testMapper;
 
 
@@ -15,9 +12,9 @@ public class ConnectTest
     testMapper mapper;
 
     @RequestMapping("/connectTest")
-    public String test()
+    public String test(@RequestAttribute String U_ID)
     {
-        return "접속 성공되었다";
+        return U_ID;
     }
 
     @RequestMapping("/Test/{id}")

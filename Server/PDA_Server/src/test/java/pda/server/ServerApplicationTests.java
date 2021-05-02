@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
+import pda.server.Auth.JwtTokenUtil;
 import pda.server.Auth.RSADecoder;
 import pda.server.Auth.RSAKey;
 import pda.server.Controller.AuthCon;
@@ -45,6 +46,8 @@ class ServerApplicationTests
     String mysqlPW;
     @Autowired
     Environment environment;
+    @Autowired
+    JwtTokenUtil jwt;
 
     @Test
     void getSetting()
@@ -80,6 +83,12 @@ class ServerApplicationTests
         AuthCon hash = new AuthCon();
 
         System.out.println(hash.HashingF("test", "test"));
+    }
+
+    @Test
+    void token()
+    {
+        System.out.println(jwt.doGenerateToken("12345"));
     }
 }
 
