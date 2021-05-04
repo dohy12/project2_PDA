@@ -11,6 +11,7 @@ import pda.server.Auth.RSADecoder;
 import pda.server.Auth.RSAKey;
 import pda.server.Controller.AuthCon;
 import javax.crypto.Cipher;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -85,10 +86,13 @@ class ServerApplicationTests
         System.out.println(hash.HashingF("test", "test"));
     }
 
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
     @Test
     void token()
     {
-        System.out.println(jwt.doGenerateToken("12345"));
+        System.out.println(jwt.doGenerateToken("1503238549"));
+//        System.out.println(jwtTokenUtil.getAllClaimsFromToken(jwt.doGenerateToken("1234")));
     }
 }
 

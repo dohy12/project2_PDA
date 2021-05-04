@@ -1,11 +1,9 @@
 package pda.server.DAO;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import pda.server.DTO.Member;
 
+import java.util.List;
 import java.util.Map;
 
 @Mapper
@@ -21,8 +19,38 @@ public interface MemberOperation
     public int isAdmin(@Param("GroupID") String GroupID, @Param("UID") int UID);
 
     @Update("UPDATE ${GroupID}.user set isAdmin = #{AdminFlag};")
-    public int setAdmin(@Param("GroupID") String GroupID, @Param("AdminFlag") int AdminFlag);
+    public void setAdmin(@Param("GroupID") String GroupID, @Param("AdminFlag") int AdminFlag);
 
     @Select("select U_ID from ${GroupID}.user where JoinTime is null ")
-    public Map<String,Object> waitingToJoin(@Param("GroupID") String GroupID);
+    public Map<String, Object> waitingToJoin(@Param("GroupID") String GroupID);
+
+    @Select("select JoinedGroups from main.user${Num} where U_ID = #{UID}")
+    public String JoinedGroups(@Param("Num") int Num, @Param("UID") int UID);
+
+    @Select("select AwaitingCertification from main.user${Num} where U_ID = #{UID}")
+    public String AwaitingCertification(@Param("Num") int Num, @Param("UID") int UID);
+
+    @Update("UPDATE main.user${Num} set JoinedGroups = #{Groups} where U_ID = #{UID}")
+    public void UpdateJoinedGroups(@Param("Num") int Num, @Param("Groups") String Groups, @Param("UID") int UID);
+
+    @Update("UPDATE main.user${Num} set AwaitingCertification = #{Groups} where U_ID = #{UID}")
+    public void UpdateAwaitingCertification(@Param("Num") int Num, @Param("Groups") String Groups, @Param("UID") int UID);
+
+    @Update("UPDATE main.user${Num} set AwaitingCertification = null where U_ID = #{UID}")
+    public void UpdateAwaitingCertificationToNull(@Param("Num") int Num, @Param("UID") int UID);
+
+    @Update("UPDATE main.user${Num} set JoinedGroups = null where U_ID = #{UID}")
+    public void UpdateJoinedGroupsToNull(@Param("Num") int Num, @Param("UID") int UID);
+
+    @Insert("INSERT ${GroupID}.user(U_ID,ID) values (#{UID},#{ID})")
+    public void AddUser(@Param("GroupID") String GroupID, @Param("UID") int UID, @Param("ID") String ID);
+
+    @Select("select ID from main.user${Num} where U_ID = #{UID}")
+    public String FindIDByUid(@Param("Num") int Num, @Param("UID") int UID);
+
+    @Select("select * from ${GroupID}.user where JoinTime is null")
+    public List<Member> WaitingList(@Param("GroupID") String GroupID);
+
+    @Update("UPDATE ${GroupID}.user set JoinTime = now() where U_ID = #{UID} ")
+    public void Certification(@Param("GroupID") String GroupID,@Param("UID") int UID);
 }

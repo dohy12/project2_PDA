@@ -23,7 +23,7 @@ public class GuestBook
     @Autowired
     MemberOperation memberOperation;
 
-    @RequestMapping("/{GroupId}/MemberList")
+    @RequestMapping("/GuestBook/{GroupId}/MemberList")
     public List<Member> MemberList(@PathVariable String GroupId)
     {
         Member[] partialInf;
@@ -41,7 +41,7 @@ public class GuestBook
         return MemberList;
     }
 
-    @RequestMapping("/{GroupId}/setAdmin/{Flag}")
+    @RequestMapping("/GuestBook/{GroupId}/setAdmin/{Flag}")
     public String setAdmin(@PathVariable String GroupId ,@PathVariable int Flag, @RequestParam(name = "UID" ,required = false) int UID)
     {
         if (memberOperation.isAdmin(GroupId, UID)!=1)
@@ -53,7 +53,7 @@ public class GuestBook
 
     }
 
-    @RequestMapping("/{GroupId}/waitingToJoin")
+    @RequestMapping("/GuestBook/{GroupId}/waitingToJoin")
     public Map<String,Object> waitingToJoin(@PathVariable String GroupId , @RequestParam(name = "UID" ,required = false) int UID)
     {
         if (memberOperation.isAdmin(GroupId, UID)!=1)
