@@ -10,6 +10,6 @@ import java.util.Map;
 public interface testMapper {
 
     //test용 쿼리문
-    @Select("SELECT * FROM ${dbname}.test")
-    Map<String, Object> test(@Param("dbname") String dbname);
+    @Select("SELECT * FROM ${GroupID}.test")
+    Map<String, Object> test(@Param("GroupID") String GroupID);
 }
