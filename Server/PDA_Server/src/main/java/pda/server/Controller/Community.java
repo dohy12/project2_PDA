@@ -5,24 +5,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import pda.server.DAO.Board;
+import pda.server.DAO.BoardOperation;
+import pda.server.DTO.Board;
+
+import java.util.List;
 
 @RestController
 public class Community {
 
     @Autowired
-    Board board;
+    BoardOperation board;
+    Board Board = new Board(0, (short) 0, "TiTle(test)", "Contents(test)", 1);
     @RequestMapping(value = "/Community/{GroupId}", method = RequestMethod.GET)
-    public String boardList(@PathVariable("GroupId") String GroupId){
+    public List<Board> boardList(@PathVariable("GroupId") String GroupId){
 
-        board.boardList(GroupId);
+        return board.boardList(GroupId);
 
-        return "조회";
     }
 
     @RequestMapping(value = "/Community/{GroupId}", method = RequestMethod.POST)
-    public String boardPost(@PathVariable("GroupId") String GroupId) {
+    public String boardPost(@PathVariable("GroupId") String GroupId, @PathVariable("Board") Board Board) {
 
+        board.boardPost(GroupId, Board);
 
         return "작성";
     }
@@ -38,9 +42,5 @@ public class Community {
 
         return "수정";
     }
-
-    /*
-    게시글 포맷 정리 먼저
-     */
 
 }
