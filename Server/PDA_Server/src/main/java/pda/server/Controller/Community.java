@@ -15,7 +15,6 @@ public class Community {
 
     @Autowired
     BoardOperation board;
-    Board Board = new Board(0, (short) 0, "TiTle(test)", "Contents(test)", 1);
     @RequestMapping(value = "/Community/{GroupId}", method = RequestMethod.GET)
     public List<Board> boardList(@PathVariable("GroupId") String GroupId){
 
@@ -24,11 +23,11 @@ public class Community {
     }
 
     @RequestMapping(value = "/Community/{GroupId}", method = RequestMethod.POST)
-    public String boardPost(@PathVariable("GroupId") String GroupId, @PathVariable("Board") Board Board) {
+    public String boardPost(@PathVariable("GroupId") String GroupId) {
 
-        board.boardPost(GroupId, Board);
+        return board.boardPost(GroupId);
 
-        return "작성";
+        //return "작성";
     }
 
     @RequestMapping(value = "/Community/{GroupId}/{BID}", method = RequestMethod.DELETE)
