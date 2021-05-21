@@ -47,9 +47,13 @@ public class AuthCon {
     public Map<String, Object> UserCreate(@RequestBody User user)
     {
         Map<String, Object> result = new HashMap<>();
-
-        usr.mainGenerate(user.getId().hashCode()%10, user);
-        result.put("result", "성공적으로 만들었습니다.");
+        try {
+            usr.mainGenerate(user.getId().hashCode() % 10, user);
+            result.put("result", "성공적으로 만들었습니다.");
+        }
+        catch (Exception e) {
+            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "계정 생성 실패");
+        }
         return result;
     }
 
@@ -60,7 +64,7 @@ public class AuthCon {
             return (Map<String, Object>) new HashMap<>().put("result","ok");
         }
         else
-            return (Map<String, Object>) new HashMap<>().put("result","no");
+            throw new RestException(HttpStatus.UNAUTHORIZED, "비밀번호 또는 아이디가 일치하지 않습니다.");
     }
 
     public String HashingF(String pw, String salt)
