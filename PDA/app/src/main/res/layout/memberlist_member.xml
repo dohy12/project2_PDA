@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/memList_back"
+        android:layout_width="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/border_selected"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/memList_id"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="-1"/>
+
+        <TextView
+            android:id="@+id/memList_isChecked"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="false"/>
+
+        <ImageView
+            android:id="@+id/memList_img"
+            android:layout_margin="10dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/img6"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                
+                <TextView
+                    android:id="@+id/memList_name"
+                    android:textSize="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#000000"
+                    android:text="이도희(26) | 학생"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:id="@+id/memList_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/memList_btn_accept"
+                        android:layout_width="60dp"
+                        android:layout_height="32dp"
+                        android:layout_margin="0dp"
+                        android:textColor="#FFFFFF"
+                        android:text="승인"
+                        android:backgroundTint="#3293ce"
+                        android:textSize="10dp"/>
+
+                    <Button
+                        android:id="@+id/memList_btn_refuse"
+                        android:layout_width="60dp"
+                        android:layout_height="32dp"
+                        android:layout_margin="0dp"
+                        android:textColor="#FFFFFF"
+                        android:text="거절"
+                        android:backgroundTint="#e74c00"
+                        android:textSize="10dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/memList_phone"
+                android:textSize="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mobile. 010-2890-XXXX"/>
+
+            <TextView
+                android:id="@+id/memList_email"
+                android:textSize="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="E-mail. dohy12@naver.com"/>
+
+            <TextView
+                android:id="@+id/memList_intro"
+                android:textSize="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="안녕하세요 경북대학교를 다니고 있는 학생입니다. 잘부탁드립니다."/>
+
+            <LinearLayout
+                android:id="@+id/memList_selectedBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:textSize="10dp"
+                    android:onClick="goMyPage"
+                    android:text="마이페이지"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:textSize="10dp"
+                    android:text="통화하기"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="0dp"
+                    android:src="@drawable/img8"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:textSize="10dp"
+                    android:text="카톡 메세지"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
