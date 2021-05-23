@@ -94,7 +94,7 @@ public class PaymentController {
 
 	
 	//단체 소개 관련 정보 불러오기 
-	@RequestMapping(path = "/payment/groups/intros/{GroupId}", method = RequestMethod.GET)
+	@RequestMapping(path = "/groups/intros/{GroupId}", method = RequestMethod.GET)
 	public Map<String, Object> select_group_intros(@PathVariable String GroupId)
 	{
 		return paymentMapper.select_group_intros(GroupId);
