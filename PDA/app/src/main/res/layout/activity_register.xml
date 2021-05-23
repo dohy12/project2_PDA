@@ -259,6 +259,8 @@
                     android:text="프로필"/>
 
                 <ImageView
+                    android:onClick="loadProfile"
+                    android:id="@+id/profile_image"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
@@ -266,6 +268,7 @@
                     android:src="@drawable/img12"/>
 
                 <TextView
+                    android:id="@+id/profile_image_url"
                     android:layout_marginLeft="5dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
