@@ -155,15 +155,18 @@
                     android:text="생일"/>
 
                 <TextView
+                    android:id="@+id/register_birth"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/border"
                     android:hint="생일"
+                    android:text="19700101"
                     android:textSize="18dp"
                     android:padding="10dp"/>
                 
                 <ImageView
+                    android:onClick="showDatePicker2"
                     android:padding="10dp"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"

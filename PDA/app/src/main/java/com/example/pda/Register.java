@@ -1,13 +1,18 @@
 package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.Window;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +69,47 @@ public class Register extends AppCompatActivity {
             Toast.makeText(this, "로딩에 오류가 있습니다.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+
+    }
+
+    public void showDatePicker(View view) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(),"datePicker");
+    }
+
+    public void showDatePicker2(View view){
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog.setContentView(R.layout.fragment_date_picker);
+
+        TextView tv = findViewById(R.id.register_birth);
+        String str_date = (String)tv.getText();
+
+        int year = Integer.parseInt(str_date.substring(0,4));
+        int month = Integer.parseInt(str_date.substring(4,6))-1;
+        int day = Integer.parseInt(str_date.substring(6,8));
+
+        DatePicker datePicker = dialog.findViewById(R.id.datePicker);
+        datePicker.updateDate(year, month, day);
+        datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker datePicker, int y, int m, int d) {
+                TextView _tv = findViewById(R.id.register_birth);
+                _tv.setText(String.format("%d%02d%02d",y,m+1,d));
+            }
+        });
+
+        dialog.show();
+    }
+
+
+    public void processDatePickerResult(int year, int month, int day){
+        String month_string = Integer.toString(month+1);
+        String day_string = Integer.toString(day);
+        String year_string = Integer.toString(year);
+
+        String dateMessage = (year_string+"/"+month_string + "/" + day_string);
+
 
     }
 }
