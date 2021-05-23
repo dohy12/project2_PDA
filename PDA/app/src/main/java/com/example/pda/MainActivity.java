@@ -29,5 +29,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goIntroduction(View view){
+        Intent intent = new Intent(this, Introduction.class);
+        startActivity(intent);
+    }
+
 
 }
