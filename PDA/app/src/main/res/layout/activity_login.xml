@@ -94,7 +94,7 @@
                     android:layout_height="30dp"
                     android:gravity="center"
                     android:textColor="#FFFFFF"
-                    android:onClick="goLogin"
+                    android:onClick="goSelectGroup"
                     android:text="로그인"/>
             </LinearLayout>
 

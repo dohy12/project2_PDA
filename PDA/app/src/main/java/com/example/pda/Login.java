@@ -14,8 +14,8 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
-    public void goLogin(View view){
-        Intent intent = new Intent(this,MainActivity.class);
+    public void goSelectGroup(View view){
+        Intent intent = new Intent(this,SelectGroup.class);
         startActivity(intent);
     }
 
