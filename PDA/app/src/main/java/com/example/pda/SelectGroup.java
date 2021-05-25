@@ -38,7 +38,13 @@ public class SelectGroup extends AppCompatActivity {
         tempList.add("단체이름5");
         tempList.add("단체이름6");
         tempList.add("단체이름7");
+
+        setProfileInfo();
         showGroupList();
+    }
+
+    private void setProfileInfo(){
+        findViewById(R.id.profile_image).setClipToOutline(true);
     }
 
     private void showGroupList(){

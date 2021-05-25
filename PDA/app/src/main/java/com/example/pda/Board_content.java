@@ -3,6 +3,7 @@ package com.example.pda;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -66,6 +67,9 @@ public class Board_content extends AppCompatActivity {
     }
 
     private void showBoardInfo(){ // 게시판 내용 넣기
+
+        findViewById(R.id.profile_image).setClipToOutline(true);
+
         Boolean isNotice = boardInfo.getNotice();//공지 체크
 
         if(isNotice)
@@ -163,6 +167,8 @@ public class Board_content extends AppCompatActivity {
             Board_comment bc = boardCommentList.get(i);
             View v = inflater.inflate(R.layout.board_comments, null);
 
+            v.findViewById(R.id.profile_image).setClipToOutline(true);
+
             ((TextView)v.findViewById(R.id.comments_id)).setText(Integer.toString(bc.getCommentID()));
             ((TextView)v.findViewById(R.id.comments_name)).setText(bc.getName());
             ((TextView)v.findViewById(R.id.comments_contents)).setText(bc.getComments());
@@ -192,4 +198,8 @@ public class Board_content extends AppCompatActivity {
     }
 
 
+    public void goBoardWriting(View view){
+        Intent intent = new Intent(this, Board_Writing.class);
+        startActivity(intent);
+    }
 }

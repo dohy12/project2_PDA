@@ -32,6 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:textSize="12dp"
+                    android:textColor="#000000"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"
                     android:text="회원목록"/>
@@ -47,12 +48,14 @@
                     android:paddingLeft="10dp"
                     android:hint="검색"
                     android:textSize="12dp"
+                    android:textColor="#000000"
                     android:background="@drawable/border"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:textSize="12dp"
+                    android:textColor="#000000"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="10dp"
                     android:gravity="center_vertical"
@@ -85,7 +88,7 @@
                             android:layout_width="wrap_content"
                             android:textColor="#ed7d31"
                             android:layout_height="20dp"
-                            android:textSize="10dp"
+                            android:textSize="12dp"
                             android:gravity="center_vertical"
                             android:text="승인 대기 중 인원(01)"/>
 
@@ -96,13 +99,13 @@
 
                         <Button
                             android:layout_width="60dp"
-                            android:layout_height="32dp"
+                            android:layout_height="35dp"
                             android:layout_margin="0dp"
                             android:textColor="#FFFFFF"
                             android:text="숨기기"
                             android:backgroundTint="#606060"
                             android:onClick="hide_new"
-                            android:textSize="10dp"/>
+                            android:textSize="12dp"/>
                     </LinearLayout>
 
                     <LinearLayout

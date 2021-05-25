@@ -38,6 +38,8 @@ public class Mypage extends AppCompatActivity {
     }
 
     private void setMypage(Member mem){
+        findViewById(R.id.profile_image).setClipToOutline(true);
+
         String str_name_age = mem.getName() + "(" + mem.getAge() +")";
         ((TextView)findViewById(R.id.memList_name)).setText(str_name_age);
 
@@ -56,6 +58,8 @@ public class Mypage extends AppCompatActivity {
             GuestBook guestBook = guestBookList.get(i);
             View v = inflater.inflate(R.layout.guestbook, null);
             container.addView(v);
+
+            v.findViewById(R.id.profile_image).setClipToOutline(true);
 
             ((TextView)v.findViewById(R.id.guestBook_name)).setText(guestBook.getName());
             ((TextView)v.findViewById(R.id.guestBook_comment)).setText(guestBook.getComment());
