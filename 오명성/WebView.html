@@ -7,7 +7,7 @@
 
 <body>
     <!-- 아임포트 자바스크립트는 jQuery 기반으로 개발되었습니다 -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
     <script type="text/javascript">
@@ -15,37 +15,55 @@
         var IMP = window.IMP; // 생략가능
         IMP.init('imp09069030');
 
-
         /* 앱단 */
         // db에서 회비가격, 회비이름 가져오기
         // 앱단에서 결제 정보(사용자 이름, 회비가격, 회비이름)를 서버로 전송
-        // 서버에서 merchant_uid 생성 후 결제 정보와 함께 DB 저장 
+        // 서버에서 merchant_uid 생성 후 결제 정보와 함께 DB 저장
 
-        // 웹뷰에서 DB의 결제 정보를 서버에서 가져옴 - JQuery http 콜
+        //앱에서 http 콜에 사용할 JWT 받아오기 - 확인 완료
+        /*function get_JWT() {
+            return Android.return_JWT();
+        }
+
+        function get_GroupId() {
+            return Android.return_GroupId();
+        }
+        var jwt = get_JWT();
+        var GroupId = get_GroupId();*/
+        
+        // 웹뷰에서 DB의 결제 정보를 서버에서 가져옴 (JQuery ajax 이용) - 확인 완료
+        var jwt = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ5IiwiZXhwIjoxNjIxODM3OTA0LCJpYXQiOjE2MjE4MzYxMDR9.05UehRqDIGiFDRlYW3P-jL8OCoJEPKdoEz5h0aI-3joZmHVepkuyOa9c_A51LBGzB53CNs_mZnpDv1SNTndJlA"
+        var GroupId = "deaa01013b0144e99faab90ecd670950"
         var Buyer_name, Payment_name, Payment_price, Merchat_uid; //가져올 정보(사용자 이름, 회비가격, 회비이름, 주문번호)
-        /*
-            http 콜 부분
-        */
 
-        //임의로 설정
-        Buyer_name = '홍길동';
-        Payment_name = '경북대학교_학생회비[1년]';  
-        Payment_price = 100; 
-        Merchant_uid = 'merchant_' + new Date().getTime();
+        $.ajax({
+            url: "http://localhost:8080/payments/" + GroupId,
+            headers : {"Content-Type": "application/json", "JWT": jwt },                
+            type: "GET",                            
+            dataType: "json",  
+            async: false,   //HTTP 요청 끝날 때 까지 기다림
+            success: function(json) {
+                Buyer_name = json.buyer_name;
+                Payment_name = json.payment_name;
+                Payment_price= json.payment_price;
+                Merchant_uid = json.merchant_uid;
+            }                 
+        });
 
         //결제창 호출코드
         IMP.request_pay({
             pg: 'inicis', // version 1.1.0부터 지원.
             pay_method: 'card',
-            merchant_uid: Merchat_uid, 
+            merchant_uid: Merchat_uid,
             name: Payment_name,
             amount: Payment_price,
             buyer_name: Buyer_name,
         }, function (rsp) { //callback
             if (rsp.success) { //결제 성공 - 결제 결과 서버로 전송, 서버에서 위변조 확인 후 결과 정보 DB에 저장
+                //테스트 예정
                 // jQuery로 HTTP 요청
-                /*jQuery.ajax({
-                    url: "https://18.206.18.154/payments/complete", // 가맹점 서버
+                /*$.ajax({
+                    url: "https://18.206.18.154/payments/results", // 가맹점 서버
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     data: {
@@ -55,7 +73,7 @@
                 }).done(function (data) {
                     // 가맹점 서버 결제 API 성공시 로직
                 })*/
-                
+
                 //임의 결과 처리
                 var msg = '결제가 완료되었습니다.';
                 msg += '고유ID : ' + rsp.imp_uid;
@@ -63,12 +81,11 @@
                 msg += '결제 금액 : ' + rsp.paid_amount;
                 msg += '카드 승인번호 : ' + rsp.apply_num;
             } else { //결제 실패
-                
+
                 //임의 결과 처리
                 var msg = '결제에 실패하였습니다.';
                 msg += '에러내용 : ' + rsp.error_msg;
             }
-
             alert(msg);
         });
     </script>

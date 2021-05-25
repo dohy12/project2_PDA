@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:padding="20dp"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/survey_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="[설문조사] 오늘 점심 뭐 먹지"
+        android:textSize="15dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="#000000"/>
+
+    <RadioGroup
+        android:id="@+id/survey_radioGroup"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/survey_list_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/survey_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:gravity="right"
+        android:text="투표하기"/>
+
+</LinearLayout>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">PDA</string>
+    <string name="test_tring">
+        안녕하세요. 개발자 드리머즈입니다. 안드로이드에서 이미지버튼(ImageButton)을 사용 중 정리가 필요해 글 남깁니다. 처음에는 고정된 이미지 버튼의 크기에 맞게 이미지의 크기가 조절될 거라고 생각했는데 아닌 것 같습니다. 이미지 버튼의 크기가 layout xml파일에서 android:layout_width="50dp"와 같은 방식으로 크기가 고정된 상태에서 이미지 버튼의 크기보다 이미지가 작으면 버튼 내부에 여백이 생기며 이미지 버튼의 크기보다 이미지가 크면 이미지가 짤립니다. 상황은 이미지버튼의 이미지가 크기가 버튼보다 크다는 것을 발견했고 이 문제를 xml코드에서 간단하게 android:padding으로 해결할 수 있을 거라고 생각했습니다. 그런데 padding으로 조절되지 않아 정리글 남깁니다.스택오버플로우에 도움이 되는 글이 있습니다.(https://stackoverflow.com/questions/15116393/fit-image-in-imagebutton-in-android/15117536#15117536)
+    </string>
+    <string name="test_string2">
+        패, 덮어 오면 별에도 하나에 이국 별을 새워 마디씩 계십니다. 멀리 하나의 헤는 멀리 버리었습니다. 부끄러운 많은 이제 노새, 밤을 어머님, 나는 라이너 봅니다. 노루, 어머니, 했던 이국 이 별 가슴속에 새워 봅니다.
+    </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
