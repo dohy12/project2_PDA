@@ -1,3 +1,4 @@
+package pda.server;
 
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.jupiter.api.Test;
