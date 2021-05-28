@@ -34,5 +34,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goMembershipFee(View view){
+        Intent intent = new Intent(this, MembershipFee.class);
+        startActivity(intent);
+    }
+
 
 }

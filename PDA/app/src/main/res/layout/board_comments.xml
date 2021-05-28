@@ -27,9 +27,11 @@
 
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:id="@+id/profile_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/img6"
+                    android:background="@drawable/border_corner1"
                     android:layout_centerHorizontal="true"
                     android:scaleType="centerCrop"/>
 
@@ -39,7 +41,7 @@
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
-                    android:textSize="12dp"
+                    android:textSize="14dp"
                     android:gravity="center_vertical"
                     android:textColor="#000000"
                     android:text="이도희"/>
@@ -48,7 +50,7 @@
                     android:id="@+id/comments_date"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:textSize="12dp"
+                    android:textSize="14dp"
                     android:gravity="center_vertical"
                     android:text="2021.04.04 23:38"/>
             </LinearLayout>
@@ -62,6 +64,11 @@
                 android:lineSpacingExtra="6dp"
                 android:textSize="12dp"
                 android:text="@string/test_string2"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#909090"/>
 
             <LinearLayout
                 android:id="@+id/comments_reply_container"

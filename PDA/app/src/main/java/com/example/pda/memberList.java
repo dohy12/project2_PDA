@@ -46,6 +46,8 @@ public class memberList extends AppCompatActivity {
         View v = inflater.inflate(R.layout.memberlist_member, null);
         _container.addView(v);
 
+        v.findViewById(R.id.profile_image).setClipToOutline(true);
+
         ((TextView)v.findViewById(R.id.memList_id)).setText(Integer.toString(mem.getId()));
 
         String str_name_age = mem.getName() + "(" + mem.getAge() +")";

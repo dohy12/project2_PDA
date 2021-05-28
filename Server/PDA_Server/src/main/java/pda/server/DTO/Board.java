@@ -1,20 +1,20 @@
 package pda.server.DTO;
 
-/*import java.util.Date;
-import java.text.SimpleDateFormat;*/
+import java.sql.Timestamp;
 
 public class Board {
     public int B_ID;
     public short isNotice;
     public String title;
-//    public Date dateTime;
+    public Timestamp dateTime;
     public String contents;
     public int U_ID;
 
-    public Board(int B_ID, short isNotice, String title, String contents, int U_ID){
+    public Board(int B_ID, short isNotice, String title, Timestamp dateTime, String contents, int U_ID){
         this.setB_ID(B_ID);
         this.setIsNotice(isNotice);
         this.setTitle(title);
+        this.setDateTime(dateTime);
         this.setContents(contents);
         this.setU_ID(U_ID);
     }
@@ -40,12 +40,12 @@ public class Board {
         this.title = title;
     }
 
-    /*public Date getDateTime(){
+    public Timestamp getDateTime(){
         return dateTime;
     }
-    public void setDateTime(Date dateTime){
+    public void setDateTime(Timestamp dateTime){
         this.dateTime = dateTime;
-    }*/
+    }
 
     public String getContents(){
         return contents;

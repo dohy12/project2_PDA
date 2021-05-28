@@ -25,19 +25,23 @@ public class Community {
     @RequestMapping(value = "/Community/{GroupId}", method = RequestMethod.POST)
     public String boardPost(@PathVariable("GroupId") String GroupId) {
 
-        return board.boardPost(GroupId);
+        board.boardPost(GroupId);
 
-        //return "작성";
+        return "작성";
     }
 
     @RequestMapping(value = "/Community/{GroupId}/{BID}", method = RequestMethod.DELETE)
     public String boardDelete(@PathVariable("GroupId") String GroupId, @PathVariable("BID") int BID){
+
+        board.boardDelete(GroupId, BID);
 
         return "삭제";
     }
 
     @RequestMapping(value = "/Community/{GroupId}/{BID}", method = RequestMethod.PUT)
     public String boardUpdate(@PathVariable("GroupId") String GroupId, @PathVariable("BID") int BID){
+
+        board.boardUpdate(GroupId, BID);
 
         return "수정";
     }
