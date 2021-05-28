@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 // http formLogin, headers .. 설정
 		http.cors();
+		http.csrf().disable();
 	}
 
 	@Bean
