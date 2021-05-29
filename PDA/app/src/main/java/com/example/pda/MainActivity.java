@@ -45,5 +45,5 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MembershipFee.class);
         startActivity(intent);
     }
-    
+
 }
