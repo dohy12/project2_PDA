@@ -32,10 +32,16 @@ public class Board_Writing extends AppCompatActivity {
     private LayoutInflater inflater;
     int survey_ch=0;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board__writing);
+
+        ///툴바 세팅/////////////
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2);
+        ////////////////////////
 
         container = (LinearLayout)findViewById(R.id.boardWriting_container);
         survey_container = (LinearLayout)findViewById(R.id.boardWriting_survey_container);

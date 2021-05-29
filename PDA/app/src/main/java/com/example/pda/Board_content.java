@@ -33,10 +33,16 @@ public class Board_content extends AppCompatActivity {
 
     Survey survey = null;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_content);
+
+        ///툴바 세팅/////////////
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2);
+        ////////////////////////
 
         comments_container = findViewById(R.id.board_comments_container);
         survey_container = findViewById(R.id.board_survey_container);

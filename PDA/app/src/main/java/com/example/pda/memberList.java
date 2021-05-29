@@ -20,7 +20,6 @@ public class memberList extends AppCompatActivity {
     private LinearLayout container_new;
     private LayoutInflater inflater;
 
-    Drawer drawer;
     Toolbar toolbar;
 
     @Override
@@ -29,8 +28,7 @@ public class memberList extends AppCompatActivity {
         setContentView(R.layout.activity_member_list);
 
         ///툴바 세팅/////////////
-        drawer = new Drawer(findViewById(R.id.drawerBar));
-        toolbar = new Toolbar(findViewById(R.id.toolbar), drawer);
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2);
         ////////////////////////
 
         container = (LinearLayout)findViewById(R.id.memberList_container);
