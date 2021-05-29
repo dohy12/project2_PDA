@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public void goMembershipFee(View view){
         Intent intent = new Intent(this, MembershipFee.class);
         startActivity(intent);
+        sdfk;kadsf
     }
 
     
