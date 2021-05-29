@@ -18,6 +18,8 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:paddingLeft="10dp"
+            android:id="@+id/toolbarButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -33,6 +35,8 @@
             android:text="단체이름"/>
 
         <FrameLayout
+            android:paddingRight="10dp"
+            android:id="@+id/toolbarAlarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp">

@@ -20,10 +20,18 @@ public class memberList extends AppCompatActivity {
     private LinearLayout container_new;
     private LayoutInflater inflater;
 
+    Drawer drawer;
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_list);
+
+        ///툴바 세팅/////////////
+        drawer = new Drawer(findViewById(R.id.drawerBar));
+        toolbar = new Toolbar(findViewById(R.id.toolbar), drawer);
+        ////////////////////////
 
         container = (LinearLayout)findViewById(R.id.memberList_container);
         container_new = (LinearLayout)findViewById(R.id.memberList_container_new);

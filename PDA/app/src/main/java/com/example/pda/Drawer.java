@@ -3,10 +3,10 @@ package com.example.pda;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 public class Drawer {
-    View view;
+    public View view;
+    View menus[];
 
     public Drawer(View v){
         this.view = v;
@@ -31,15 +31,14 @@ public class Drawer {
 
 
     public void setMenus(int[] menuID){
+        menus = new View[menuID.length];
 
         for(int i=0; i<menuID.length; i++){
-            View menuView = view.findViewById(menuID[i]);
+            menus[i] = view.findViewById(menuID[i]);
 
-            ImageView iconImage = menuView.findViewById(R.id.icon);
+            ImageView iconImage = menus[i].findViewById(R.id.icon);
             iconImage.setColorFilter(Color.parseColor("#909090"));
         }
-
-
     }
 
 
