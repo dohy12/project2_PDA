@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerBar"
     xmlns:android="http://schemas.android.com/apk/res/android" 
     android:layout_width="300dp"
     android:layout_gravity="left"
-
     android:paddingTop="20dp"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#C1C1C1"
     android:orientation="vertical">
 
     <ImageView
@@ -41,5 +40,223 @@
         android:layout_height="0.3dp"
         android:background="#909090"/>
 
+    <LinearLayout
+        android:id="@+id/drawer_menu1"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <ImageView
+            android:id="@+id/icon"
+            android:src="@drawable/icon1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            tools:ignore="DuplicateIds"/>
+        
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:text="마이페이지"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/drawer_menu2"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:src="@drawable/icon2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            tools:ignore="DuplicateIds" />
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:text="공지사항"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/drawer_menu3"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:src="@drawable/icon6"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            tools:ignore="DuplicateIds"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:text="게시판"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/drawer_menu4"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:src="@drawable/icon3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            tools:ignore="DuplicateIds"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:text="행사앨범"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/drawer_menu5"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:src="@drawable/icon4"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            tools:ignore="DuplicateIds"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:text="회비관리"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/drawer_menu6"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:src="@drawable/icon5"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            tools:ignore="DuplicateIds"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:text="단체 소개"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/drawer_menu7"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:src="@drawable/icon7"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            tools:ignore="DuplicateIds"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:text="설정"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <View
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="#909090"/>
+
+    <LinearLayout
+        android:id="@+id/drawer_menu8"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:src="@drawable/icon8"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            tools:ignore="DuplicateIds"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:text="로그아웃"/>
+    </LinearLayout>
 
 </LinearLayout>

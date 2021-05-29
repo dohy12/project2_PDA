@@ -8,10 +8,14 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    Drawer drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        drawer = new Drawer(findViewById(R.id.drawerBar));
     }
 
     public void goMemList(View view){
