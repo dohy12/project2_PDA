@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
         ///툴바 세팅/////////////
         drawer = new Drawer(findViewById(R.id.drawerBar));
-        toolbar = new Toolbar(findViewById(R.id.toolbar), drawer, 1);
+        toolbar = new Toolbar(findViewById(R.id.toolbar), drawer, 1, this);
         ////////////////////////
     }
 

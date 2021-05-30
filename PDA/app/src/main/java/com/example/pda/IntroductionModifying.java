@@ -31,7 +31,7 @@ public class IntroductionModifying extends AppCompatActivity {
         setContentView(R.layout.activity_introduction_modifying);
 
         ///툴바 세팅/////////////
-        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2);
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
 
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);

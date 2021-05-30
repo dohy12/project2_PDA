@@ -1,5 +1,6 @@
 package com.example.pda;
 
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,13 +15,15 @@ public class Toolbar {
     View toolbarAlarm;
     ImageView toolbarProfile;
     Drawer drawer;
+    AppCompatActivity activity;
 
     int toolbarType;
 
-    public Toolbar(View view, Drawer drawer, int toolbarType){
+    public Toolbar(View view, Drawer drawer, int toolbarType, AppCompatActivity activity){
         this.view = view;
         this.drawer = drawer;
         this.toolbarType = toolbarType;
+        this.activity = activity;
 
         toolbarButton = view.findViewById(R.id.toolbarButton1);
         toolbarAlarm = view.findViewById(R.id.toolbarAlarm);
@@ -41,6 +44,13 @@ public class Toolbar {
         }
         if (toolbarType == 2){
             ((ImageView)toolbarButton).setImageDrawable(toolbarProfile.getResources().getDrawable(R.drawable.icon10, null));
+
+            toolbarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    activity.finish();
+                }
+            });
         }
 
     }
@@ -48,6 +58,4 @@ public class Toolbar {
     public void setToolbarProfile(){
         toolbarProfile.setClipToOutline(true);
     }
-
-
 }

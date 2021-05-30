@@ -28,7 +28,7 @@ public class MembershipFee extends AppCompatActivity {
         setContentView(R.layout.activity_membership_fee);
 
         ///툴바 세팅/////////////
-        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2);
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
 
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);

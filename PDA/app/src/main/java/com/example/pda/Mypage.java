@@ -26,7 +26,7 @@ public class Mypage extends AppCompatActivity {
         setContentView(R.layout.activity_mypage);
 
         ///툴바 세팅/////////////
-        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2);
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
 
         container = (LinearLayout)findViewById(R.id.guestBook_container);

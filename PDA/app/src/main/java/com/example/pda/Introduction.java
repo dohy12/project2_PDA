@@ -26,7 +26,7 @@ public class Introduction extends AppCompatActivity {
         setContentView(R.layout.activity_introduction);
 
         ///툴바 세팅/////////////
-        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2);
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
 
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);

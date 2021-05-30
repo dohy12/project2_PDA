@@ -41,7 +41,7 @@ public class Board_content extends AppCompatActivity {
         setContentView(R.layout.activity_board_content);
 
         ///툴바 세팅/////////////
-        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2);
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
 
         comments_container = findViewById(R.id.board_comments_container);
