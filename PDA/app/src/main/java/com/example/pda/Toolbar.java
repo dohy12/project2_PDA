@@ -27,7 +27,7 @@ public class Toolbar {
 
         toolbarButton = view.findViewById(R.id.toolbarButton1);
         toolbarAlarm = view.findViewById(R.id.toolbarAlarm);
-        toolbarProfile = view.findViewById(R.id.profile_image);
+        toolbarProfile = view.findViewById(R.id.toolbar_profile_image);
 
         setToolbarButton();
         setToolbarProfile();

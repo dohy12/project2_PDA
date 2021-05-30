@@ -103,10 +103,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -144,6 +144,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:layout_marginTop="5dp"
                     android:layout_width="10dp"
                     android:layout_height="20dp"
                     android:layout_marginRight="4dp"
@@ -153,8 +154,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:orientation="vertical">
 
                 <View
@@ -228,8 +229,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginBottom="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
         </LinearLayout>
 
     </ScrollView>
