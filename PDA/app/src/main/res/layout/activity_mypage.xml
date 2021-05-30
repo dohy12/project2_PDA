@@ -101,23 +101,41 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"/>
 
-                <TextView
-                    android:layout_marginLeft="30dp"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:textColor="#000000"
-                    android:textSize="14dp"
-                    android:text="통화하기"/>
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/icon13"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="#000000"
+                        android:textSize="14dp"
+                        android:gravity="center_vertical"
+                        android:text="통화하기"/>
+                </LinearLayout>
 
-                <TextView
-                    android:layout_marginLeft="30dp"
-                    android:padding="5dp"
+
+                <LinearLayout
+                    android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000"
-                    android:textSize="14dp"
-                    android:text="카톡 메세지"/>
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/icon14"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="#000000"
+                        android:textSize="14dp"
+                        android:gravity="center_vertical"
+                        android:text="카톡 메세지"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

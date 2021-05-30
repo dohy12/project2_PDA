@@ -15,7 +15,7 @@ public class Toolbar {
     public View view;
     View toolbarButton;
     View toolbarAlarm;
-    ImageView toolbarProfile;
+    View toolbarProfile;
     Drawer drawer;
     AppCompatActivity activity;
 
@@ -45,7 +45,7 @@ public class Toolbar {
             });
         }
         if (toolbarType == 2){
-            ((ImageView)toolbarButton).setImageDrawable(toolbarProfile.getResources().getDrawable(R.drawable.icon10, null));
+            ((ImageView)toolbarButton.findViewById(R.id.toolbarImage)).setImageDrawable(toolbarProfile.getResources().getDrawable(R.drawable.icon15, null));
 
             toolbarButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,7 +58,7 @@ public class Toolbar {
     }
 
     public void setToolbarProfile(){
-        toolbarProfile.setClipToOutline(true);
+        toolbarProfile.findViewById(R.id.toolbarImage).setClipToOutline(true);
 
         toolbarProfile.setOnClickListener(new View.OnClickListener() {
             @Override
