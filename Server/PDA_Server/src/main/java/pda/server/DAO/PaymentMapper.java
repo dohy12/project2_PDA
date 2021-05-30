@@ -15,6 +15,10 @@ public interface PaymentMapper {
 	@Select("SELECT * FROM ${GroupId}.payments")
     public List<Map<String, Object>> select_due_infos(@Param("GroupId") String GroupId);
 	
+	//PID에 해당하는 회비 가격 가져오기 (그룹 스키마, payments)
+	@Select("SELECT pay FROM #{GroupId}.payments WHERE P_ID=#{P_ID}")
+	public int select_pay(String GroupId, int P_ID);
+	
 	//유저가 결제한 회비 정보 가져오기 (그룹 스키마, 그룹 테이블)
 	@Select("SELECT * FROM ${GroupId}.payments WHERE P_ID IN (SELECT P_ID FROM ${GroupId}.payment_result WHERE U_ID=#{U_ID})")
 	public List<Map<String, Object>> select_user_due_infos(@Param("GroupId") String GroupId, int U_ID);

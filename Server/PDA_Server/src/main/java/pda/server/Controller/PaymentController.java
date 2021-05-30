@@ -1,13 +1,22 @@
 package pda.server.Controller;
 
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +28,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import pda.server.DAO.PaymentMapper;
+
 
 @CrossOrigin(origins = "*") // 추가
 @RestController
@@ -116,6 +127,7 @@ public class PaymentController {
 	    return "성공";
 	}
 	
+	/*
 	//결제 성공 시 결과 정보 저장하기 (확인) - 아래 있는 것으로 대체 예정
 	@RequestMapping(path = "/payments/results", method = RequestMethod.POST)
 	public String insert_result_infos(@RequestBody Map<String, Object> param, @RequestAttribute String U_ID)
@@ -127,32 +139,70 @@ public class PaymentController {
 		String time = (String)param.get("time");
 	    paymentMapper.insert_result_infos(GroupId, P_ID, Integer.parseInt(U_ID), imp_uid, merchant_uid, time);
 	    return "성공";
-	}
+	}*/
 	
 	@RequestMapping(path = "/payment/success", method = RequestMethod.GET)
-	public String payemnt_result_verification(@RequestParam(value="imp_uid")String imp_uid, @RequestParam(value="merchant_uid")String merchant_uid)
+	public String payment_result_verification(@RequestParam(value="imp_uid")String imp_uid, @RequestParam(value="merchant_uid")String merchant_uid) throws RestClientException, URISyntaxException, ParseException
 	{
-		/* 결제 결과 검증 부분 */
-		/*
-		//post body
-		Map<String, String> map = new HashMap<>();;
-		map.put("imp_apikey", "9542528569364242"); //REST API 키
-		map.put("imp_secret", "uMGHwm4vTuKsHy1kxlZ1xrfAmidjnymRk3zRpEmj86MQFOad99fGBugXNuhb3D2oGBf6fBqoIcfn1pAa"); //REST API Secret
+		//아직 확인 안함, 코드만 대강 작성
 		
+		/*아임 포트 서버에서 액세스 토큰 발급받기 - POST*/
 		//post header
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", "application/json");
 		
-		HttpEntity<Map<String, String>> request = new HttpEntity<>(map, headers);
+		//post parameter
+		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+		parameters.add("imp_apikey", "9542528569364242"); //REST API 키
+		parameters.add("imp_secret", "uMGHwm4vTuKsHy1kxlZ1xrfAmidjnymRk3zRpEmj86MQFOad99fGBugXNuhb3D2oGBf6fBqoIcfn1pAa"); //REST API Secret
 		
-		RestTemplate restTemplate = new RestTemplate();
+		//post request
+		HttpEntity<MultiValueMap<String, String>> post_request = new HttpEntity<>(parameters, headers);
 		
-		ResponseEntity<Map> responseEntity = restTemplate.postForObject("https://api.iamport.kr/users/getToken", map, Map.class);
+		RestTemplate rest = new RestTemplate();
 		
-		String getToken = */
+		//post response result - String(JSONObject) 형태로 받음
+		String post_result;
+		post_result = rest.postForObject(new URI("https://api.iamport.kr/users/getToken"), post_request, String.class);
+
+		//post 결과 중 access token parsing
+		JSONObject post_fb;
+		post_fb = (JSONObject) new JSONParser().parse(post_result);
+		String access_token = (String) post_fb.get("access_token");
 		
-		/* db 저장 부분 */
 		
-	    return "성공" + "imp_uid: " + imp_uid + "merchant_uid: " + merchant_uid;
+		/*imp_uid로 아임포트 서버에서 결제 정보 조회 - GET*/
+		//get header - access token 추가
+		headers.set("Authorization", access_token);
+		
+		HttpEntity<MultiValueMap<String, String>> get_request = new HttpEntity<>(null, headers);
+		
+		ResponseEntity get_result = rest.exchange("https://api.iamport.kr/payments/" + imp_uid, HttpMethod.GET, get_request, String.class);
+		JSONObject get_fb;
+		get_fb = (JSONObject) new JSONParser().parse(get_result.getBody().toString());
+		HashMap<String, Object> response = (HashMap<String, Object>) get_fb.get("response"); //response 객체 얻기
+		
+		int amount = (int)response.get("amount"); //아임포트 서버측 결제 값 얻기
+		
+		HashMap<String, Object>custom_data = (HashMap<String, Object>) response.get("custom_data"); //custom 객체 얻기
+		String Group_ID = (String)custom_data.get("Group_ID"); //P_ID 얻기
+		int U_ID = (int)custom_data.get("U_ID"); //U_ID 얻기
+		int P_ID = (int)custom_data.get("P_ID"); //P_ID 얻기
+		
+		int amountToBePaid = paymentMapper.select_pay(Group_ID, P_ID);
+		
+		//결제 위변조 검증 - 아임포트 서버 측 결제 값과 실제 결제 되어야 하는 값 비교
+		if(amountToBePaid == amount) { //결제 금액 일치 - DB 결제 정보 저장
+			//현재 시간 얻기
+			SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+			Date time = new Date();
+			String current_time = format1.format(time);
+			//db 저장
+			paymentMapper.insert_result_infos(Group_ID, P_ID, U_ID, imp_uid, merchant_uid, current_time);
+		}
+		else { //결제 값 위변조
+			//throw error 
+		}
+		return "성공";
 	} 
 }
