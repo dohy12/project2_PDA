@@ -4,13 +4,18 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.concurrent.Callable;
 
 public class Drawer {
     public View view;
     View menus[];
     AppCompatActivity activity;
+
+    Callable[] cmdList;
 
     public Drawer(View v, AppCompatActivity activity){
         this.view = v;
@@ -32,6 +37,16 @@ public class Drawer {
                 R.id.drawer_menu8
         };
 
+        cmdList = new Callable[8];
+        cmdList[0] = new goMyPage();
+        cmdList[1] = new goBoard1();
+        cmdList[2] = new goBoard2();
+        cmdList[3] = new goAlbum();
+        cmdList[4] = new goMembershipFee();
+        cmdList[5] = new goIntroduction();
+        cmdList[6] = new goConfig();
+        cmdList[7] = new logout();
+
         setMenus(menuID);
     }
 
@@ -44,33 +59,89 @@ public class Drawer {
 
             ImageView iconImage = menus[i].findViewById(R.id.icon);
             iconImage.setColorFilter(Color.parseColor("#909090"));
+
+            final int finalI = i;
+            menus[i].setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    Toast myToast = Toast.makeText(activity,"test", Toast.LENGTH_SHORT);
+                    myToast.show();
+                    try {
+                        cmdList[finalI].call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     }
 
-    public void goMemList(View view){
-        Intent intent = new Intent(activity, memberList.class);
-        activity.startActivity(intent);
+    class goMyPage implements Callable{
+        @Override
+        public Object call() throws Exception {
+            Intent intent = new Intent(activity, Mypage.class);
+            activity.startActivity(intent);
+            return null;
+        }
     }
 
-    public void goBoard1(View view){
-        Intent intent = new Intent(activity, Board.class);
-        activity.startActivity(intent);
+    class goBoard1 implements Callable{
+        @Override
+        public Object call() throws Exception {
+            Intent intent = new Intent(activity, Board.class);
+            activity.startActivity(intent);
+            return null;
+        }
     }
 
-    public void goBoard2(View view){
-        Intent intent = new Intent(activity, Board.class);
-        activity.startActivity(intent);
+    class goBoard2 implements Callable{
+        @Override
+        public Object call() throws Exception {
+            Intent intent = new Intent(activity, Board.class);
+            activity.startActivity(intent);
+            return null;
+        }
     }
 
-    public void goIntroduction(View view){
-        Intent intent = new Intent(activity, Introduction.class);
-        activity.startActivity(intent);
+    class goMembershipFee implements Callable{
+        @Override
+        public Object call() throws Exception {
+            Intent intent = new Intent(activity, MembershipFee.class);
+            activity.startActivity(intent);
+            return null;
+        }
     }
 
-    public void goMembershipFee(View view){
-        Intent intent = new Intent(activity, MembershipFee.class);
-        activity.startActivity(intent);
+    class goIntroduction implements Callable{
+        @Override
+        public Object call() throws Exception {
+            Intent intent = new Intent(activity, Introduction.class);
+            activity.startActivity(intent);
+            return null;
+        }
     }
 
+    class goAlbum implements Callable{
+        @Override
+        public Object call() throws Exception {
+            return null;
+        }
+    }
+
+    class goConfig implements Callable{
+        @Override
+        public Object call() throws Exception {
+            return null;
+        }
+    }
+
+    class logout implements Callable{
+        @Override
+        public Object call() throws Exception {
+            activity.finish();
+            return null;
+        }
+    }
 
 }

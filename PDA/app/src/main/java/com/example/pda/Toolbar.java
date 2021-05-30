@@ -9,6 +9,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import java.util.concurrent.Callable;
+
 public class Toolbar {
     public View view;
     View toolbarButton;
@@ -57,7 +59,18 @@ public class Toolbar {
 
     public void setToolbarProfile(){
         toolbarProfile.setClipToOutline(true);
+
+        toolbarProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goMypage();
+            }
+        });
     }
 
+    public void goMypage(){
+        Intent intent = new Intent(activity, Mypage.class);
+        activity.startActivity(intent);
+    }
 
 }
