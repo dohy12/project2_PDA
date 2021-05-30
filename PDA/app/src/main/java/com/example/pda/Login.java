@@ -17,6 +17,7 @@ public class Login extends AppCompatActivity {
     public void goSelectGroup(View view){
         Intent intent = new Intent(this,SelectGroup.class);
         startActivity(intent);
+        finish();
     }
 
     public void goRegister(View view){
