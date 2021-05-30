@@ -44,7 +44,7 @@ public class Mypage extends AppCompatActivity {
     }
 
     private void setMypage(Member mem){
-        findViewById(R.id.profile_image).setClipToOutline(true);
+        findViewById(R.id.mypage_profileImage).setClipToOutline(true);
 
         String str_name_age = mem.getName() + "(" + mem.getAge() +")";
         ((TextView)findViewById(R.id.memList_name)).setText(str_name_age);

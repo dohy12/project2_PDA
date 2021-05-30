@@ -58,4 +58,6 @@ public class Toolbar {
     public void setToolbarProfile(){
         toolbarProfile.setClipToOutline(true);
     }
+
+
 }
