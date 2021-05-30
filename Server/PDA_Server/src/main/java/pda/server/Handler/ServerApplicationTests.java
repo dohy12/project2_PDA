@@ -16,7 +16,7 @@ import java.util.Base64;
 import java.util.UUID;
 
 @SpringBootTest
-class ServerApplicationTests
+class ServerApplicationTests 
 {
     @Value("${spring.datasource.password}")
     private String PW;
@@ -48,7 +48,8 @@ class ServerApplicationTests
     @Autowired
     Environment environment;
     @Autowired
-    JwtTokenUtil jwt;
+	static //test
+    JwtTokenUtil jwt = new JwtTokenUtil();
 
     @Test
     void getSetting()
