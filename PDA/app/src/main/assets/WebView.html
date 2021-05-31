@@ -12,10 +12,6 @@
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
 <script type="text/javascript">
-        //가맹점 식별하기
-        var IMP = window.IMP; // 생략가능
-        IMP.init('imp09069030');
-
         /* 앱단 */
         // db에서 회비가격, 회비이름 가져오기
         // 앱단에서 결제 정보(사용자 이름, 회비가격, 회비이름)를 서버로 전송
@@ -40,10 +36,8 @@
         var UID = get_UID();
 
         // 웹뷰에서 DB의 결제 정보를 서버에서 가져옴 (JQuery ajax 이용) - 확인 완료
-        //var jwt = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ5IiwiZXhwIjoxNjIyNDIxNzAzLCJpYXQiOjE2MjI0MTk5MDN9.6H3Z6mlvfDppPtfc3uyQjFPyMNkSbzMmbpIztpeWHoH5EZNtizX-t5PqzPGqE178PBax1Q77q-lXNiX62dIgCw"
-        //var GroupId = "deaa01013b0144e99faab90ecd670950"
         var Buyer_name, Payment_name, Payment_price, Merchat_uid; //가져올 정보(사용자 이름, 회비가격, 회비이름, 주문번호)
-        var origin = "http://c65fa99eb289.ngrok.io/"
+        var origin = "http://3ca936fceecb.ngrok.io/"
 
         $.ajax({
             url: origin + "payments/request-infos/" + GroupId + "/" + PID,
@@ -69,6 +63,10 @@
             }
         });
 
+        //가맹점 식별하기
+        var IMP = window.IMP; // 생략가능
+        IMP.init('imp09069030');
+
         //결제창 호출코드
         IMP.request_pay({
             pg: 'inicis', // version 1.1.0부터 지원.
@@ -80,36 +78,7 @@
             custom_data: {U_ID : UID, P_ID : PID, GroupId : GroupId},
             m_redirect_url: origin + "payment/success", //결제 성공 시 get method로 결제 결과 (imp_uid, merchant_uid) 보내기 - 모바일에서는 콜백 작동 x, m_redirect_url로만 결과 정보 전송 가능
             app_scheme : 'iamportapp'
-        }, function (rsp) { //callback
-            /*if (rsp.success) { //결제 성공 - 결제 결과 서버로 전송, 서버에서 위변조 확인 후 결과 정보 DB에 저장
-                var now = new Date();
-                var time = now.toLocaleString();
-                var body = {GroupId: GroupId, imp_uid: rsp.imp_uid, merchant_uid: rsp.merchant_uid, time : time};
-
-                $.ajax({
-                    url: origin + "payments/results", // 가맹점 서버
-                    headers: { "Content-Type": "application/json", "JWT": jwt },
-                    type: "POST",
-                    dataType: "json",
-                    data: JSON.stringify(body),
-                    success : function(data, status, xhr) {console.log("결제 결과 정보 서버로 전송 성공")},
-                    error: function(jqXHR, textStatus, errorThrown) { console.log(jqXHR.responseText)},
-                })
-
-                var msg = '결제가 완료되었습니다.';
-                msg += '고유ID : ' + rsp.imp_uid;
-                msg += '상점 거래ID : ' + rsp.merchant_uid;
-                msg += '결제 금액 : ' + rsp.paid_amount;
-                msg += '카드 승인번호 : ' + rsp.apply_num;
-            }
-            else { //결제 실패 - 결제 요청 테이블에서 해당 요청 정보 삭제
-                //임의 결과 처리
-                var msg = '결제에 실패하였습니다.';
-                msg += '에러내용 : ' + rsp.error_msg;
-            }
-            alert(msg)*/
         })
-
     </script>
 </body>
 </html>
