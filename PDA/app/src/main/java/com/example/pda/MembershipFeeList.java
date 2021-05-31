@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -65,8 +66,18 @@ public class MembershipFeeList extends AppCompatActivity {
                 tv.setTextColor(Color.parseColor("#FFFFFF"));
 
                 ((TextView)v.findViewById(R.id.fee_amount)).setTextColor(Color.parseColor("#909090"));
-
             }
+            else{
+                ///회비 리스트에 onclickListener 추가
+                v.findViewById(R.id.fee_border).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast myToast = Toast.makeText(getApplicationContext(),"test", Toast.LENGTH_SHORT);
+                        myToast.show();
+                    }
+                });
+            }
+
         }
     }
 }

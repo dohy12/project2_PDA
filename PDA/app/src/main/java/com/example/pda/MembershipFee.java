@@ -3,6 +3,7 @@ package com.example.pda;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,10 +38,11 @@ public class MembershipFee extends AppCompatActivity {
         container = findViewById(R.id.container);
 
         tempList = new ArrayList<>();
-        tempList.add(new FeeUsage(LocalDate.of(2021,5,25),"운동회 행사", 30000, 1000000));
-        tempList.add(new FeeUsage(LocalDate.of(2021,5,26),"운동회 행사2", 30000, 970000));
-        tempList.add(new FeeUsage(LocalDate.of(2021,5,27),"운동회 행사3", 50000, 920000));
-        tempList.add(new FeeUsage(LocalDate.of(2021,5,28),"운동회 행사4", 30000, 890000));
+        tempList.add(new FeeUsage(LocalDate.of(2021,5,25),"운동회 행사", -30000, 1000000));
+        tempList.add(new FeeUsage(LocalDate.of(2021,5,26),"운동회 행사2", -30000, 970000));
+        tempList.add(new FeeUsage(LocalDate.of(2021,5,27),"운동회 행사3", -50000, 920000));
+        tempList.add(new FeeUsage(LocalDate.of(2021,5,28),"운동회 행사4", -30000, 890000));
+        tempList.add(new FeeUsage(LocalDate.of(2021,5,29),"(이도희) 회비 납부", 100000, 990000));
 
         showList();
     }
@@ -56,8 +58,17 @@ public class MembershipFee extends AppCompatActivity {
             ((TextView)v.findViewById(R.id.fee_date)).setText(formatStr);
 
             ((TextView)v.findViewById(R.id.fee_detail)).setText(f.getDetail());
-            ((TextView)v.findViewById(R.id.fee_amount)).setText(String.format("-%,d",f.getAmount()));
-            ((TextView)v.findViewById(R.id.fee_remained)).setText(String.format("남은 회비 %,d",f.getRemained()));
+            ((TextView)v.findViewById(R.id.fee_amount)).setText(String.format("%,d원",f.getAmount()));
+            ((TextView)v.findViewById(R.id.fee_remained)).setText(String.format("남은 회비 %,d원",f.getRemained()));
+
+            //// 사용한 회비: 빨간색   회비 납부 : 파란색
+            if(f.getAmount()>0){
+                ((TextView)v.findViewById(R.id.fee_amount)).setTextColor(Color.parseColor("#0070c0"));
+            }
+            else{
+                ((TextView)v.findViewById(R.id.fee_amount)).setTextColor(Color.parseColor("#c00000"));
+            }
+
         }
     }
 

@@ -17,6 +17,5 @@ public class Album extends AppCompatActivity {
         toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
 
-        findViewById(R.id.album).setClipToOutline(true);
     }
 }
