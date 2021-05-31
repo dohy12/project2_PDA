@@ -46,4 +46,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goAlbum(View view){
+        Intent intent = new Intent(this, Album.class);
+        startActivity(intent);
+    }
 }

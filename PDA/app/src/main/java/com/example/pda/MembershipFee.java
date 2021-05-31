@@ -1,6 +1,8 @@
 package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +59,11 @@ public class MembershipFee extends AppCompatActivity {
             ((TextView)v.findViewById(R.id.fee_amount)).setText(String.format("-%,d",f.getAmount()));
             ((TextView)v.findViewById(R.id.fee_remained)).setText(String.format("남은 회비 %,d",f.getRemained()));
         }
+    }
+
+    public void goMembershipFeeList(View view){
+        Intent intent = new Intent(this, MembershipFeeList.class);
+        startActivity(intent);
     }
 
 }

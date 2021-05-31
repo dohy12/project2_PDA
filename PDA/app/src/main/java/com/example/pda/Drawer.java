@@ -125,6 +125,8 @@ public class Drawer {
     class goAlbum implements Callable{
         @Override
         public Object call() throws Exception {
+            Intent intent = new Intent(activity, Album.class);
+            activity.startActivity(intent);
             return null;
         }
     }
