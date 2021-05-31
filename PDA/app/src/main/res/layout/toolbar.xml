@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="55dp"
     android:background="#FFFFFF"
     app:contentInsetStart="0dp"
     android:elevation="10dp"
@@ -17,12 +18,27 @@
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
 
-        <ImageView
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:id="@+id/toolbarButton1"
+            android:padding="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/img3"
-            android:adjustViewBounds="true"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/toolbarImage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/icon11"
+                android:adjustViewBounds="true"
+                tools:ignore="DuplicateIds" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="0dp"/>
 
         <TextView
             android:layout_width="0dp"
@@ -32,28 +48,53 @@
             android:textColor="#000000"
             android:text="단체이름"/>
 
-        <FrameLayout
+        <LinearLayout
+            android:padding="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp">
+            android:layout_height="wrap_content">
 
-            <ImageView
+            <FrameLayout
+                android:id="@+id/toolbarAlarm"
                 android:layout_width="wrap_content"
-                android:padding="5dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/img4"
-                android:adjustViewBounds="true"/>
+                android:layout_marginRight="5dp">
 
-            <TextView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="right"
-                android:text="20"
-                android:textSize="10dp"
-                android:textColor="#ffffff"
-                android:gravity="center"
-                android:background="@drawable/main_alarm"/>
-        </FrameLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:padding="5dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img4"
+                    android:adjustViewBounds="true"/>
+
+                <TextView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="right"
+                    android:text="20"
+                    android:textSize="10dp"
+                    android:textColor="#ffffff"
+                    android:gravity="center"
+                    android:background="@drawable/main_alarm"/>
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:id="@+id/toolbar_profile_image"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/toolbarImage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/img6"
+                android:background="@drawable/circle"
+                android:adjustViewBounds="true"
+                tools:ignore="DuplicateIds"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 

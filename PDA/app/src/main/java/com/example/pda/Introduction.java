@@ -18,10 +18,16 @@ public class Introduction extends AppCompatActivity {
     private LayoutInflater inflater;
     ArrayList<Drawable> imageList;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introduction);
+
+        ///툴바 세팅/////////////
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
+        ////////////////////////
 
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         image_container = findViewById(R.id.board_image_container);

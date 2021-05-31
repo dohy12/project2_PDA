@@ -18,14 +18,11 @@ public class RSAKey {
         return kf.generatePrivate(spec);
     }
 
-    public PublicKey getpub(String filename)
-            throws Exception {
-
+    public PublicKey getpub(String filename) throws Exception {
         ClassPathResource cpr = new ClassPathResource(filename);
         byte[] keyBytes = FileCopyUtils.copyToByteArray(cpr.getInputStream());
 
-        X509EncodedKeySpec spec =
-                new X509EncodedKeySpec(keyBytes);
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return kf.generatePublic(spec);
     }

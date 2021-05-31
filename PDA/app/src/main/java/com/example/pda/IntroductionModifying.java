@@ -23,10 +23,16 @@ public class IntroductionModifying extends AppCompatActivity {
     private LinearLayout image_container;
     private LayoutInflater inflater;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introduction_modifying);
+
+        ///툴바 세팅/////////////
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
+        ////////////////////////
 
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         image_container = findViewById(R.id.board_image_container);

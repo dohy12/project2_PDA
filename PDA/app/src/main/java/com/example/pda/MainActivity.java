@@ -7,11 +7,18 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
+    Drawer drawer;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ///툴바 세팅/////////////
+        drawer = new Drawer(findViewById(R.id.drawerBar), this);
+        toolbar = new Toolbar(findViewById(R.id.toolbar), drawer, 1, this);
+        ////////////////////////
     }
 
     public void goMemList(View view){
@@ -34,5 +41,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goMembershipFee(View view){
+        Intent intent = new Intent(this, MembershipFee.class);
+        startActivity(intent);
+    }
 
 }

@@ -19,10 +19,16 @@ public class Board extends AppCompatActivity {
     private LayoutInflater inflater;
     ArrayList<Board_Info> boardInfoList;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
+
+        ///툴바 세팅/////////////
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
+        ////////////////////////
 
         container = (LinearLayout)findViewById(R.id.board_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);

@@ -10,6 +10,11 @@
 <!-- 아임포트 자바스크립트는 jQuery 기반으로 개발되었습니다 -->
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+=======
+    <!-- 아임포트 자바스크립트는 jQuery 기반으로 개발되었습니다 -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+
 
 <script type="text/javascript">
         //가맹점 식별하기
@@ -23,11 +28,16 @@
 
         //앱에서 http 콜에 사용할 정보 받아오기 - 확인 완료
         function get_JWT() {
+
+        //앱에서 http 콜에 사용할 JWT 받아오기 - 확인 완료
+        /*function get_JWT() {
+
             return Android.return_JWT();
         }
         function get_GroupId() {
             return Android.return_GroupId();
         }
+
         function get_PID() {
             return Android.return_PID();
         }
@@ -47,11 +57,22 @@
 
         $.ajax({
             url: origin + "payments/request-infos/" + GroupId + "/" + PID,
+        var jwt = get_JWT();
+        var GroupId = get_GroupId();*/
+
+        // 웹뷰에서 DB의 결제 정보를 서버에서 가져옴 (JQuery ajax 이용) - 확인 완료
+        var jwt = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ5IiwiZXhwIjoxNjIyMjE3NzM4LCJpYXQiOjE2MjIyMTU5Mzh9.60_PgOWpDbwO1Et2GpQGXNe61pPRsMr-F0I7gkLGholGe86AVJwMitXE07XLxhHmReXGvlK8yYKCgzJWylLXHg"
+        var GroupId = "deaa01013b0144e99faab90ecd670950"
+        var Buyer_name, Payment_name, Payment_price, Merchat_uid; //가져올 정보(사용자 이름, 회비가격, 회비이름, 주문번호)
+
+        $.ajax({
+            url: "http://a97edf194c08.ngrok.io/payments/request-infos/" + GroupId,
             headers: { "Content-Type": "application/json", "JWT": jwt },
             type: "GET",
             dataType: "json",
             async: false,   //HTTP 요청 끝날 때 까지 기다림
             success: function (json) {
+
                 Buyer_name = json.buyer_name; //사용자 이름
                 Merchant_uid = json.merchant_uid;  //주문번호
             }
@@ -65,7 +86,12 @@
             async: false,   //HTTP 요청 끝날 때 까지 기다림
             success: function (json) {
                 Payment_name = json.title; //회비 이름
-                Payment_price = json.pay; //회비 가격
+
+                Buyer_name = json.buyer_name;
+                Payment_name = json.payment_name;
+                Payment_price = json.payment_price;
+                Merchant_uid = json.merchant_uid;
+
             }
         });
 
@@ -81,13 +107,19 @@
             m_redirect_url: origin + "payment/success", //결제 성공 시 get method로 결제 결과 (imp_uid, merchant_uid) 보내기 - 모바일에서는 콜백 작동 x, m_redirect_url로만 결과 정보 전송 가능
             app_scheme : 'iamportapp'
         }, function (rsp) { //callback
+
             /*if (rsp.success) { //결제 성공 - 결제 결과 서버로 전송, 서버에서 위변조 확인 후 결과 정보 DB에 저장
+
+            if (rsp.success) { //결제 성공 - 결제 결과 서버로 전송, 서버에서 위변조 확인 후 결과 정보 DB에 저장
+
                 var now = new Date();
                 var time = now.toLocaleString();
                 var body = {GroupId: GroupId, imp_uid: rsp.imp_uid, merchant_uid: rsp.merchant_uid, time : time};
 
                 $.ajax({
                     url: origin + "payments/results", // 가맹점 서버
+                    url: "http://a97edf194c08.ngrok.io/payments/results", // 가맹점 서버
+
                     headers: { "Content-Type": "application/json", "JWT": jwt },
                     type: "POST",
                     dataType: "json",
@@ -107,9 +139,10 @@
                 var msg = '결제에 실패하였습니다.';
                 msg += '에러내용 : ' + rsp.error_msg;
             }
-            alert(msg)*/
-        })
 
+            alert(msg)
+        })
+            
     </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -32,6 +33,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:textSize="12dp"
+                    android:textColor="#000000"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"
                     android:text="회원목록"/>
@@ -47,12 +49,14 @@
                     android:paddingLeft="10dp"
                     android:hint="검색"
                     android:textSize="12dp"
+                    android:textColor="#000000"
                     android:background="@drawable/border"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:textSize="12dp"
+                    android:textColor="#000000"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="10dp"
                     android:gravity="center_vertical"
@@ -65,6 +69,80 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="#d9d9d9"/>
+
+                <LinearLayout
+                    android:padding="5dp"
+                    android:id="@+id/memList_back"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/memList_id"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:text="-1"/>
+
+                    <TextView
+                        android:id="@+id/memList_isChecked"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:text="false"/>
+
+                    <ImageView
+                        android:background="@drawable/circle"
+                        android:id="@+id/memberList_profileImage"
+                        android:layout_margin="10dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/img6"
+                        android:layout_centerHorizontal="true"
+                        android:scaleType="centerCrop"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:id="@+id/memList_name"
+                                    android:textSize="17dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:textColor="#000000"
+                                    android:text="이도희(26)"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12dp"
+                                    android:text="mobile. 010-2890-6812"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.3dp"
@@ -85,7 +163,7 @@
                             android:layout_width="wrap_content"
                             android:textColor="#ed7d31"
                             android:layout_height="20dp"
-                            android:textSize="10dp"
+                            android:textSize="12dp"
                             android:gravity="center_vertical"
                             android:text="승인 대기 중 인원(01)"/>
 
@@ -96,13 +174,13 @@
 
                         <Button
                             android:layout_width="60dp"
-                            android:layout_height="32dp"
+                            android:layout_height="35dp"
                             android:layout_margin="0dp"
                             android:textColor="#FFFFFF"
                             android:text="숨기기"
                             android:backgroundTint="#606060"
                             android:onClick="hide_new"
-                            android:textSize="10dp"/>
+                            android:textSize="12dp"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -125,4 +203,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

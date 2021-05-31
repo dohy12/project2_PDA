@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,10 +21,18 @@ public class memberList extends AppCompatActivity {
     private LinearLayout container_new;
     private LayoutInflater inflater;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_list);
+
+        ///툴바 세팅/////////////
+        toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
+        ////////////////////////
+
+        findViewById(R.id.memberList_profileImage).setClipToOutline(true);
 
         container = (LinearLayout)findViewById(R.id.memberList_container);
         container_new = (LinearLayout)findViewById(R.id.memberList_container_new);
@@ -46,24 +55,13 @@ public class memberList extends AppCompatActivity {
         View v = inflater.inflate(R.layout.memberlist_member, null);
         _container.addView(v);
 
+        v.findViewById(R.id.profile_image).setClipToOutline(true);
+
         ((TextView)v.findViewById(R.id.memList_id)).setText(Integer.toString(mem.getId()));
 
         String str_name_age = mem.getName() + "(" + mem.getAge() +")";
         tv = v.findViewById(R.id.memList_name);
         tv.setText(str_name_age);
-
-        String str_phone = "Mobile. " + mem.getPhone();
-        tv = v.findViewById(R.id.memList_phone);
-        tv.setText(str_phone);
-
-        String str_email = "E-mail. " + mem.getEmail();
-        tv = v.findViewById(R.id.memList_email);
-        tv.setText(str_email);
-
-        tv = v.findViewById(R.id.memList_intro);
-        tv.setText(mem.getIntro());
-
-        v.findViewById(R.id.memList_selectedBar).setVisibility(View.GONE);
 
         return v;
     }
@@ -93,29 +91,11 @@ public class memberList extends AppCompatActivity {
 
             v.findViewById(R.id.memList_btn).setVisibility(View.GONE);
             l = v.findViewById(R.id.memList_back);
-            l.setBackground(ContextCompat.getDrawable(this, R.drawable.border));
 
             l.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    TextView _tv = view.findViewById(R.id.memList_isChecked);
-                    String isChecked = (String) _tv.getText();
-
-                    LinearLayout _l = view.findViewById(R.id.memList_back);
-
-                    if(isChecked == "true"){
-                        _l.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-                        view.findViewById(R.id.memList_selectedBar).setVisibility(View.GONE);
-                        _tv.setText("false");
-                    }
-                    else{
-                        _l.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border_selected));
-                        view.findViewById(R.id.memList_selectedBar).setVisibility(View.VISIBLE);
-                        _tv.setText("true");
-                    }
-
-
+                    goMyPage(view);
                 }
             });
 
