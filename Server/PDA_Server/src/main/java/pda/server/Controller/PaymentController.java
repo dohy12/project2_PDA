@@ -11,12 +11,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import pda.server.DAO.PaymentMapper;
 
 
@@ -43,7 +50,7 @@ public class PaymentController {
 		this.paymentMapper = paymentMapper; 
 	} 
 	
-	//단체 회비 정보 저장하기 (확인)
+	//단체 회비 정보 저장하기 (확인) - 앱 관리자 페이지에서 요청
 	@RequestMapping(path = "/payments/due-infos", method = RequestMethod.POST)
     public String insert_due_infos(@RequestBody Map<String, Object> param)
     {
@@ -58,28 +65,35 @@ public class PaymentController {
         return "성공";
     }
 	
-	//전체 회비 정보 가져오기 (확인)
+	//전체 회비 정보 가져오기 (확인) - 앱 회비 관리 페이지에서 요청
 	@RequestMapping(path = "/payments/due-infos/{GroupId}", method = RequestMethod.GET)
 	public List<Map<String, Object>> select_due_infos(@PathVariable String GroupId)
 	{
 		return paymentMapper.select_due_infos(GroupId);
 	}
 	
-	//유저가 결제한 회비 정보 가져오기(확인)
+	//유저가 결제한 회비 정보 가져오기(확인) - 앱 회비 관리 페이지에서 요청
 	@RequestMapping(path = "/payments/user-due-infos/{GroupId}", method = RequestMethod.GET)
 	public List<Map<String, Object>> select_user_due_infos(@PathVariable String GroupId, @RequestAttribute String U_ID)
 	{
 		return paymentMapper.select_user_due_infos(GroupId, Integer.parseInt(U_ID));
 	}
+	
+	//PID에 해당하는 회비 이름, 가격 가져오기 - 웹 뷰에서 요청
+	@RequestMapping(path = "/payments/due-infos/{GroupId}/{P_ID}", method = RequestMethod.GET)
+	public Map<String, Object> select_due_infos_pid(@PathVariable String GroupId, @PathVariable int P_ID)
+	{
+		return paymentMapper.select_pay_title(GroupId, P_ID);
+	}
 		
-	//결제 요청 정보 저장하기(확인)
+	//결제 요청 정보 저장하기(확인) - 앱 회비 관리 페이지에서 요청 (결제 버튼 클릭 시)
 	@RequestMapping(path = "/payments/request-infos", method = RequestMethod.POST)
 	public String insert_request_infos(@RequestBody Map<String, Object> param, @RequestAttribute String U_ID)
 	{
 		String GroupId = (String) param.get("GroupId");
 		int P_ID = (int) param.get("P_ID");
-		String merchant_uid = (String) param.get("merchant_uid");
 		String buyer_name = (String) param.get("buyer_name");
+		String merchant_uid = "merchant_" + U_ID + "_" + P_ID; //서버 사이드에서 merchant_uid 생성
 		paymentMapper.insert_request_infos(GroupId, Integer.parseInt(U_ID), P_ID, merchant_uid, buyer_name);
 		return "성공";
 	}
@@ -127,33 +141,21 @@ public class PaymentController {
 	    return "성공";
 	}
 	
-	/*
-	//결제 성공 시 결과 정보 저장하기 (확인) - 아래 있는 것으로 대체 예정
-	@RequestMapping(path = "/payments/results", method = RequestMethod.POST)
-	public String insert_result_infos(@RequestBody Map<String, Object> param, @RequestAttribute String U_ID)
-	{
-		String GroupId = (String)param.get("GroupId");
-		int P_ID = (int)param.get("P_ID");
-		String imp_uid = (String)param.get("imp_uid");
-		String merchant_uid = (String)param.get("merchant_uid");
-		String time = (String)param.get("time");
-	    paymentMapper.insert_result_infos(GroupId, P_ID, Integer.parseInt(U_ID), imp_uid, merchant_uid, time);
-	    return "성공";
-	}*/
-	
+	//결제 위변조 검증 후 결제 결과 db 저장
 	@RequestMapping(path = "/payment/success", method = RequestMethod.GET)
-	public String payment_result_verification(@RequestParam(value="imp_uid")String imp_uid, @RequestParam(value="merchant_uid")String merchant_uid) throws RestClientException, URISyntaxException, ParseException
+	public String payment_result_verification(@RequestParam(value="imp_uid")String imp_uid, @RequestParam(value="merchant_uid")String merchant_uid) throws Exception
 	{
-		//아직 확인 안함, 코드만 대강 작성
+		//확인 완료
 		
-		/*아임 포트 서버에서 액세스 토큰 발급받기 - POST*/
+		//아임 포트 서버에서 액세스 토큰 발급받기 - POST (확인)
 		//post header
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Type", "application/json");
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		//headers.set("Content-Type", "application/json");
 		
 		//post parameter
 		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
-		parameters.add("imp_apikey", "9542528569364242"); //REST API 키
+		parameters.add("imp_key", "9542528569364242"); //REST API 키
 		parameters.add("imp_secret", "uMGHwm4vTuKsHy1kxlZ1xrfAmidjnymRk3zRpEmj86MQFOad99fGBugXNuhb3D2oGBf6fBqoIcfn1pAa"); //REST API Secret
 		
 		//post request
@@ -162,34 +164,40 @@ public class PaymentController {
 		RestTemplate rest = new RestTemplate();
 		
 		//post response result - String(JSONObject) 형태로 받음
-		String post_result;
-		post_result = rest.postForObject(new URI("https://api.iamport.kr/users/getToken"), post_request, String.class);
+		ResponseEntity<String> post_result = rest.postForEntity(new URI("http://api.iamport.kr/users/getToken"), post_request, String.class);
 
 		//post 결과 중 access token parsing
-		JSONObject post_fb;
-		post_fb = (JSONObject) new JSONParser().parse(post_result);
-		String access_token = (String) post_fb.get("access_token");
+		ObjectMapper objectMapper = new ObjectMapper();
+		String jsonString = objectMapper.writeValueAsString(post_result);
+		Map<String, Object> map = objectMapper.readValue(jsonString, Map.class);
+		Map<String, Object> body_map = objectMapper.readValue((String) map.get("body"), Map.class);
+		Map<String, String> response = (Map<String, String>) body_map.get("response");
+		String access_token = response.get("access_token");
+		System.out.println("access_token : " + access_token);
 		
-		
-		/*imp_uid로 아임포트 서버에서 결제 정보 조회 - GET*/
+		//imp_uid로 아임포트 서버에서 결제 정보 조회 - GET
 		//get header - access token 추가
 		headers.set("Authorization", access_token);
 		
 		HttpEntity<MultiValueMap<String, String>> get_request = new HttpEntity<>(null, headers);
 		
-		ResponseEntity get_result = rest.exchange("https://api.iamport.kr/payments/" + imp_uid, HttpMethod.GET, get_request, String.class);
-		JSONObject get_fb;
-		get_fb = (JSONObject) new JSONParser().parse(get_result.getBody().toString());
-		HashMap<String, Object> response = (HashMap<String, Object>) get_fb.get("response"); //response 객체 얻기
+		ResponseEntity<String> get_result = rest.exchange("http://api.iamport.kr/payments/" + imp_uid, HttpMethod.GET, get_request, String.class);
 		
-		int amount = (int)response.get("amount"); //아임포트 서버측 결제 값 얻기
+		jsonString = objectMapper.writeValueAsString(get_result);
+		System.out.println(jsonString);
 		
-		HashMap<String, Object>custom_data = (HashMap<String, Object>) response.get("custom_data"); //custom 객체 얻기
-		String Group_ID = (String)custom_data.get("Group_ID"); //P_ID 얻기
-		int U_ID = (int)custom_data.get("U_ID"); //U_ID 얻기
-		int P_ID = (int)custom_data.get("P_ID"); //P_ID 얻기
+		map = objectMapper.readValue(jsonString, Map.class);
+		body_map = objectMapper.readValue((String) map.get("body"), Map.class);
+		Map<String, Object> response2 = (Map<String, Object>) body_map.get("response");
+		int amount = (int) response2.get("amount"); //아임포트 서버측 결제 값 얻기
+		System.out.println(response2);
+		Map<String, Object> custom_data_map = objectMapper.readValue((String) response2.get("custom_data"), Map.class); //custom_data 추출
 		
-		int amountToBePaid = paymentMapper.select_pay(Group_ID, P_ID);
+		String GroupId = (String)custom_data_map.get("GroupId"); //P_ID 얻기
+		int U_ID = (int)custom_data_map.get("U_ID"); //U_ID 얻기
+		int P_ID = (int)custom_data_map.get("P_ID"); //P_ID 얻기
+		
+		int amountToBePaid = paymentMapper.select_pay(GroupId, P_ID);
 		
 		//결제 위변조 검증 - 아임포트 서버 측 결제 값과 실제 결제 되어야 하는 값 비교
 		if(amountToBePaid == amount) { //결제 금액 일치 - DB 결제 정보 저장
@@ -198,11 +206,12 @@ public class PaymentController {
 			Date time = new Date();
 			String current_time = format1.format(time);
 			//db 저장
-			paymentMapper.insert_result_infos(Group_ID, P_ID, U_ID, imp_uid, merchant_uid, current_time);
+			paymentMapper.insert_result_infos(GroupId, P_ID, U_ID, imp_uid, merchant_uid, current_time);
 		}
 		else { //결제 값 위변조
-			//throw error 
+			Exception e = new Exception("결제 값 위변조");
+			throw e;
 		}
-		return "성공";
+		return "성공" + "imp_uid : " + imp_uid;
 	} 
 }
