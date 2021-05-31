@@ -109,7 +109,5 @@ public class Register extends AppCompatActivity {
         String year_string = Integer.toString(year);
 
         String dateMessage = (year_string+"/"+month_string + "/" + day_string);
-
-
     }
 }

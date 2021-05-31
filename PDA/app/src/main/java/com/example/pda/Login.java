@@ -57,7 +57,7 @@ public class Login extends AppCompatActivity {
         RSAEncoder rsa = new RSAEncoder();
         String result = "";
         try {
-            URL url = new URL("http://localhost:8080/auth?id=" + ID + "&pw=" + rsa.EncryptRSA(System.currentTimeMillis() + ":" + PW))
+            URL url = new URL("http://localhost:8080/auth?id=" + ID + "&pw=" + rsa.EncryptRSA(System.currentTimeMillis() + ":" + PW));
             httpConn = (HttpURLConnection) url.openConnection();
 
             httpConn.setRequestMethod("GET");
@@ -82,6 +82,8 @@ public class Login extends AppCompatActivity {
         } catch (IOException e) { // for openConnection().
             e.printStackTrace();
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (httpConn != null)
