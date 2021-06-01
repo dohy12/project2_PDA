@@ -8,7 +8,7 @@ public class Member extends User implements Serializable
 {
     private static final long serialVersionUID = -62407511042001259L;
 
-    private Integer uId;
+    private Integer U_ID;
 
     private String id;
 
@@ -23,12 +23,12 @@ public class Member extends User implements Serializable
 
     public Integer getUId()
     {
-        return uId;
+        return U_ID;
     }
 
     public void setUId(Integer uId)
     {
-        this.uId = uId;
+        this.U_ID = uId;
     }
 
     public String getId()

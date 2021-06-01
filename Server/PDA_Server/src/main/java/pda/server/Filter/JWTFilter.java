@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/connectTest/*", "/message/*", "/user/*", "/Community/*","/JoinGroup/*", "/payments/*"})
+@WebFilter(urlPatterns = {"/connectTest/*", "/message/*", "/user/*", "/Community/*","/JoinGroup/*", "/payments/*","/GuestBook/*"})
 public class JWTFilter implements Filter {
 
     @Autowired
@@ -34,6 +34,7 @@ public class JWTFilter implements Filter {
             filterChain.doFilter(servletRequest,servletResponse);
         }
         catch (Exception e) {
+            e.printStackTrace();
             ((HttpServletResponse)servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }

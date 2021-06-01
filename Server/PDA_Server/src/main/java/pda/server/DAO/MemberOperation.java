@@ -2,6 +2,7 @@ package pda.server.DAO;
 
 import org.apache.ibatis.annotations.*;
 import pda.server.DTO.Member;
+import pda.server.DTO.User;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ public interface MemberOperation
     public Member[] MemberList(@Param("GroupID") String GroupID);
 
     @Select("select * from main.user${Num} where U_ID = #{UID}")
-    public UserInfo details(@Param("Num") int Num, @Param("UID") int UID);
+    public Member details(@Param("Num") int Num, @Param("UID") int UID);
 
     @Select("select isAdmin from ${GroupID}.user where U_ID = #{UID} ")
     public int isAdmin(@Param("GroupID") String GroupID, @Param("UID") int UID);
@@ -22,7 +23,7 @@ public interface MemberOperation
     public void setAdmin(@Param("GroupID") String GroupID, @Param("AdminFlag") int AdminFlag);
 
     @Select("select U_ID from ${GroupID}.user where JoinTime is null ")
-    public Map<String, Object> waitingToJoin(@Param("GroupID") String GroupID);
+    public List<Integer> waitingToJoin(@Param("GroupID") String GroupID);
 
     @Select("select JoinedGroups from main.user${Num} where U_ID = #{UID}")
     public String JoinedGroups(@Param("Num") int Num, @Param("UID") int UID);
