@@ -26,6 +26,7 @@
             android:orientation="horizontal">
 
             <TextView
+
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
@@ -61,6 +62,7 @@
                     android:text="아이디"/>
 
                 <EditText
+                    android:id="@+id/newID"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
