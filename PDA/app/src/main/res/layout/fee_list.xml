@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/fee_border"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fee_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ooo 회비"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:id="@+id/fee_date"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="21-05-18"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/fee_text"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="#000000"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="납부하기"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fee_amount"
+            android:layout_margin="20dp"
+            android:gravity="right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="35dp"
+            android:textColor="#ed7d31"
+            android:text="30,000원"/>
+    </LinearLayout>
+
+</LinearLayout>
