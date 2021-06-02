@@ -89,7 +89,7 @@ class ServerApplicationTests
     @Test
     void token()
     {
-        System.out.println(jwt.doGenerateToken("1503238549"));
+        System.out.println(jwt.doGenerateToken("1503238548"));
 //        System.out.println(jwtTokenUtil.getAllClaimsFromToken(jwt.doGenerateToken("1234")));
     }
 }
