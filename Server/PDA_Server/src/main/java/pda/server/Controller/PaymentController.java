@@ -72,11 +72,17 @@ public class PaymentController {
 		return paymentMapper.select_due_infos(GroupId);
 	}
 	
-	//유저가 결제한 회비 정보 가져오기(확인) - 앱 회비 관리 페이지에서 요청
+	//유저가 결제한 회비 P_ID 가져오기(확인) - 앱 회비 관리 페이지에서 요청
 	@RequestMapping(path = "/payments/user-due-infos/{GroupId}", method = RequestMethod.GET)
-	public List<Map<String, Object>> select_user_due_infos(@PathVariable String GroupId, @RequestAttribute String U_ID)
+	public List<Integer> select_user_due_infos(@PathVariable String GroupId, @RequestAttribute String U_ID)
 	{
 		return paymentMapper.select_user_due_infos(GroupId, Integer.parseInt(U_ID));
+	}
+	
+	@RequestMapping(path = "/payments/pay-infos/{GroupId}", method = RequestMethod.GET)
+	public List<Map<String, Object>> select_pay_infos(@PathVariable String GroupId)
+	{
+		return paymentMapper.select_pay_infos(GroupId);
 	}
 	
 	//PID에 해당하는 회비 이름, 가격 가져오기 - 웹 뷰에서 요청
