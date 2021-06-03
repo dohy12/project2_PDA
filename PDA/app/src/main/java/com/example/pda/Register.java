@@ -23,9 +23,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,8 +44,18 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Register extends AppCompatActivity {
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
+public class Register extends AppCompatActivity {
+    private AlertDialog.Builder alert;
+    private Bitmap scaled;
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int PICK_FROM_ALBUM = 1;
     private boolean dupcheck;
@@ -64,6 +76,7 @@ public class Register extends AppCompatActivity {
                 dupcheck = false;
             }
         });
+        alert = new AlertDialog.Builder(this);
     }
 
     public void loadProfile(View view){
@@ -89,7 +102,7 @@ public class Register extends AppCompatActivity {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
                 //이미지가 한계이상(?) 크면 불러 오지 못하므로 사이즈를 줄여 준다.
                 int nh = (int) (bitmap.getHeight() * (1024.0 / bitmap.getWidth()));
-                Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
+                scaled = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
 
                 ImageView iv = findViewById(R.id.profile_image);
                 iv.setImageBitmap(scaled);
@@ -150,78 +163,35 @@ public class Register extends AppCompatActivity {
     public void doRegister(View view)
     {
         if(dupcheck == true) {
-            HttpURLConnection httpConn = null;
-            if(((EditText)findViewById(R.id.newID)).getText().toString().equals(((EditText)findViewById(R.id.newID)).getText().toString())) {
+            if(((EditText)findViewById(R.id.newPW)).getText().toString().equals(((EditText)findViewById(R.id.checkPW)).getText().toString())) {
+                uploadImage();
+                OkHttpClient client = new OkHttpClient();
+
+                HttpUrl httpUrl = new HttpUrl.Builder()
+                        .scheme("http")
+                        .host("18.206.18.154")
+                        .port(8080)
+                        .addPathSegment("auth")
+                        .build();
+
+                String json = "";
                 try {
-                    URL url = new URL("http://localhost:8080/image/" + ((EditText)findViewById(R.id.name)).getText().toString() +"profile.png");
-                    File file = new File(((TextView)findViewById(R.id.profile_image_url)).getText().toString());
-                    FileInputStream fileInputStream = new FileInputStream(file);
-                    httpConn = (HttpURLConnection) url.openConnection();
-                    httpConn.setRequestMethod("POST");
-
-                    DataOutputStream dos = new DataOutputStream(httpConn.getOutputStream());
-                    int maxBufferSize = 1 * 1024 * 1024;
-                    int bytesAvailable = fileInputStream.available();
-                    int bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                    byte[] buffer = new byte[bufferSize];
-                    int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                    while (bytesRead > 0) {
-                        dos.write(buffer, 0, bufferSize);
-                        bytesAvailable = fileInputStream.available();
-                        bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                        bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                    }
-                    dos.flush();
-                    dos.close();
-                    fileInputStream.close();
-
-                    if(httpConn.getResponseCode() == 200) {
-                        httpConn.disconnect();
-                        url = new URL("http://localhost:8080/auth");
-                        httpConn = (HttpURLConnection) url.openConnection();
-                        httpConn.setRequestMethod("POST");
-                        String json = "";
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.accumulate("name", ((EditText)findViewById(R.id.name)).getText().toString());
-                        jsonObject.accumulate("id", ((EditText)findViewById(R.id.newID)).getText().toString());
-                        Map<String, Object> ret = HashingF(((EditText)findViewById(R.id.newPW)).getText().toString());
-                        jsonObject.accumulate("passHash", ret.get("hash"));
-                        jsonObject.accumulate("passSalt", ret.get("salt"));
-                        jsonObject.accumulate("age", getAge(((TextView)findViewById(R.id.register_birth)).getText().toString()));
-                        jsonObject.accumulate("birth", ((TextView)findViewById(R.id.register_birth)).getText().toString());
-                        jsonObject.accumulate("email", ((EditText)findViewById(R.id.email)).getText().toString());
-                        jsonObject.accumulate("kakao", ((EditText)findViewById(R.id.kakao)).getText().toString());
-                        jsonObject.accumulate("phone", ((EditText)findViewById(R.id.telephonenum)).getText().toString());
-                        jsonObject.accumulate("profileimg", ((TextView)findViewById(R.id.profile_image_url)).getText().toString() + "profile.png");
-                        jsonObject.accumulate("introduction", ((EditText)findViewById(R.id.introduction)).getText().toString());
-                        jsonObject.accumulate("joinedgroups", "");
-                        jsonObject.accumulate("awaitingcertification", "");
-
-                        json = jsonObject.toString();
-                        OutputStream os = httpConn.getOutputStream();
-                        os.write(json.getBytes());
-                        os.flush();
-
-                        if(httpConn.getResponseCode() == 200)
-                        {
-                            httpConn.disconnect();
-                            Intent intent = getIntent();
-                            setResult(RESULT_OK, intent);
-                            this.finish();
-                        }
-                        else
-                        {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                            alert.setMessage("회원가입 실패").setPositiveButton("확인", null);
-                        }
-                    }
-                    else
-                    {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                        alert.setMessage("프로필 사진 전송 실패").setPositiveButton("확인", null);
-                    }
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.accumulate("name", ((EditText)findViewById(R.id.name)).getText().toString());
+                    jsonObject.accumulate("id", ((EditText)findViewById(R.id.newID)).getText().toString());
+                    Map<String, Object> ret = HashingF(((EditText)findViewById(R.id.newPW)).getText().toString());
+                    jsonObject.accumulate("passHash", ret.get("hash"));
+                    jsonObject.accumulate("passSalt", ret.get("salt"));
+                    jsonObject.accumulate("age", getAge(((TextView)findViewById(R.id.register_birth)).getText().toString()));
+                    jsonObject.accumulate("birth", ((TextView)findViewById(R.id.register_birth)).getText().toString());
+                    jsonObject.accumulate("email", ((EditText)findViewById(R.id.email)).getText().toString());
+                    jsonObject.accumulate("kakao", ((EditText)findViewById(R.id.kakao)).getText().toString());
+                    jsonObject.accumulate("phone", ((EditText)findViewById(R.id.telephonenum)).getText().toString());
+                    jsonObject.accumulate("profileimg", ((TextView)findViewById(R.id.profile_image_url)).getText().toString() + "profile.png");
+                    jsonObject.accumulate("introduction", ((EditText)findViewById(R.id.introduction)).getText().toString());
+                    jsonObject.accumulate("joinedgroups", "");
+                    jsonObject.accumulate("awaitingcertification", "");
+                    json = jsonObject.toString();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -229,44 +199,104 @@ public class Register extends AppCompatActivity {
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
+
+                RequestBody reqBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+
+                Request request = new Request.Builder()
+                        .url(httpUrl)
+                        .post(reqBody)
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        alert.setMessage("회원가입 실패").setPositiveButton("확인", null);
+                        alert.show();
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+                    }
+                });
+                Intent intent = getIntent();
+                setResult(RESULT_OK, intent);
+                finish();
+
             }
             else
             {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setMessage("비밀번호 불일치").setPositiveButton("확인", null);
                 alert.show();
             }
         }
         else
         {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setMessage("ID 중복확인을 해주십시오").setPositiveButton("확인", null);
             alert.show();
         }
     }
 
+    public void uploadImage()
+    {
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl httpUrl = new HttpUrl.Builder()
+                .scheme("http")
+                .host("18.206.18.154")
+                .port(8080)
+                .addPathSegment("image/profile" +  System.currentTimeMillis()+ ".png")
+                .build();
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
+        scaled.compress( Bitmap.CompressFormat.PNG, 100, stream) ;
+        byte[] byteArray = stream.toByteArray();
+        RequestBody reqBody = RequestBody.create(byteArray);
+        Request request = new Request.Builder()
+                .url(httpUrl)
+                .post(reqBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                alert.setMessage("이미지 업로드 실패").setPositiveButton("확인", null);
+                alert.show();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                
+            }
+        });
+    }
+
     public void doDupcheck(View view)
     {
-        HttpURLConnection httpConn = null;
-        try {
-            URL url = new URL("http://localhost:8080/" + ((EditText)findViewById(R.id.newID)).getText().toString());
-            httpConn = (HttpURLConnection) url.openConnection();
-            httpConn.setRequestMethod("GET");
+        OkHttpClient client = new OkHttpClient();
 
-            if (httpConn.getResponseCode() == 200)
-            {
+        HttpUrl httpUrl = new HttpUrl.Builder()
+                .scheme("http")
+                .host("18.206.18.154")
+                .port(8080)
+                .addPathSegment(((EditText)findViewById(R.id.newID)).getText().toString())
+                .build();
+
+        Request request = new Request.Builder()
+                .url(httpUrl)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                alert.setMessage("중복입니다").setPositiveButton("확인", null);
+                alert.show();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 dupcheck = true;
                 ((TextView)findViewById(R.id.dup)).setText("확인완료");
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            httpConn.disconnect();
-        }
+        });
     }
 
     public Map<String, Object> HashingF(String pw) throws NoSuchAlgorithmException, UnsupportedEncodingException {

@@ -5,15 +5,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Board extends AppCompatActivity {
     private LinearLayout container;
@@ -33,6 +48,41 @@ public class Board extends AppCompatActivity {
 
         container = (LinearLayout)findViewById(R.id.board_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        OkHttpClient client = new OkHttpClient();
+
+        //localhost 사용 시 @GET method 실행됨 확인
+        //POST, DELETE, PUT 은 localhost 아니어도 실행됨 확인
+/*
+        String url = "http://10.0.2.2:8080/Community/";
+        String GroupId = "deaa01013b0144e99faab90ecd670950/";
+        //getGroupId 추가시 수정
+        int isNotice = 1;
+
+        String httpUrl = url + GroupId + isNotice;
+
+        Request request = new Request.Builder()
+                .url(httpUrl)
+                .get()
+                .addHeader("JWT", app.getJWT())
+                .build();
+
+        System.out.println(httpUrl);
+        System.out.println(request.headers().toString());
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(@NotNull okhttp3.Call call, @NotNull IOException e) {
+                System.out.println("실패");
+            }
+
+            @Override
+            public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) throws IOException {
+                System.out.println("성공");
+                System.out.println(response.code());
+                System.out.println(response.body().string());
+            }
+        });
+*/
 
         boardInfoList = new ArrayList<>();
         boardInfoList.add(new Board_Info(1, true,"제목","이도희",   LocalDateTime.of(2021,5,22,10,30),222,5));

@@ -41,7 +41,9 @@ public class AuthCon {
         Map<String, Object> ret = new HashMap<String, Object>();
 
         if(pwinfo.getPass_Hash().equals(HashingF(pw, pwinfo.getPass_Salt()))) {
-            ret.put("result", token.doGenerateToken(pwinfo.getU_ID()));
+            ret.put("name", pwinfo.getName());
+            ret.put("UID", pwinfo.getU_ID());
+            ret.put("JWT", token.doGenerateToken(pwinfo.getU_ID()));
             return ret;
         }
         else
@@ -71,7 +73,7 @@ public class AuthCon {
             return (Map<String, Object>) new HashMap<>().put("result","ok");
         }
         else
-            throw new RestException(HttpStatus.UNAUTHORIZED, "비밀번호 또는 아이디가 일치하지 않습니다.");
+            throw new RestException(HttpStatus.UNAUTHORIZED, "중복입니다.");
     }
 
     public String HashingF(String pw, String salt)
