@@ -37,9 +37,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Mypage extends AppCompatActivity {
-    private boolean IsEnable = false;
+    private boolean IsEnable = true;
     private LinearLayout container;
     private LayoutInflater inflater;
+    AppCompatActivity activity;
     Member mem;
     ArrayList<GuestBook> guestBookList;
 
@@ -198,7 +199,7 @@ public class Mypage extends AppCompatActivity {
         FormBody formBody = new FormBody.Builder()
                 .add("Content", text)
                 .build();
-        final String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzExNjE5LCJpYXQiOjE2MjI3MDk4MTl9.J5cseFKVYGGNcZj2eJLgz5CUnMOzDWtdCmFUyE3I1klHCf11UBnDq9udQCEUDuhOgZMjdS7goTsgoElI0ijA5w";
+        final String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzE0NDc1LCJpYXQiOjE2MjI3MTI2NzV9.5pLwY-dBnx1372_BibTltPfQvtnflI00KsNIC9stJBy8V-s1fjftwd-OGrDXWJcwy4HHWsFW6q5omymEen8HLQ";
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .build();
         String Host = "http://10.0.2.2:";
@@ -221,8 +222,10 @@ public class Mypage extends AppCompatActivity {
                     c.setText("");
                     String msg = response.body().string();
                     Toast.makeText(Mypage.this, msg, Toast.LENGTH_SHORT).show();
+                    guestBookList.clear();
+                    getGuestBook();
                     Log.d("TAG", "run: " + msg);
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
