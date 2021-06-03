@@ -26,8 +26,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 public class Login extends AppCompatActivity {
-    AlertDialog.Builder alert;
-    Intent intent;
+    private AlertDialog.Builder alert;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
