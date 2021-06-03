@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -59,5 +61,10 @@ public class AlbumContent extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void goShowReply(View view){
+        Intent intent = new Intent(this, ShowReply.class);
+        startActivity(intent);
     }
 }

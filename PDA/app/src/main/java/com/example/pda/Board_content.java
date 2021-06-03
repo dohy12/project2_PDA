@@ -187,7 +187,6 @@ public class Board_content extends AppCompatActivity {
                 comments_container.addView(v);
             else
             {
-
                 int count = comments_container.getChildCount();
 
                 for(int j=0;j<count;j++)
@@ -198,7 +197,6 @@ public class Board_content extends AppCompatActivity {
                     if(replyId == comments_id)
                         ((LinearLayout)childV.findViewById(R.id.comments_reply_container)).addView(v);
                 }
-
             }
         }
     }
@@ -208,4 +206,6 @@ public class Board_content extends AppCompatActivity {
         Intent intent = new Intent(this, Board_Writing.class);
         startActivity(intent);
     }
+
+
 }
