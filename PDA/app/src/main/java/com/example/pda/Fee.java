@@ -5,10 +5,11 @@ import java.time.LocalDate;
 public class Fee {
     private boolean isPayed;
     private String feeTitle;
-    private LocalDate feeDate;
+    private String feeDate;
     private int feeAmount;
+    public int P_ID;
 
-    public Fee(boolean isPayed, String feeTitle, LocalDate feeDate, int feeAmount){
+    public Fee(boolean isPayed, String feeTitle, String feeDate, int feeAmount){
         this.isPayed = isPayed;
         this.feeTitle = feeTitle;
         this.feeDate = feeDate;
@@ -23,11 +24,15 @@ public class Fee {
         return feeTitle;
     }
 
-    public LocalDate getFeeDate() {
+    public String getFeeDate() {
         return feeDate;
     }
 
     public int getFeeAmount() {
         return feeAmount;
+    }
+
+    public int getP_ID() {
+        return P_ID;
     }
 }
