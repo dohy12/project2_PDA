@@ -23,9 +23,14 @@ public interface PaymentMapper {
 	@Select("SELECT pay, title FROM ${GroupId}.payments WHERE P_ID=${P_ID}")
 	public Map<String, Object> select_pay_title(String GroupId, int P_ID);
 	
-	//유저가 결제한 회비 정보 가져오기 (그룹 스키마, 그룹 테이블)
-	@Select("SELECT * FROM ${GroupId}.payments WHERE P_ID IN (SELECT P_ID FROM ${GroupId}.payment_result WHERE U_ID=#{U_ID})")
-	public List<Map<String, Object>> select_user_due_infos(@Param("GroupId") String GroupId, int U_ID);
+	//유저가 결제한 회비 P_ID 가져오기 (그룹 스키마, 그룹 테이블) - 상세 목록 보기 페이지 
+	@Select("SELECT P_ID FROM ${GroupId}.payments WHERE P_ID IN (SELECT P_ID FROM ${GroupId}.payment_result WHERE U_ID=#{U_ID})")
+	public List<Integer> select_user_due_infos(@Param("GroupId") String GroupId, int U_ID);
+	
+	//결제 결과 테이블에 있는 회비 정보들 가져오기
+	@Select("SELECT pay, title, buyer_name, DATE_FORMAT(time, '%y%m%d') as time FROM ${GroupId}.payments, ${GroupId}.payment_request, ${GroupId}.payment_result "
+			+ "WHERE ${GroupId}.payments.P_ID=${GroupId}.payment_result.P_ID AND ${GroupId}.payment_result.U_ID=${GroupId}.payment_request.U_ID")
+	public List<Map<String, Object>> select_pay_infos(@Param("GroupId") String GroupId);
 	
 	//결제 요청 정보 저장하기 (그룹스키마, 결제 요청 테이블)
 	@Insert("INSERT INTO ${GroupId}.payment_request VALUES (#{U_ID}, ${P_ID}, '${merchant_uid}', '${buyer_name}')")

@@ -63,9 +63,7 @@ public class Login extends AppCompatActivity {
         try {
             URL url = new URL("http://localhost:8080/auth?id=" + ID + "&pw=" + rsa.EncryptRSA(System.currentTimeMillis() + ":" + PW));
             httpConn = (HttpURLConnection) url.openConnection();
-
             httpConn.setRequestMethod("GET");
-            httpConn.connect();
             int code = httpConn.getResponseCode();
 
             if (code == 200)

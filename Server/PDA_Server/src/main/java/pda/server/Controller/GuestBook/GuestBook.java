@@ -1,19 +1,14 @@
 package pda.server.Controller.GuestBook;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import pda.server.Controller.RestException;
+import org.springframework.web.bind.annotation.*;
 import pda.server.DAO.MemberOperation;
+import pda.server.DTO.Guestbook;
 import pda.server.DTO.Member;
 import pda.server.Handler.UserTableMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /***
  *
@@ -62,5 +57,34 @@ public class GuestBook
 //            throw new RestException(HttpStatus.UNAUTHORIZED,"권한 없습니다");
 //        }
         return memberOperation.waitingToJoin(GroupId);
+    }
+
+    @RequestMapping("/JoinGroup/Certification/List/{GroupId}")
+    public List<Member> List(@PathVariable String GroupId, @RequestAttribute String U_ID)
+    {
+//        if (memberOperation.isAdmin(GroupId, U_ID) != 1)
+//        {
+//            throw new RestException(HttpStatus.UNAUTHORIZED, "권한 없습니다");
+//        }
+        return memberOperation.WaitingList(GroupId);
+    }
+
+    @RequestMapping("/GuestBook/SendMessage/{MemberUID}")
+    public String  SendMessage(@PathVariable int MemberUID, @RequestAttribute String U_ID , @RequestParam String Content)
+    {
+        memberOperation.SendMessage(Integer.parseInt(U_ID), MemberUID, Content);
+        return "발송 성공";
+    }
+    @RequestMapping("/GuestBook/ReceiveMessage")
+    public List<Guestbook> ReceiveMessage(@RequestAttribute String U_ID)
+    {
+        List<Guestbook> GuestBook = new ArrayList<>();
+        for (Guestbook temp : memberOperation.ReceiveMessage(Integer.parseInt(U_ID)))
+        {
+            String name  = memberOperation.SearchName(UserTableMapping.UIDConversion(temp.getSender()), temp.getSender());
+            temp.setSenderName(name);
+            GuestBook.add(temp);
+        }
+        return GuestBook;
     }
 }
