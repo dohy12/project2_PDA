@@ -1,9 +1,11 @@
 package pda.server.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import pda.server.DAO.MemberOperation;
-import pda.server.DTO.Guestbook;
 import pda.server.DTO.Member;
 import pda.server.Handler.UserTableMapping;
 
@@ -100,5 +102,4 @@ public class JoinGroup
 //        }
         return memberOperation.WaitingList(GroupId);
     }
-
 }

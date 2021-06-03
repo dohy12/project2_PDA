@@ -1,9 +1,7 @@
 package pda.server.DAO;
 
 import org.apache.ibatis.annotations.*;
-import pda.server.DTO.Guestbook;
 import pda.server.DTO.Member;
-import pda.server.DTO.User;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +13,7 @@ public interface MemberOperation
     public Member[] MemberList(@Param("GroupID") String GroupID);
 
     @Select("select * from main.user${Num} where U_ID = #{UID}")
-    public Member details(@Param("Num") int Num, @Param("UID") int UID);
+    public UserInfo details(@Param("Num") int Num, @Param("UID") int UID);
 
     @Select("select isAdmin from ${GroupID}.user where U_ID = #{UID} ")
     public int isAdmin(@Param("GroupID") String GroupID, @Param("UID") int UID);
@@ -24,7 +22,7 @@ public interface MemberOperation
     public void setAdmin(@Param("GroupID") String GroupID, @Param("AdminFlag") int AdminFlag);
 
     @Select("select U_ID from ${GroupID}.user where JoinTime is null ")
-    public List<Integer> waitingToJoin(@Param("GroupID") String GroupID);
+    public Map<String, Object> waitingToJoin(@Param("GroupID") String GroupID);
 
     @Select("select JoinedGroups from main.user${Num} where U_ID = #{UID}")
     public String JoinedGroups(@Param("Num") int Num, @Param("UID") int UID);
@@ -55,13 +53,4 @@ public interface MemberOperation
 
     @Update("UPDATE ${GroupID}.user set JoinTime = now() where U_ID = #{UID} ")
     public void Certification(@Param("GroupID") String GroupID,@Param("UID") int UID);
-
-    @Insert("Insert main.guestBook(Sender, Receiver, Time, Content) VALUES (#{Sender} , #{Receiver} , now() , #{Content} )")
-    public void SendMessage(@Param("Sender") int Sender, @Param("Receiver") int Receiver, @Param("Content") String Content);
-
-    @Select("select Sender,Receiver,Time,Content from main.guestBook where Receiver = #{Receiver}")
-    public List<Guestbook> ReceiveMessage(@Param("Receiver") int Receiver);
-
-    @Select("select name from main.user${Num} where U_ID = #{UID}")
-    public String SearchName(@Param("Num") int Num, @Param("UID") int UID);
 }
