@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -52,17 +53,23 @@ public class Mypage extends AppCompatActivity {
 
         guestBookList = new ArrayList<>();
 
-        if (IsEnable)
-            getGuestBook();
+        if (IsEnable) {
+            try {
+                getGuestBook();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         else {
             guestBookList.add(new GuestBook("이도희", "안녕하세요", LocalDateTime.of(2021, 5, 15, 9, 51)));
             guestBookList.add(new GuestBook("이도희2", "안녕하세요", LocalDateTime.of(2021, 5, 16, 9, 51)));
             guestBookList.add(new GuestBook("이도희3", "안녕하세요", LocalDateTime.of(2021, 5, 17, 9, 51)));
             guestBookList.add(new GuestBook("이도희4", "안녕하세요", LocalDateTime.of(2021, 5, 18, 9, 51)));
+
+            mem = new Member(1, "이도희1", 27, "010-2890-6812", "dohy12@naver.com", "경북대학교를 다니고 있는 학생입니다 잘 부탁드립니다.");
+            setMypage(mem);
+            showBookList();
         }
-        mem = new Member(1, "이도희1", 27, "010-2890-6812", "dohy12@naver.com", "경북대학교를 다니고 있는 학생입니다 잘 부탁드립니다.");
-        setMypage(mem);
-        showBookList();
     }
 
     private void setMypage(Member mem) {
@@ -96,34 +103,64 @@ public class Mypage extends AppCompatActivity {
         }
     }
 
-    private void getGuestBook() {
-        final String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzA0NTc3LCJpYXQiOjE2MjI3MDI3Nzd9.9eY12c0ObT8fBDA4_oD-RzHwG_77wmyMxQ3Dg8jk7NMrd0eUcnjtCjeat169IXp0ORmmUayh2k1yiwfRjMK-nQ";
+    private void getGuestBook() throws InterruptedException {
+        final String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzA2MDgxLCJpYXQiOjE2MjI3MDQyODF9.hbiryzoxngs-GVQpOniXYmgavzMQEvk8AA-FSndhkWK7YnS_wqwTZk1E2G0wBessg_8ZadQSym-Aocdo1om_8Q";
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(new Interceptor() {
-                    @NotNull
-                    @Override
-                    public Response intercept(@NotNull Chain chain) throws IOException {
-                        Request newRequest = chain.request().newBuilder().addHeader("JWT", JWT).build();
-                        return chain.proceed(newRequest);
-                    }
-                })
+//                .addInterceptor(new Interceptor() {
+//                    @NotNull
+//                    @Override
+//                    public Response intercept(@NotNull Chain chain) throws IOException {
+//                        Request newRequest = chain.request()
+//                                .newBuilder()
+//                                .addHeader("JWT", JWT).build();
+//                        return chain.proceed(newRequest);
+//                    }
+//                })
                 .build();
-        String Host = "http://localhost:8080/";
-        String AccessPath = "GuestBook/ReceiveMessage";
-        String url = Host + AccessPath;
+        String Host = "http://10.0.2.2:";
+        String port = "8080";
+        String AccessPath = "/GuestBook/ReceiveMessage";
+        String url = Host + port + AccessPath;
+        System.out.println(url);
         final Request request = new Request.Builder()
                 .url(url)
                 .get()
+                .addHeader("JWT",JWT)
                 .build();
         final Call call = okHttpClient.newCall(request);
-        new Thread(new Runnable() {
+//        call.enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Log.d("TAG", "onFailure: ");
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                Log.d("TAG", "onResponse: " + response.body().string());
+//                System.out.println("执行");
+//                Gson gson = new Gson();
+//                Guestbook[] guestbook = gson.fromJson(response.body().string(), Guestbook[].class);
+//                for (Guestbook temp : guestbook) {
+//                    System.out.println(temp);
+//                    Date date = temp.getTime();
+//                    Instant instant = date.toInstant();
+//                    ZoneId zoneId = ZoneId.systemDefault();
+//                    LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+//                    guestBookList.add(new GuestBook(temp.getSenderName(), temp.getContent(), localDateTime));
+//                }
+//            }
+//        });
+        Runnable networkTask = new Runnable() {
+//        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    System.out.println("执行");
                     Response response = call.execute();
                     Gson gson = new Gson();
                     Guestbook[] guestbook = gson.fromJson(response.body().string(), Guestbook[].class);
                     for (Guestbook temp : guestbook) {
+                        System.out.println(temp);
                         Date date = temp.getTime();
                         Instant instant = date.toInstant();
                         ZoneId zoneId = ZoneId.systemDefault();
@@ -135,8 +172,12 @@ public class Mypage extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }).start();
-
+        };
+        new Thread(networkTask).run();
+        System.out.println("执行完毕");
+        mem = new Member(1, "이도희1", 27, "010-2890-6812", "dohy12@naver.com", "경북대학교를 다니고 있는 학생입니다 잘 부탁드립니다.");
+        setMypage(mem);
+        showBookList();
     }
 
 
