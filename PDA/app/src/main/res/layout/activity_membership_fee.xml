@@ -73,15 +73,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="남은 회비"/>
+                    android:text="납부된 회비"/>
               
                 <TextView
+                    android:id="@+id/fee_total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
                     android:layout_gravity="center"
-                    android:textSize="35dp"
-                    android:text="130,000원"/>
+                    android:textSize="35dp" />
             </LinearLayout>
           
             <LinearLayout
@@ -116,6 +116,7 @@
                 </LinearLayout>
               
                 <TextView
+                    android:id="@+id/toPay"
                     android:layout_margin="30dp"
                     android:gravity="right"
                     android:layout_width="match_parent"

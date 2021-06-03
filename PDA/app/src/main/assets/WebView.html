@@ -8,7 +8,7 @@
 
 <body>
 <!-- 아임포트 자바스크립트는 jQuery 기반으로 개발되었습니다 -->
-<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
 <script type="text/javascript">
@@ -37,7 +37,7 @@
 
         // 웹뷰에서 DB의 결제 정보를 서버에서 가져옴 (JQuery ajax 이용) - 확인 완료
         var Buyer_name, Payment_name, Payment_price, Merchat_uid; //가져올 정보(사용자 이름, 회비가격, 회비이름, 주문번호)
-        var origin = "http://3ca936fceecb.ngrok.io/"
+        var origin = "http://8fae9f085367.ngrok.io/"
 
         $.ajax({
             url: origin + "payments/request-infos/" + GroupId + "/" + PID,

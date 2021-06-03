@@ -30,6 +30,10 @@ public class Login extends AppCompatActivity {
     }
 
     public void goSelectGroup(View view){
+        Intent intent = new Intent(this,SelectGroup.class);
+        startActivity(intent);
+        finish();
+        /*
         String JWT = doLogin();
         if(JWT.length() > 0) {
             Intent intent = new Intent(this, SelectGroup.class);
@@ -40,7 +44,7 @@ public class Login extends AppCompatActivity {
         {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setMessage("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.").setPositiveButton("확인", null);
-        }
+        }*/
     }
 
     public void goRegister(View view){

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -11,15 +12,18 @@ import android.webkit.WebView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 public class Payment extends AppCompatActivity {
     private WebView payWebView;
     private final String APP_SCHEME = "iamportapp"; //결제 성공시 돌아갈 주소?
     private String webview_url = "file:///android_asset/WebView.html"; //local assets directory에 저장
+    private int P_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_payment);
 
         //아래 주석은 구현해야할 사항
         /*
@@ -50,6 +54,7 @@ public class Payment extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
+        P_ID = intent.getIntExtra("P_ID", 0);
         Uri intentData = intent.getData();
 
         /*
@@ -74,7 +79,7 @@ public class Payment extends AppCompatActivity {
         /** Show a toast from the web page */
         @JavascriptInterface
         public String return_JWT() {
-            return "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ5IiwiZXhwIjoxNjIyNDYxMDI4LCJpYXQiOjE2MjI0NTkyMjh9.Fbs8gB4CCb1g464xi17tzB7CQlCD8Yh9W4Vdf11PTQChrozehD8B3HUWtximwULoQukB81SJb7oMG3rgCiTgiA";
+            return "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ5IiwiZXhwIjoxNjIyNjk1NzAzLCJpYXQiOjE2MjI2OTM5MDN9.Sj0boAjOB7AQ0d_b7tpHo5ETarDh7fghlA7piImRJQvfHVaWSIQA8IO4OzBIvBk9Irq2bv4rycNZdHlwsIcS0g";
         }
 
         @JavascriptInterface
@@ -84,7 +89,7 @@ public class Payment extends AppCompatActivity {
 
         @JavascriptInterface
         public int return_PID() {
-            return 1;
+            return P_ID;
         }
 
         @JavascriptInterface
