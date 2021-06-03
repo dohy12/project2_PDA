@@ -19,13 +19,14 @@ public class SelectGroup extends AppCompatActivity {
 
     private LinearLayout container;
     private LayoutInflater inflater;
-
     ArrayList<String> tempList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_group);
+
+        System.out.println(app.getJWT());
 
         container = findViewById(R.id.container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
