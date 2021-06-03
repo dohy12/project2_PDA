@@ -2,12 +2,15 @@ package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pda.entity.Guestbook;
 import com.google.gson.Gson;
@@ -22,10 +25,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -43,7 +49,6 @@ public class Mypage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
-
         ///툴바 세팅/////////////
         toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
@@ -59,8 +64,16 @@ public class Mypage extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+            Button btn = findViewById(R.id.SendMessage);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendMessage();
+                }
+            });
+
+//            findViewById(R.id.SendMessage).set;
+        } else {
             guestBookList.add(new GuestBook("이도희", "안녕하세요", LocalDateTime.of(2021, 5, 15, 9, 51)));
             guestBookList.add(new GuestBook("이도희2", "안녕하세요", LocalDateTime.of(2021, 5, 16, 9, 51)));
             guestBookList.add(new GuestBook("이도희3", "안녕하세요", LocalDateTime.of(2021, 5, 17, 9, 51)));
@@ -104,7 +117,7 @@ public class Mypage extends AppCompatActivity {
     }
 
     private void getGuestBook() throws InterruptedException {
-        final String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzA2MDgxLCJpYXQiOjE2MjI3MDQyODF9.hbiryzoxngs-GVQpOniXYmgavzMQEvk8AA-FSndhkWK7YnS_wqwTZk1E2G0wBessg_8ZadQSym-Aocdo1om_8Q";
+        final String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzEzMTU5LCJpYXQiOjE2MjI3MTEzNTl9.rkFEyerMVBy3vZlwvI-U7bfe4IUiWVCzpqlleMYyxeYHf9VCUASQ7jJ5rTjRThNpvG96FcrBucnVjQAm_WFa-Q";
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new Interceptor() {
 //                    @NotNull
@@ -125,7 +138,7 @@ public class Mypage extends AppCompatActivity {
         final Request request = new Request.Builder()
                 .url(url)
                 .get()
-                .addHeader("JWT",JWT)
+                .addHeader("JWT", JWT)
                 .build();
         final Call call = okHttpClient.newCall(request);
 //        call.enqueue(new Callback() {
@@ -151,14 +164,14 @@ public class Mypage extends AppCompatActivity {
 //            }
 //        });
         Runnable networkTask = new Runnable() {
-//        new Thread(new Runnable() {
+            //        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    System.out.println("执行");
                     Response response = call.execute();
+                    String gsonText = Objects.requireNonNull(response.body()).string();
                     Gson gson = new Gson();
-                    Guestbook[] guestbook = gson.fromJson(response.body().string(), Guestbook[].class);
+                    Guestbook[] guestbook = gson.fromJson(gsonText, Guestbook[].class);
                     for (Guestbook temp : guestbook) {
                         System.out.println(temp);
                         Date date = temp.getTime();
@@ -174,11 +187,47 @@ public class Mypage extends AppCompatActivity {
             }
         };
         new Thread(networkTask).run();
-        System.out.println("执行完毕");
         mem = new Member(1, "이도희1", 27, "010-2890-6812", "dohy12@naver.com", "경북대학교를 다니고 있는 학생입니다 잘 부탁드립니다.");
         setMypage(mem);
         showBookList();
     }
 
+    private void sendMessage() {
+        final TextView c = findViewById(R.id.Conment);
+        final String text = c.getText().toString();
+        FormBody formBody = new FormBody.Builder()
+                .add("Content", text)
+                .build();
+        final String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzExNjE5LCJpYXQiOjE2MjI3MDk4MTl9.J5cseFKVYGGNcZj2eJLgz5CUnMOzDWtdCmFUyE3I1klHCf11UBnDq9udQCEUDuhOgZMjdS7goTsgoElI0ijA5w";
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .build();
+        String Host = "http://10.0.2.2:";
+        String port = "8080";
+        String AccessPath = "/GuestBook/SendMessage/1503238548";
+        String url = Host + port + AccessPath;
+        System.out.println(url);
+        final Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .addHeader("JWT", JWT)
+                .build();
+        final Call call = okHttpClient.newCall(request);
+        Runnable networkTask = new Runnable() {
+            //        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = call.execute();
+                    c.setText("");
+                    String msg = response.body().string();
+                    Toast.makeText(Mypage.this, msg, Toast.LENGTH_SHORT).show();
+                    Log.d("TAG", "run: " + msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(networkTask).run();
+    }
 
 }
