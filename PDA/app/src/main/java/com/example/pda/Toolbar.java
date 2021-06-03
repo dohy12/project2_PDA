@@ -73,4 +73,7 @@ public class Toolbar {
         activity.startActivity(intent);
     }
 
+    public AppCompatActivity getActivity() {
+        return activity;
+    }
 }

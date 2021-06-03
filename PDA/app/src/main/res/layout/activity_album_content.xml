@@ -52,6 +52,8 @@
                 android:text="가을 대운동회 사진"/>
 
             <ImageView
+                android:onClick="openMenu"
+                android:id="@+id/menu_anchor"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/icon20"/>

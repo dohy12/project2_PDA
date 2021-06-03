@@ -8,9 +8,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AlbumContent extends AppCompatActivity {
 
@@ -66,5 +69,32 @@ public class AlbumContent extends AppCompatActivity {
     public void goShowReply(View view){
         Intent intent = new Intent(this, ShowReply.class);
         startActivity(intent);
+    }
+
+    public void openMenu(View view){
+        View anchor = findViewById(R.id.menu_anchor);
+        final PopupMenu popupMenu = new PopupMenu(this, anchor);
+        getMenuInflater().inflate(R.menu.menu_test, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.menu1:
+                        Toast.makeText(toolbar.getActivity(), "메뉴 1 클릭", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.menu2:
+                        Toast.makeText(toolbar.getActivity(), "메뉴 2 클릭", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.menu3:
+                        Toast.makeText(toolbar.getActivity(), "메뉴 3 클릭", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
+                return false;
+            }
+        });
+        popupMenu.show();
     }
 }
