@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -75,23 +76,18 @@ public class AlbumContent extends AppCompatActivity {
         View anchor = findViewById(R.id.menu_anchor);
         final PopupMenu popupMenu = new PopupMenu(this, anchor);
         getMenuInflater().inflate(R.menu.menu_test, popupMenu.getMenu());
+
+        Menu menu = popupMenu.getMenu();
+
+        for(int i=0; i<5;i++)
+            menu.add(Menu.NONE, i, Menu.NONE, "메뉴"+i);
+
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.menu1:
-                        Toast.makeText(toolbar.getActivity(), "메뉴 1 클릭", Toast.LENGTH_SHORT).show();
-                        break;
+                int i= menuItem.getItemId();
 
-                    case R.id.menu2:
-                        Toast.makeText(toolbar.getActivity(), "메뉴 2 클릭", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.menu3:
-                        Toast.makeText(toolbar.getActivity(), "메뉴 3 클릭", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-
+                Toast.makeText(toolbar.getActivity(), i + "선택", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
