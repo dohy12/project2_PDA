@@ -151,7 +151,7 @@ public class Register extends AppCompatActivity {
     {
         if(dupcheck == true) {
             HttpURLConnection httpConn = null;
-            if(((EditText)findViewById(R.id.newID)).getText().toString().equals(findViewById(R.id.newID).toString())) {
+            if(((EditText)findViewById(R.id.newID)).getText().toString().equals(((EditText)findViewById(R.id.newID)).getText().toString())) {
                 try {
                     URL url = new URL("http://localhost:8080/image/" + ((EditText)findViewById(R.id.name)).getText().toString() +"profile.png");
                     File file = new File(((TextView)findViewById(R.id.profile_image_url)).getText().toString());
@@ -187,13 +187,13 @@ public class Register extends AppCompatActivity {
                         Map<String, Object> ret = HashingF(((EditText)findViewById(R.id.newPW)).getText().toString());
                         jsonObject.accumulate("passHash", ret.get("hash"));
                         jsonObject.accumulate("passSalt", ret.get("salt"));
-                        jsonObject.accumulate("age", getAge(findViewById(R.id.register_birth).toString()));
-                        jsonObject.accumulate("birth", findViewById(R.id.register_birth).toString());
-                        jsonObject.accumulate("email", findViewById(R.id.email).toString());
-                        jsonObject.accumulate("kakao", findViewById(R.id.kakao).toString());
-                        jsonObject.accumulate("phone", findViewById(R.id.telephonenum).toString());
-                        jsonObject.accumulate("profileimg", findViewById(R.id.name).toString() + "profile.png");
-                        jsonObject.accumulate("introduction", findViewById(R.id.introduction).toString());
+                        jsonObject.accumulate("age", getAge(((TextView)findViewById(R.id.register_birth)).getText().toString()));
+                        jsonObject.accumulate("birth", ((TextView)findViewById(R.id.register_birth)).getText().toString());
+                        jsonObject.accumulate("email", ((EditText)findViewById(R.id.email)).getText().toString());
+                        jsonObject.accumulate("kakao", ((EditText)findViewById(R.id.kakao)).getText().toString());
+                        jsonObject.accumulate("phone", ((EditText)findViewById(R.id.telephonenum)).getText().toString());
+                        jsonObject.accumulate("profileimg", ((TextView)findViewById(R.id.profile_image_url)).getText().toString() + "profile.png");
+                        jsonObject.accumulate("introduction", ((EditText)findViewById(R.id.introduction)).getText().toString());
                         jsonObject.accumulate("joinedgroups", "");
                         jsonObject.accumulate("awaitingcertification", "");
 
@@ -234,12 +234,14 @@ public class Register extends AppCompatActivity {
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setMessage("비밀번호 불일치").setPositiveButton("확인", null);
+                alert.show();
             }
         }
         else
         {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setMessage("ID 중복확인을 해주십시오").setPositiveButton("확인", null);
+            alert.show();
         }
     }
 
@@ -247,7 +249,7 @@ public class Register extends AppCompatActivity {
     {
         HttpURLConnection httpConn = null;
         try {
-            URL url = new URL("http://localhost:8080/" + findViewById(R.id.newID).toString());
+            URL url = new URL("http://localhost:8080/" + ((EditText)findViewById(R.id.newID)).getText().toString());
             httpConn = (HttpURLConnection) url.openConnection();
             httpConn.setRequestMethod("GET");
 
