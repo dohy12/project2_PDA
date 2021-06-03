@@ -47,6 +47,8 @@ public class Login extends AppCompatActivity {
         else {
             String ID = ((EditText)findViewById(R.id.ID)).getText().toString();
             String PW = ((EditText)findViewById(R.id.PW)).getText().toString();
+            app.setID(ID);
+            app.setEnPW(EncryptRSA(PW));
             OkHttpClient client = new OkHttpClient();
 
             HttpUrl httpUrl = new HttpUrl.Builder()
@@ -59,23 +61,26 @@ public class Login extends AppCompatActivity {
 
             Request request = new Request.Builder()
                     .url(httpUrl)
-                    .addHeader("pw", EncryptRSA(PW))
+                    .addHeader("pw", app.getEnPW())
                     .build();
+
             System.out.println(httpUrl);
             System.out.println(request.headers().toString());
             client.newCall(request).enqueue(new okhttp3.Callback() {
                 @Override
                 public void onFailure(@NotNull okhttp3.Call call, @NotNull IOException e) {
-                    System.out.println("실패");
+                    System.out.println("로그인 실패");
+                    alert.setMessage("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.").setPositiveButton("확인", null);
+                    alert.show();
                 }
 
                 @Override
                 public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) throws IOException {
                     try {
                         JSONObject json = new JSONObject(response.body().string());
-
-                        app.setJWT(json.getString("result"));
-                        startActivity(intent);
+                        app.setJWT(json.getString("JWT"));
+                        app.setName(json.getString("name"));
+                        app.setUid(json.getString("UID"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
