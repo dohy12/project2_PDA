@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 public class JwtTokenUtil {
     public static final long JWT_EX_TIME =  60 * 30;
 
-    //@Value("${spring.jwt.secret}")
-    private String SecretKey = "ENC(/Bvd6nnUzO/iiNfE7JzUm2+A7mPWj+FFn0cDWdk/2sk=)";
+    @Value("${spring.jwt.secret}")
+    private String SecretKey;
 
     public String getUIDFromToken(String token)
     {
