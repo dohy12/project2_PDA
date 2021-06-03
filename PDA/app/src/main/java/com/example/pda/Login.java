@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity {
 
             HttpUrl httpUrl = new HttpUrl.Builder()
                     .scheme("http")
-                    .host("10.0.2.2")
+                    .host("18.206.18.154")
                     .port(8080)
                     .addPathSegment("auth")
                     .addQueryParameter("id", ID)
@@ -83,7 +83,8 @@ public class Login extends AppCompatActivity {
                 public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) throws IOException {
                     try {
                         JSONObject json = new JSONObject(response.body().string());
-                        intent.putExtra("JWT", json.getString("result"));
+
+                        app.setJWT(json.getString("result"));
                         startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();
