@@ -13,12 +13,13 @@ public class Community {
 
     @Autowired
     BoardOperation board;
-    Timestamp dateTime = new Timestamp(System.currentTimeMillis());
+    Timestamp dateTime;
     Board Board = new Board(0,(short)1,"BoardClassTitle",dateTime,"BoardClassContents",1503238549);
 
     //게시글 목록을 보여줄 때 사용
     //상위 20개 게시글 정보를 불러옴
     //URL의 isNotice로 공지사항과 일반게시글 구분
+
     @RequestMapping(value = "/Community/{GroupId}/{isNotice}", method = RequestMethod.GET)
     public List<Board> boardList(@PathVariable("GroupId") String GroupId, @PathVariable("isNotice") int isNotice) {
 
@@ -34,7 +35,7 @@ public class Community {
     }
 
     //하나의 게시글 정보 조회할 때 사용
-    @RequestMapping(value = "/Community/{GroupId}/{BID}", method = RequestMethod.GET)
+    @RequestMapping(value = "/Community/{GroupId}/select/{BID}", method = RequestMethod.GET)
     public Board selectedBoard(@PathVariable("GroupId") String GroupId, @PathVariable("BID") int BID) {
 
         return board.selectedBoard(GroupId, BID);
@@ -42,7 +43,7 @@ public class Community {
 
     //게시글 검색 기능
     //키워드를 제목/내용에 포함하는 글
-    @RequestMapping(value = "/Community/{GroupId}/{Keyword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/Community/{GroupId}/search/{Keyword}", method = RequestMethod.GET)
     public List<Board> searchBoard(@PathVariable("GroupId") String GroupId, @PathVariable("Keyword") String Keyword) {
 
         return board.searchBoard(GroupId, Keyword);
@@ -55,6 +56,8 @@ public class Community {
 
         try{
             if(Board.getIsNotice() == 1 && authUID == 1) {
+                dateTime = new Timestamp(System.currentTimeMillis());
+                Board.setDateTime(dateTime);
                 board.boardPost(GroupId, Board);
             } else if(Board.getIsNotice() == 0) {
                 board.boardPost(GroupId, Board);

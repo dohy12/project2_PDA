@@ -10,6 +10,11 @@ public interface CommentOperation {
     //오래된 댓글부터 순서대로
     @Select("select * from ${GroupId}.board_comment where B_ID = ${BID} order by date")
     public List<Comment> commentList(@Param("GroupId") String GroupId, @Param("BID") String BID);
+    public List<Comment> commentList(@Param("GroupId") String GroupId, @Param("BID") int BID);
+
+    //하나의 댓글 선택하기
+    @Select("select * from ${GroupId}.board_comment where C_ID = ${CID}")
+    public Comment selectedComment(@Param("GroupId") String GroupId, @Param("CID") int CID);
 
     //댓글 입력하기
     @Insert("insert into ${GroupId}.board_comment values(${Comment.C_ID}, ${Comment.dateTime}, \"${Comment.contents}\", ${Comment.B_ID}, ${Comment.U_ID}, ${Comment.R_CID})")
