@@ -59,16 +59,6 @@ public class GuestBook
         return memberOperation.waitingToJoin(GroupId);
     }
 
-    @RequestMapping("/JoinGroup/Certification/List/{GroupId}")
-    public List<Member> List(@PathVariable String GroupId, @RequestAttribute String U_ID)
-    {
-//        if (memberOperation.isAdmin(GroupId, U_ID) != 1)
-//        {
-//            throw new RestException(HttpStatus.UNAUTHORIZED, "권한 없습니다");
-//        }
-        return memberOperation.WaitingList(GroupId);
-    }
-
     @RequestMapping("/GuestBook/SendMessage/{MemberUID}")
     public String  SendMessage(@PathVariable int MemberUID, @RequestAttribute String U_ID , @RequestParam String Content)
     {
