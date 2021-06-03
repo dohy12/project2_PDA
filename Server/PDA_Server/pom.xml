@@ -10,7 +10,7 @@
     </parent>
     <groupId>PDA</groupId>
     <artifactId>server</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>server</name>
     <description>Demo project for Spring Boot</description>
     <properties>
