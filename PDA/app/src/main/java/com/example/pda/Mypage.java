@@ -37,7 +37,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Mypage extends AppCompatActivity {
-    private boolean IsEnable = true;
+    private boolean IsEnable = false;
     private LinearLayout container;
     private LayoutInflater inflater;
     AppCompatActivity activity;
