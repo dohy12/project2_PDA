@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pda.server.Auth.JwtTokenUtil;
+import pda.server.Auth.RSADecoder;
 import pda.server.DAO.UserInfo;
 import pda.server.DTO.User;
 import pda.server.DTO.UserPW;
@@ -25,12 +26,18 @@ public class AuthCon {
     JwtTokenUtil token;
 
     @GetMapping()
-    public Map<String, Object> Login(@RequestParam String id, @RequestParam String pw)
+    public Map<String, Object> Login(@RequestParam("id") String id, @RequestHeader("pw") String pw)
     {
         UserPW pwinfo = usr.getPW(Integer.toString(id.hashCode() %10), id);
         if(pwinfo == null)
-            throw new RestException(HttpStatus.UNAUTHORIZED, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
-
+            throw new RestException(HttpStatus.UNAUTHORIZED, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.1");
+        System.out.println(pw);
+        RSADecoder rsa = new RSADecoder();
+        try {
+            pw = rsa.decryptRSA(pw);
+        } catch (Exception e) {
+            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "복호화 오류");
+        }
         Map<String, Object> ret = new HashMap<String, Object>();
 
         if(pwinfo.getPass_Hash().equals(HashingF(pw, pwinfo.getPass_Salt()))) {
@@ -39,7 +46,7 @@ public class AuthCon {
         }
         else
         {
-            throw new RestException(HttpStatus.UNAUTHORIZED, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
+            throw new RestException(HttpStatus.UNAUTHORIZED, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.2");
         }
     }
 
