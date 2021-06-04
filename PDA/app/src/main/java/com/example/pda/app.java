@@ -1,6 +1,10 @@
 package com.example.pda;
 
 import android.app.Application;
+import android.util.Log;
+
+import com.example.pda.entity.User;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -8,9 +12,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 public class app extends Application {
     private static String JWT = "";
@@ -19,11 +26,52 @@ public class app extends Application {
     private static String uid = "";
     private static String name = "";
     private static String GroupId = "";
+    private static String GroupName = "";
+    private static String age = "";
+    private static String phone = "";
+    private static String email = "";
+    private static String intro = "";
     @Override
     public void onCreate() {
         super.onCreate();
     }
+    public static  void getUserInf()
+    {
+        String Host = "http://10.0.2.2:";
+        String port = "8080";
+        String AccessPath = "/UserInf";
+        final String url = Host + port + AccessPath;
+        final OkHttpClient okHttpClient = new OkHttpClient();
+        final Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("JWT", JWT)
+                .build();
+        final Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("TAG", "onFailure: ");
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Gson gson = new Gson();
+                User user = gson.fromJson(response.body().string(), User.class);
+                name = user.getName();
+                phone = user.getPhone();
+                age = user.getAge().toString();
+                email = user.getEmail();
+                if (user.getIntroduction() == null)
+                    intro = "";
+                else
+                    intro = user.getIntroduction();
+
+            }
+        });
+
+
+    }
     public static void doLogin()
     {
         OkHttpClient client = new OkHttpClient();
@@ -60,6 +108,46 @@ public class app extends Application {
                 }
             }
         });
+    }
+
+    public static String getGroupName() {
+        return GroupName;
+    }
+
+    public static void setGroupName(String groupName) {
+        GroupName = groupName;
+    }
+
+    public static String getAge() {
+        return age;
+    }
+
+    public static void setAge(String age) {
+        app.age = age;
+    }
+
+    public static String getPhone() {
+        return phone;
+    }
+
+    public static void setPhone(String phone) {
+        app.phone = phone;
+    }
+
+    public static String getEmail() {
+        return email;
+    }
+
+    public static void setEmail(String email) {
+        app.email = email;
+    }
+
+    public static String getIntro() {
+        return intro;
+    }
+
+    public static void setIntro(String intro) {
+        app.intro = intro;
     }
 
     public static String getUid() {

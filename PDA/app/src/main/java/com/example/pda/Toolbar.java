@@ -70,6 +70,11 @@ public class Toolbar {
 
     public void goMypage(){
         Intent intent = new Intent(activity, Mypage.class);
+        intent.putExtra("Name",app.getName());
+        intent.putExtra("Phone",app.getPhone());
+        intent.putExtra("Email",app.getEmail());
+        intent.putExtra("Intro",app.getIntro());
+        intent.putExtra("Age",app.getAge());
         activity.startActivity(intent);
     }
 

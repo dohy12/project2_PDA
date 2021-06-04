@@ -40,6 +40,12 @@ public class Mypage extends AppCompatActivity {
     private boolean IsEnable = false;
     private LinearLayout container;
     private LayoutInflater inflater;
+    private String Name;
+    private String Phone;
+    private String Intro;
+    private String Email;
+    private String Age;
+
     AppCompatActivity activity;
     Member mem;
     ArrayList<GuestBook> guestBookList;
@@ -58,6 +64,12 @@ public class Mypage extends AppCompatActivity {
         inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
         guestBookList = new ArrayList<>();
+        Intent intent = getIntent();
+        Name = intent.getStringExtra("Name");
+        Phone = intent.getStringExtra("Phone");
+        Intro = intent.getStringExtra("Intro");
+        Email = intent.getStringExtra("Email");
+        Age = intent.getStringExtra("Age");
 
         if (IsEnable) {
             try {
@@ -118,7 +130,8 @@ public class Mypage extends AppCompatActivity {
     }
 
     private void getGuestBook() throws InterruptedException {
-        final String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzEzMTU5LCJpYXQiOjE2MjI3MTEzNTl9.rkFEyerMVBy3vZlwvI-U7bfe4IUiWVCzpqlleMYyxeYHf9VCUASQ7jJ5rTjRThNpvG96FcrBucnVjQAm_WFa-Q";
+        String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzEzMTU5LCJpYXQiOjE2MjI3MTEzNTl9.rkFEyerMVBy3vZlwvI-U7bfe4IUiWVCzpqlleMYyxeYHf9VCUASQ7jJ5rTjRThNpvG96FcrBucnVjQAm_WFa-Q";
+        JWT = app.getJWT();
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new Interceptor() {
 //                    @NotNull
@@ -199,13 +212,15 @@ public class Mypage extends AppCompatActivity {
         FormBody formBody = new FormBody.Builder()
                 .add("Content", text)
                 .build();
-        final String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzE0NDc1LCJpYXQiOjE2MjI3MTI2NzV9.5pLwY-dBnx1372_BibTltPfQvtnflI00KsNIC9stJBy8V-s1fjftwd-OGrDXWJcwy4HHWsFW6q5omymEen8HLQ";
+        String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzE0NDc1LCJpYXQiOjE2MjI3MTI2NzV9.5pLwY-dBnx1372_BibTltPfQvtnflI00KsNIC9stJBy8V-s1fjftwd-OGrDXWJcwy4HHWsFW6q5omymEen8HLQ";
+        JWT = app.getJWT();
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .build();
         String Host = "http://10.0.2.2:";
         String port = "8080";
-        String AccessPath = "/GuestBook/SendMessage/1503238548";
-        String url = Host + port + AccessPath;
+        String AccessPath = "/GuestBook/SendMessage";
+        String Receiver = "";
+        String url = Host + port + AccessPath + Receiver;
         System.out.println(url);
         final Request request = new Request.Builder()
                 .url(url)
