@@ -28,7 +28,7 @@ public class AuthCon {
     @GetMapping()
     public Map<String, Object> Login(@RequestParam("id") String id, @RequestHeader("pw") String pw)
     {
-        UserPW pwinfo = usr.getPW(Integer.toString(id.hashCode() %10), id);
+        UserPW pwinfo = usr.getPW(Integer.toString(Math.abs(id.hashCode()) %10), id);
         if(pwinfo == null)
             throw new RestException(HttpStatus.UNAUTHORIZED, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.1");
         System.out.println(pw);
@@ -57,7 +57,7 @@ public class AuthCon {
     {
         Map<String, Object> result = new HashMap<>();
         try {
-            usr.mainGenerate(user.getId().hashCode() % 10, user);
+            usr.mainGenerate(Math.abs(user.getId().hashCode()) % 10, user);
             result.put("result", "성공적으로 만들었습니다.");
         }
         catch (Exception e) {
@@ -69,7 +69,7 @@ public class AuthCon {
     @GetMapping("/{ID}")
     public Map<String, Object> IDCheck(@PathVariable String ID)
     {
-        if(usr.CheckID(ID.hashCode(), ID) == 0) {
+        if(usr.CheckID(Math.abs(ID.hashCode()) % 10, ID) == 0) {
             return (Map<String, Object>) new HashMap<>().put("result","ok");
         }
         else
