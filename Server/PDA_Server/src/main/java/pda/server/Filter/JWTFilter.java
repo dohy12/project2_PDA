@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/connectTest/*", "/message/*", "/user/*", "/Community/*","/JoinGroup/*", "/payments/*","/GuestBook/*"})
+@WebFilter(urlPatterns = {"/connectTest/*", "/message/*", "/user/*", "/Community/*","/JoinGroup/*", "/payments/*","/GuestBook/*", "/group/*"})
 public class JWTFilter implements Filter {
 
     @Autowired
