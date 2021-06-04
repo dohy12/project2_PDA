@@ -42,7 +42,7 @@ public class GetGroupInfo {
         return result;
     }
 
-    @GetMapping("/group/Joined/{ID}")
+    @GetMapping("/group/Awaiting/{ID}")
     public List<group> GetAwaitingMyGroups(@PathVariable String ID, @RequestAttribute String U_ID)
     {
         List<group> result = new ArrayList<>();
