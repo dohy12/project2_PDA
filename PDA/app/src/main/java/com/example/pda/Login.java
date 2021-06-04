@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -53,7 +56,7 @@ public class Login extends AppCompatActivity {
 
             HttpUrl httpUrl = new HttpUrl.Builder()
                     .scheme("http")
-                    .host("18.206.18.154")
+                    .host("10.0.2.2")
                     .port(8080)
                     .addPathSegment("auth")
                     .addQueryParameter("id", ID)
@@ -66,12 +69,27 @@ public class Login extends AppCompatActivity {
 
             System.out.println(httpUrl);
             System.out.println(request.headers().toString());
+
+            final Handler serverhandler = new Handler(){
+                public void handleMessage(Message msg){
+                    alert.setMessage("서버와의 연결이 원활하지 않습니다.").setPositiveButton("확인", null);
+                    alert.show();
+                }
+            };
+
+            final Handler loginhandler = new Handler(){
+                public void handleMessage(Message msg){
+                    alert.setMessage("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.").setPositiveButton("확인", null);
+                    alert.show();
+                }
+            };
+
             client.newCall(request).enqueue(new okhttp3.Callback() {
                 @Override
                 public void onFailure(@NotNull okhttp3.Call call, @NotNull IOException e) {
                     System.out.println("로그인 실패");
-                    alert.setMessage("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.").setPositiveButton("확인", null);
-                    alert.show();
+                    Message msg = serverhandler.obtainMessage();
+                    serverhandler.sendMessage(msg);
                 }
 
                 @Override
@@ -81,7 +99,10 @@ public class Login extends AppCompatActivity {
                         app.setJWT(json.getString("JWT"));
                         app.setName(json.getString("name"));
                         app.setUid(json.getString("UID"));
+                        startActivity(intent);
                     } catch (JSONException e) {
+                        Message msg = loginhandler.obtainMessage();
+                        loginhandler.sendMessage(msg);
                         e.printStackTrace();
                     }
                 }

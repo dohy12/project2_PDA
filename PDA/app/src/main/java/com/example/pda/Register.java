@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Path;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,16 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
@@ -48,6 +42,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -58,7 +53,35 @@ public class Register extends AppCompatActivity {
     private Bitmap scaled;
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int PICK_FROM_ALBUM = 1;
-    private boolean dupcheck;
+    private boolean dupcheck = false;
+    private boolean uploadck = false;
+    private String alertmsg = "";
+    private String prosrc = "";
+    final Handler duphandler = new Handler(){
+        public void handleMessage(Message msg){
+            if(dupcheck)
+                ((TextView)findViewById(R.id.dup)).setText("확인완료");
+            else
+                ((TextView)findViewById(R.id.dup)).setText("중복체크");
+        }
+    };
+
+    final Handler alerthander = new Handler(){
+        public void handleMessage(Message msg){
+            alert.setMessage(alertmsg).setPositiveButton("확인", null);
+            alert.show();
+        }
+    };
+
+    final Handler intenthander = new Handler(){
+        public void handleMessage(Message msg){
+            Intent intent = getIntent();
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +97,8 @@ public class Register extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 dupcheck = false;
+                Message msg = duphandler.obtainMessage();
+                duphandler.sendMessage(msg);
             }
         });
         alert = new AlertDialog.Builder(this);
@@ -162,14 +187,19 @@ public class Register extends AppCompatActivity {
 
     public void doRegister(View view)
     {
+        prosrc = "profile" + System.currentTimeMillis() + ".png";
+        uploadImage(prosrc);
+    }
+
+    public void uploadUsr()
+    {
         if(dupcheck == true) {
             if(((EditText)findViewById(R.id.newPW)).getText().toString().equals(((EditText)findViewById(R.id.checkPW)).getText().toString())) {
-                uploadImage();
                 OkHttpClient client = new OkHttpClient();
 
                 HttpUrl httpUrl = new HttpUrl.Builder()
                         .scheme("http")
-                        .host("18.206.18.154")
+                        .host("10.0.2.2")
                         .port(8080)
                         .addPathSegment("auth")
                         .build();
@@ -177,18 +207,18 @@ public class Register extends AppCompatActivity {
                 String json = "";
                 try {
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.accumulate("name", ((EditText)findViewById(R.id.name)).getText().toString());
-                    jsonObject.accumulate("id", ((EditText)findViewById(R.id.newID)).getText().toString());
-                    Map<String, Object> ret = HashingF(((EditText)findViewById(R.id.newPW)).getText().toString());
+                    jsonObject.accumulate("name", ((EditText) findViewById(R.id.name)).getText().toString());
+                    jsonObject.accumulate("id", ((EditText) findViewById(R.id.newID)).getText().toString());
+                    Map<String, Object> ret = HashingF(((EditText) findViewById(R.id.newPW)).getText().toString());
                     jsonObject.accumulate("passHash", ret.get("hash"));
                     jsonObject.accumulate("passSalt", ret.get("salt"));
-                    jsonObject.accumulate("age", getAge(((TextView)findViewById(R.id.register_birth)).getText().toString()));
-                    jsonObject.accumulate("birth", ((TextView)findViewById(R.id.register_birth)).getText().toString());
-                    jsonObject.accumulate("email", ((EditText)findViewById(R.id.email)).getText().toString());
-                    jsonObject.accumulate("kakao", ((EditText)findViewById(R.id.kakao)).getText().toString());
-                    jsonObject.accumulate("phone", ((EditText)findViewById(R.id.telephonenum)).getText().toString());
-                    jsonObject.accumulate("profileimg", ((TextView)findViewById(R.id.profile_image_url)).getText().toString() + "profile.png");
-                    jsonObject.accumulate("introduction", ((EditText)findViewById(R.id.introduction)).getText().toString());
+                    jsonObject.accumulate("age", getAge(((TextView) findViewById(R.id.register_birth)).getText().toString()));
+                    jsonObject.accumulate("birth", ((TextView) findViewById(R.id.register_birth)).getText().toString());
+                    jsonObject.accumulate("email", ((EditText) findViewById(R.id.email)).getText().toString());
+                    jsonObject.accumulate("kakao", ((EditText) findViewById(R.id.kakao)).getText().toString());
+                    jsonObject.accumulate("phone", ((EditText) findViewById(R.id.telephonenum)).getText().toString());
+                    jsonObject.accumulate("profileimg", prosrc);
+                    jsonObject.accumulate("introduction", ((EditText) findViewById(R.id.introduction)).getText().toString());
                     jsonObject.accumulate("joinedgroups", "");
                     jsonObject.accumulate("awaitingcertification", "");
                     json = jsonObject.toString();
@@ -206,67 +236,93 @@ public class Register extends AppCompatActivity {
                         .url(httpUrl)
                         .post(reqBody)
                         .build();
+                System.out.println(request.body());
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        alert.setMessage("회원가입 실패").setPositiveButton("확인", null);
-                        alert.show();
+                        alertmsg = "서버와의 연결이 원활하지 않습니다.";
+                        Message msg = alerthander.obtainMessage();
+                        alerthander.sendMessage(msg);
                     }
 
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
+                        if (response.code() == 200) {
+                            Message msg = intenthander.obtainMessage();
+                            intenthander.sendMessage(msg);
+                        } else {
+                            alertmsg = "회원가입 실패";
+                            Message msg = alerthander.obtainMessage();
+                            alerthander.sendMessage(msg);
+                        }
                     }
                 });
-                Intent intent = getIntent();
-                setResult(RESULT_OK, intent);
-                finish();
-
             }
             else
             {
-                alert.setMessage("비밀번호 불일치").setPositiveButton("확인", null);
-                alert.show();
+                alertmsg = "비밀번호 불일치";
+                Message msg = alerthander.obtainMessage();
+                alerthander.sendMessage(msg);
             }
         }
         else
         {
-            alert.setMessage("ID 중복확인을 해주십시오").setPositiveButton("확인", null);
-            alert.show();
+            alertmsg = "ID 중복확인을 해주세요";
+            Message msg = alerthander.obtainMessage();
+            alerthander.sendMessage(msg);
         }
     }
 
-    public void uploadImage()
+
+    public void uploadImage(String name)
     {
-        OkHttpClient client = new OkHttpClient();
-        HttpUrl httpUrl = new HttpUrl.Builder()
-                .scheme("http")
-                .host("18.206.18.154")
-                .port(8080)
-                .addPathSegment("image/profile" +  System.currentTimeMillis()+ ".png")
-                .build();
+        alert.setMessage("회원가입 요청중").setCancelable(false);
+        alert.show();
+        if(scaled != null) {
+            OkHttpClient client = new OkHttpClient();
+            HttpUrl httpUrl = new HttpUrl.Builder()
+                    .scheme("http")
+                    .host("10.0.2.2")
+                    .port(8080)
+                    .addPathSegment("image")
+                    .addPathSegment(name)
+                    .build();
+            System.out.println(httpUrl);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
+            scaled.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            final RequestBody reqBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("image", "", RequestBody.create(MultipartBody.FORM, byteArray)).build();
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
-        scaled.compress( Bitmap.CompressFormat.PNG, 100, stream) ;
-        byte[] byteArray = stream.toByteArray();
-        RequestBody reqBody = RequestBody.create(byteArray);
-        Request request = new Request.Builder()
-                .url(httpUrl)
-                .post(reqBody)
-                .build();
+            Request request = new Request.Builder()
+                    .url(httpUrl)
+                    .post(reqBody)
+                    .build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    alertmsg = "서버와의 연결이 원활하지 않습니다.";
+                    Message msg = alerthander.obtainMessage();
+                    alerthander.sendMessage(msg);
+                }
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                alert.setMessage("이미지 업로드 실패").setPositiveButton("확인", null);
-                alert.show();
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                
-            }
-        });
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    if (response.code() != 200) {
+                        System.out.println(response.body().string());
+                        alertmsg = "이미지 저장 실패";
+                        Message msg = alerthander.obtainMessage();
+                        alerthander.sendMessage(msg);
+                    } else {
+                        uploadUsr();
+                    }
+                }
+            });
+        }
+        else
+        {
+            prosrc = "basicprofile.png";
+            uploadUsr();
+        }
     }
 
     public void doDupcheck(View view)
@@ -275,26 +331,45 @@ public class Register extends AppCompatActivity {
 
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("http")
-                .host("18.206.18.154")
+                .host("10.0.2.2")
                 .port(8080)
+                .addPathSegment("auth")
                 .addPathSegment(((EditText)findViewById(R.id.newID)).getText().toString())
                 .build();
+
+        System.out.println(httpUrl);
 
         Request request = new Request.Builder()
                 .url(httpUrl)
                 .build();
 
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                alert.setMessage("중복입니다").setPositiveButton("확인", null);
-                alert.show();
+                alertmsg = "서버와의 연결이 원활하지 않습니다.";
+                Message msg = alerthander.obtainMessage();
+                alerthander.sendMessage(msg);
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                dupcheck = true;
-                ((TextView)findViewById(R.id.dup)).setText("확인완료");
+                System.out.println(response.body().string());
+                if(response.code() == 200)
+                {
+                    dupcheck = true;
+                    Message msg = duphandler.obtainMessage();
+                    duphandler.sendMessage(msg);
+                }
+                else
+                {
+                    dupcheck = false;
+                    Message msg = duphandler.obtainMessage();
+                    duphandler.sendMessage(msg);
+                    alertmsg = "중복입니다.";
+                    Message amsg = alerthander.obtainMessage();
+                    alerthander.sendMessage(amsg);
+                }
             }
         });
     }
