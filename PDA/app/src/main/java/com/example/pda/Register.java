@@ -276,8 +276,6 @@ public class Register extends AppCompatActivity {
 
     public void uploadImage(String name)
     {
-        alert.setMessage("회원가입 요청중").setCancelable(false);
-        alert.show();
         if(scaled != null) {
             OkHttpClient client = new OkHttpClient();
             HttpUrl httpUrl = new HttpUrl.Builder()
