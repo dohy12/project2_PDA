@@ -8,8 +8,12 @@ import java.util.List;
 public interface BoardOperation {
     //상위 20개 게시글 읽어오기
     //글이 등록된 시간(dateTime) 기준 최근 20개 게시글
+    //isNotice = 1 즉 공지글 보기일 경우 전체 공지글 보기, isNotice = 0 즉 전체글 보기일 경우 상단 5개 공지글 이후에 일반 게시글 15개
     @Select("select * from ${GroupId}.board where isNotice = ${isNotice} order by date desc limit 20")
     public List<Board> boardList(@Param("GroupId") String GroupId, @Param("isNotice") int isNotice);
+
+    @Select("(select * from ${GroupId}.board where isNotice = 1 order by date desc limit 5) union (select * from ${GroupId}.board where isNotice = ${isNotice} order by date desc limit 15)")
+    public List<Board> boardList2(@Param("GroupId") String GroupId, @Param("isNotice") int isNotice);
 
     //게시글 검색 기준: 제목/내용에 키워드 포함
     @Select("select * from ${GroupId}.board where title like \"%${Keyword}%\" or contents like \"${Keyword}%\" order by date desc limit 20")

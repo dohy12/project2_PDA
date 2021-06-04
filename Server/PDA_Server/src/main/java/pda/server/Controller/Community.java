@@ -26,7 +26,10 @@ public class Community {
         List<Board> showBoards = null;
 
         try{
-            showBoards = board.boardList(GroupId, isNotice);
+            if(isNotice == 1)
+                showBoards = board.boardList(GroupId, isNotice);
+            else
+                showBoards = board.boardList2(GroupId, isNotice);
         } catch(Exception e) {
             e.printStackTrace();
         }
