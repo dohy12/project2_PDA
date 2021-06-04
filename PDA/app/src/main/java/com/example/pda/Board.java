@@ -16,11 +16,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -44,19 +43,12 @@ public class Board extends AppCompatActivity {
         container = (LinearLayout)findViewById(R.id.board_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        boardInfoList = new ArrayList<>();
-/*
-        boardInfoList.add(new Board_Info(1, true,"제목","이도희",   LocalDateTime.of(2021,5,22,10,30),222,5));
-        boardInfoList.add(new Board_Info(2, false,"제목1","이도희1", LocalDateTime.of(2021,5,22,10,30),222,6));
-        boardInfoList.add(new Board_Info(3, false,"제목2","이도희2", LocalDateTime.of(2021,5,22,10,30),222,7));
-        boardInfoList.add(new Board_Info(4, false,"제목3","이도희3", LocalDateTime.of(2021,5,22,10,30),222,8));
-*/
+        //인자로 전달받은 boardInfoList를 사용 가능하게 하는 구문
+        Intent receive = getIntent();
+        boardInfoList = (ArrayList<Board_Info>)receive.getSerializableExtra("boardInfoList");
+        Serializable s = receive.getSerializableExtra("boardInfoList");
 
-        //restAPI 호출
-        //날짜 데이터타입 수정 전
-        //조회수 수정 전
-        //댓글수 수정 전
-        getBoards();
+        System.out.println("size: " + boardInfoList.size());
 
         showBoardList();
 
@@ -95,56 +87,6 @@ public class Board extends AppCompatActivity {
             });
 
         }
-    }
-
-    private void getBoards(){
-
-        OkHttpClient client = new OkHttpClient();
-
-        //localhost 사용 시 @GET method 실행됨 확인
-        //POST, DELETE, PUT 은 localhost 아니어도 실행됨 확인
-        String url = "http://10.0.2.2:8080/Community/";
-        String GroupId = "deaa01013b0144e99faab90ecd670950/";
-        //getGroupId 추가시 수정
-        int isNoticeQuery = 1;
-
-        String httpUrl = url + GroupId + isNoticeQuery;
-
-        Request request = new Request.Builder()
-                .url(httpUrl)
-                .get()
-                .addHeader("JWT", app.getJWT())
-                .build();
-
-        System.out.println(httpUrl);
-        System.out.println(request.headers().toString());
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(@NotNull okhttp3.Call call, @NotNull IOException e) {
-                System.out.println("실패");
-            }
-            @Override
-            public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) throws IOException {
-                try {
-                    JSONArray jsonArray = new JSONArray(response.body().string());
-                    for(int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jObject = jsonArray.getJSONObject(i);
-                        int BID = jObject.getInt("B_ID");
-                        boolean isNotice = jObject.getInt("isNotice") == 1;
-                        String title = jObject.getString("title");
-                        String name = "temp";
-
-                        boardInfoList.add(new Board_Info(BID, isNotice, title, name, LocalDateTime.of(2021,5,22,10,30),222,5));
-                    }
-                    System.out.println("Finish list add: " + boardInfoList.size());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    System.out.println("parsing failed");
-                }
-            }
-        });
-
     }
 
     public void goBoardContent(View view){
