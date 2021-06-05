@@ -45,6 +45,7 @@ public class Mypage extends AppCompatActivity {
     private String Intro;
     private String Email;
     private String Age;
+    private String Receiver;
 
     AppCompatActivity activity;
     Member mem;
@@ -70,6 +71,7 @@ public class Mypage extends AppCompatActivity {
         Intro = intent.getStringExtra("Intro");
         Email = intent.getStringExtra("Email");
         Age = intent.getStringExtra("Age");
+        Receiver = intent.getStringExtra("Receiver");
 
         if (IsEnable) {
             try {
@@ -187,7 +189,6 @@ public class Mypage extends AppCompatActivity {
                     Gson gson = new Gson();
                     Guestbook[] guestbook = gson.fromJson(gsonText, Guestbook[].class);
                     for (Guestbook temp : guestbook) {
-                        System.out.println(temp);
                         Date date = temp.getTime();
                         Instant instant = date.toInstant();
                         ZoneId zoneId = ZoneId.systemDefault();
@@ -218,8 +219,7 @@ public class Mypage extends AppCompatActivity {
                 .build();
         String Host = "http://10.0.2.2:";
         String port = "8080";
-        String AccessPath = "/GuestBook/SendMessage";
-        String Receiver = "";
+        String AccessPath = "/GuestBook/SendMessage/";
         String url = Host + port + AccessPath + Receiver;
         System.out.println(url);
         final Request request = new Request.Builder()
@@ -232,17 +232,36 @@ public class Mypage extends AppCompatActivity {
             //        new Thread(new Runnable() {
             @Override
             public void run() {
+                Response response = null;
                 try {
-                    Response response = call.execute();
-                    c.setText("");
-                    String msg = response.body().string();
-                    Toast.makeText(Mypage.this, msg, Toast.LENGTH_SHORT).show();
-                    guestBookList.clear();
-                    getGuestBook();
-                    Log.d("TAG", "run: " + msg);
-                } catch (IOException | InterruptedException e) {
+                    response = call.execute();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
+                c.setText("");
+                String msg = null;
+                try {
+                    msg = response.body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(Mypage.this, msg, Toast.LENGTH_SHORT).show();
+//                    guestBookList.clear();
+//                    getGuestBook();
+                View v = inflater.inflate(R.layout.guestbook, null);
+                container.addView(v);
+
+                v.findViewById(R.id.profile_image).setClipToOutline(true);
+
+                ((TextView) v.findViewById(R.id.guestBook_name)).setText(Name);
+                ((TextView) v.findViewById(R.id.guestBook_comment)).setText(text);
+                Date date = new Date();
+                Instant instant = date.toInstant();
+                ZoneId zoneId = ZoneId.systemDefault();
+                LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+                String formatDate = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                ((TextView) v.findViewById(R.id.guestBook_date)).setText(formatDate);
+                Log.d("TAG", "run: " + msg);
             }
         };
         new Thread(networkTask).run();

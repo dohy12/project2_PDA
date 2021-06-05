@@ -57,7 +57,9 @@ public class app extends Application {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Gson gson = new Gson();
-                User user = gson.fromJson(response.body().string(), User.class);
+                String string = response.body().string();
+                System.out.println("string = " + string);
+                User user = gson.fromJson(string, User.class);
                 name = user.getName();
                 phone = user.getPhone();
                 age = user.getAge().toString();
