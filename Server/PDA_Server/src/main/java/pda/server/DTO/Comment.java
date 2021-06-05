@@ -9,6 +9,7 @@ public class Comment {
     public int B_ID;
     public int U_ID;
     public int R_CID;
+    public String name;
 
     public Comment(int C_ID, Timestamp dateTime, String contents, int B_ID, int U_ID, int R_CID) {
         this.setC_ID(C_ID);
@@ -36,4 +37,7 @@ public class Comment {
 
     public int getR_CID() { return R_CID; }
     public void setR_CID(int R_CID) { this.R_CID = R_CID; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 }

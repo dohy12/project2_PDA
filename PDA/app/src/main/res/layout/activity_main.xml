@@ -14,8 +14,8 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/toolbar"
-            android:id="@+id/toolbar"/>
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
 
         <ScrollView
             android:layout_width="match_parent"

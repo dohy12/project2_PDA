@@ -56,10 +56,11 @@
                     android:layout_width="60dp"
                     android:layout_height="35dp"
                     android:layout_margin="0dp"
-                    android:textColor="#FFFFFF"
-                    android:text="등록"
                     android:backgroundTint="#606060"
-                    android:textSize="12dp"/>
+                    android:onClick="wirteBoard"
+                    android:text="등록"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <View
@@ -68,13 +69,14 @@
                 android:background="#909090"/>
 
             <EditText
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:hint="제목"
                 android:padding="15dp"
                 android:textColor="#000000"
-                android:textSize="15dp"
-                android:hint="제목"/>
+                android:textSize="15dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -106,16 +108,17 @@
                 android:orientation="vertical"/>
 
             <EditText
+                android:id="@+id/contents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:minHeight="300dp"
                 android:background="@null"
-                android:padding="0dp"
-                android:textSize="15dp"
                 android:gravity="top"
-                android:hint="내용"/>
+                android:hint="내용"
+                android:minHeight="300dp"
+                android:padding="0dp"
+                android:textSize="15dp" />
         </LinearLayout>
     </ScrollView>
 
