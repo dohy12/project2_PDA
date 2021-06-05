@@ -44,4 +44,9 @@ public class Album extends AppCompatActivity {
             });
         }
     }
+
+    public void goAlbumAdd(View view){
+        Intent intent = new Intent(this, AlbumAdd.class);
+        startActivity(intent);
+    }
 }

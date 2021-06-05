@@ -62,6 +62,7 @@
                     android:text="검색"/>
 
                 <TextView
+                    android:onClick="goAlbumAdd"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:textSize="12dp"
