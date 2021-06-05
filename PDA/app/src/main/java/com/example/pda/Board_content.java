@@ -167,6 +167,38 @@ public class Board_content extends AppCompatActivity {
         }
     }
 
+    private class BoardDeletion implements Callable<String> {
+        public String call() {
+            OkHttpClient client = new OkHttpClient();
+
+            String url = "http://10.0.2.2:8080/Community/";
+            String groupId = app.getGroupId();
+            int bid = boardInfo.getBoardId();
+
+            String httpUrl = url + groupId + "/" + bid;
+
+            System.out.println(httpUrl);
+
+            Request request = new Request.Builder()
+                    .url(httpUrl)
+                    .delete()
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            String result = null;
+
+            try {
+                Response response = client.newCall(request).execute();
+                result = response.body().string();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+
+    }
+
     private void showBoardInfo(){ // 게시판 내용 넣기
 
         findViewById(R.id.profile_image).setClipToOutline(true);
@@ -301,6 +333,12 @@ public class Board_content extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goBoardModify(View view){
+        Intent intent = new Intent(this, Board_Modify.class);
+        intent.putExtra("selectedBoard", boardInfo);
+        startActivity(intent);
+    }
+
     public void openMenu(View view){
         View anchor = findViewById(R.id.menu_anchor);
         final PopupMenu popupMenu = new PopupMenu(this, anchor);
@@ -308,16 +346,34 @@ public class Board_content extends AppCompatActivity {
 
         Menu menu = popupMenu.getMenu();
 
-        for(int i=0; i<5;i++)
-            menu.add(Menu.NONE, i, Menu.NONE, "메뉴"+i);
+        menu.add(Menu.NONE, 0, Menu.NONE, "수정");
+        menu.add(Menu.NONE, 1, Menu.NONE, "삭제");
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 int i= menuItem.getItemId();
 
-                Toast.makeText(toolbar.getActivity(), i + "선택", Toast.LENGTH_SHORT).show();
-                return false;
+                switch(i){
+                    case 1:
+                        ExecutorService executorService = Executors.newSingleThreadExecutor();
+                        BoardDeletion boardDeletion = new BoardDeletion();
+                        Future<String> future = executorService.submit(boardDeletion);
+
+                        String del = null;
+
+                        try {
+                            del = future.get();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        Toast.makeText(toolbar.getActivity(), del, Toast.LENGTH_SHORT).show();
+                    case 0:
+                        //새로운 Activity Board_Modify 열어야 함
+                        Toast.makeText(toolbar.getActivity(), "수정", Toast.LENGTH_SHORT).show();
+                }
+                        return false;
             }
         });
         popupMenu.show();
