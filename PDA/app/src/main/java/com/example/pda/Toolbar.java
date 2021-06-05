@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +31,7 @@ public class Toolbar {
         toolbarButton = view.findViewById(R.id.toolbarButton1);
         toolbarAlarm = view.findViewById(R.id.toolbarAlarm);
         toolbarProfile = view.findViewById(R.id.toolbar_profile_image);
-
+        ((TextView) view.findViewById(R.id.toolbarGname)).setText(app.getGroupName());
         setToolbarButton();
         setToolbarProfile();
     }
