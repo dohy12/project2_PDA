@@ -54,7 +54,7 @@ public class memberList extends AppCompatActivity {
         textView.setText(app.getName() + "(" + app.getAge().toString() + ")");
         TextView textView2 = findViewById(R.id.memList_phone);
 //        System.out.println("app.getPhone() = " + app.getPhone());
-        textView2.setText(app.getPhone());
+        textView2.setText("mobile. "+app.getPhone());
         memList = new ArrayList<>();
         getMemberList();
     }
