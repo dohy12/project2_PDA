@@ -10,8 +10,8 @@ import javax.xml.validation.Schema;
 @Mapper
 public interface GroupGeneration
 {
-    @Insert("insert into main.GroupNameMapping(Name, GroupId) VALUES (#{GroupName} , #{GroupId})")
-    public void idGeneration(@Param("GroupName") String GroupName, @Param("GroupId") String GroupId);
+    @Insert("insert into main.GroupNameMapping(Name, GroupId, GroupImg) VALUES (#{GroupName} , #{GroupId}, #{GroupImg})")
+    public void idGeneration(@Param("GroupName") String GroupName, @Param("GroupId") String GroupId, @Param("GroupImg") String GroupImg);
 
     @Select("select COUNT(*) from main.GroupNameMapping where Name = #{GroupName}")
     public int checkDuplicate(@Param("GroupName") String GroupName);
