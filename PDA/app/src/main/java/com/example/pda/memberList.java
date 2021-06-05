@@ -138,7 +138,7 @@ public class memberList extends AppCompatActivity {
     }
 
     private void getMemberList() {
-        String Host = "http://10.0.2.2:";
+        String Host = "http://18.206.18.154:";
         String port = "8080";
         String AccessPath = "/GuestBook/" + app.getGroupId() + "/MemberList";
         final String url = Host + port + AccessPath;

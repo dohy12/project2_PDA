@@ -41,7 +41,7 @@ public class app extends Application {
     }
     public static  void getUserInf()
     {
-        String Host = "http://10.0.2.2:";
+        String Host = "http://18.206.18.154:";
         String AccessPath = "/UserInf";
         final String url = Host + port + AccessPath;
         final OkHttpClient okHttpClient = new OkHttpClient();

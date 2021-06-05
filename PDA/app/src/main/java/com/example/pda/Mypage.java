@@ -139,7 +139,7 @@ public class Mypage extends AppCompatActivity {
         JWT = app.getJWT();
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .build();
-        String Host = "http://10.0.2.2:";
+        String Host = "http://18.206.18.154:";
         String port = "8080";
         String AccessPath = "/GuestBook/ReceiveMessage";
         String url = Host + port + AccessPath;
@@ -184,7 +184,7 @@ public class Mypage extends AppCompatActivity {
         JWT = app.getJWT();
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .build();
-        String Host = "http://10.0.2.2:";
+        String Host = "http://18.206.18.154:";
         String port = "8080";
         String AccessPath = "/GuestBook/ReceiveMessage/";
         String url = Host + port + AccessPath + Receiver;
@@ -233,7 +233,7 @@ public class Mypage extends AppCompatActivity {
         JWT = app.getJWT();
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .build();
-        String Host = "http://10.0.2.2:";
+        String Host = "http://18.206.18.154:";
         String port = "8080";
         String AccessPath = "/GuestBook/SendMessage/";
         String url = Host + port + AccessPath + Receiver;
