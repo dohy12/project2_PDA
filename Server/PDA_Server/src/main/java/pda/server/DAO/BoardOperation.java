@@ -27,9 +27,6 @@ public interface BoardOperation {
             " end as name" +
             " from ${GroupId}.user) userTable" +
             " On B.U_ID = userTable.U_ID" +
-            " Left join" +
-            " (select count(*) as comments_num from ${GroupId}.board_comment where ${GroupId}.board_comment.b_id = B.b_id) C" +
-            " On B.B_ID = C.B_ID" +
             " where isNotice = 1" +
             " order by date desc limit ${limit}")
     public List<Board> boardList(@Param("GroupId") String GroupId, @Param("isNotice") int isNotice, @Param("limit") int limit);
@@ -51,7 +48,6 @@ public interface BoardOperation {
             " Else (select name from main.user9 where ${GroupId}.user.U_ID = main.user9.U_ID)" +
             " end as name" +
             " from ${GroupId}.user) userTable" +
-            " " +
             " On B.U_ID = userTable.U_ID" +
             " where isNotice = 0" +
             " order by date desc limit 15")
