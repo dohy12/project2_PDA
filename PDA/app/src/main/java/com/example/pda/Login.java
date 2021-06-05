@@ -99,6 +99,7 @@ public class Login extends AppCompatActivity {
                         app.setJWT(json.getString("JWT"));
                         app.setName(json.getString("name"));
                         app.setUid(json.getString("UID"));
+                        app.getUserInf();
                         startActivity(intent);
                     } catch (JSONException e) {
                         Message msg = loginhandler.obtainMessage();
