@@ -34,9 +34,8 @@ public class GetGroupInfo {
         List<String> gids = new ArrayList<>(Arrays.asList(temp.split(",")));
         for(String gid: gids)
         {
-            group g = new group();
+            group g = groups.getGroupInfos(gid);
             g.setGroupId(gid);
-            g.setName(groups.getGroupName(g.getGroupId()));
             result.add(g);
         }
         return result;
@@ -50,9 +49,8 @@ public class GetGroupInfo {
         List<String> gids = new ArrayList<>(Arrays.asList(temp.split(",")));
         for(String gid: gids)
         {
-            group g = new group();
+            group g = groups.getGroupInfos(gid);
             g.setGroupId(gid);
-            g.setName(groups.getGroupName(g.getGroupId()));
             result.add(g);
         }
         return result;

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Select;
 import pda.server.DTO.group;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface GetGroups {
@@ -19,6 +20,6 @@ public interface GetGroups {
     @Select("SELECT AwaitingCertification FROM main.user${table} where U_ID = #{UID}")
     String getAwaitingGroups(@Param("table") int table, @Param("UID") int UID);
 
-    @Select("SELECT Name FROM main.GroupNameMapping where GroupId = #{GroupId}")
-    String getGroupName(@Param("GroupId") String GroupId);
+    @Select("SELECT Name, GroupImg FROM main.GroupNameMapping where GroupId = #{GroupId}")
+    group getGroupInfos(@Param("GroupId") String GroupId);
 }
