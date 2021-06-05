@@ -1,8 +1,9 @@
 package com.example.pda;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Board_comment {
+public class Board_comment implements Serializable {
     private int commentID;
     private int replyID;
     private String name;

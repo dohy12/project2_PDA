@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -62,8 +63,6 @@ public class Board extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println(boardInfoList.size());
 
         showBoardList();
 
@@ -150,13 +149,15 @@ public class Board extends AppCompatActivity {
                     int BID = jsonObject.getInt("B_ID");
                     boolean isNotice = jsonObject.getInt("isNotice") == 1;
                     String title = jsonObject.getString("title");
-                    String name = "최유진";
-                    LocalDateTime date = LocalDateTime.of(2021, 6, 3, 10, 30);
-                    int views_num = 999;
+                    int UID = jsonObject.getInt("U_ID");
+                    String name = jsonObject.getString("name");
+                    String tempDate = jsonObject.getString("dateTime");
+                    LocalDateTime date;
+                    date = LocalDateTime.parse(tempDate, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+                    int views_num = jsonObject.getInt("views_num");
                     int comments_num = 10;
 
                     boardInfoList.add(new Board_Info(BID, isNotice, title, name, date, views_num, comments_num));
-                    System.out.println("Now: " + boardInfoList.size());
                 }
             } catch (Exception e) {
                 e.printStackTrace();

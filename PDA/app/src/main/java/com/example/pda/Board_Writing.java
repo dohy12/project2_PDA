@@ -12,6 +12,8 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +24,13 @@ import com.bumptech.glide.Glide;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Board_Writing extends AppCompatActivity {
 
@@ -47,6 +56,52 @@ public class Board_Writing extends AppCompatActivity {
         survey_container = (LinearLayout)findViewById(R.id.boardWriting_survey_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         //tvList = new ArrayList<>();
+    }
+
+    //등록 버튼 onClick 메소드
+    public void wirteBoard(View v) {
+        String title = ((EditText)findViewById(R.id.title)).getText().toString();
+        String contents = ((EditText)findViewById(R.id.contents)).getText().toString();
+        int notice;
+        int uid = Integer.parseInt(app.getUid());
+
+        CheckBox isNotice = (CheckBox)findViewById(R.id.isNotice);
+        if(isNotice.isChecked()) notice = 1;
+        else notice = 0;
+
+        OkHttpClient client = new OkHttpClient();
+
+        String json = makeJSONString(0, notice, title, contents, uid, 0);
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, json);
+
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:8080/Community/" + app.getGroupId())
+                .addHeader("JWT", app.getJWT())
+                .post(body)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            System.out.println(response.body().string());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //POST 메소드에 전달할 정보를 JSON String 으로 변환
+    public String makeJSONString(int BID, int isNotice, String title, String contents, int UID, int views_num) {
+
+        String res = "{\"B_ID\":" + BID +
+                ",\"isNotice\":" + isNotice +
+                ",\"title\":\"" + title +
+                "\",\"contents\":\"" + contents +
+                "\",\"U_ID\":" + UID +
+                ",\"views_num\":" + views_num +
+                "}";
+
+        return res;
     }
 
     public void addPicture(View view) {

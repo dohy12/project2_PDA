@@ -9,14 +9,18 @@ public class Board {
     public Timestamp dateTime;
     public String contents;
     public int U_ID;
+    public int views_num;
+    public String name;
 
-    public Board(int B_ID, short isNotice, String title, Timestamp dateTime, String contents, int U_ID){
+    public Board(int B_ID, short isNotice, String title, Timestamp dateTime, String contents, int U_ID, int views_num, String name) {
         this.setB_ID(B_ID);
         this.setIsNotice(isNotice);
         this.setTitle(title);
         this.setDateTime(dateTime);
         this.setContents(contents);
         this.setU_ID(U_ID);
+        this.setViews_num(views_num);
+        this.setName(name);
     }
 
     public int getB_ID(){
@@ -40,6 +44,9 @@ public class Board {
         this.title = title;
     }
 
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
     public Timestamp getDateTime(){
         return dateTime;
     }
@@ -60,4 +67,8 @@ public class Board {
     public void setU_ID(int U_ID){
         this.U_ID = U_ID;
     }
+
+    public int getViews_num() { return views_num; }
+    public void setViews_num(int views_num) { this.views_num = views_num; }
+
 }

@@ -38,6 +38,7 @@ public interface GroupGeneration
             "\n" + "  `date` DATETIME NULL DEFAULT NULL," +
             "\n" + "  `contents` LONGTEXT NULL DEFAULT NULL," +
             "\n" + "  `U_ID` INT NOT NULL," +
+            "\n" + "  `views_num` INT NOT NULL," +
             "\n" + "  PRIMARY KEY (`B_ID`)," +
             "\n" + "  INDEX `fk_board_user1_idx` (`U_ID` ASC) VISIBLE," +
             "\n" + "  CONSTRAINT `fk_board_user1`" +

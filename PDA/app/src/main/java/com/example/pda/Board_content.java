@@ -12,15 +12,30 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Board_content extends AppCompatActivity {
     private LinearLayout comments_container;
@@ -49,21 +64,28 @@ public class Board_content extends AppCompatActivity {
         image_container = findViewById(R.id.board_image_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
+        //Board에서 인자로 넘겨준 Board_Info 객체 받는 부분
         Intent myIntent = getIntent();
         boardInfo = (Board_Info) myIntent.getSerializableExtra("selectedBoard");
 
-        //boardInfo = new Board_Info(1 , true, "제목", "이도희", LocalDateTime.of(21,5,22,12,46),222, 5, "내용");
+        //조회 됐을 때 views_num을 +1 시켜주는 부분
+        updateViewsNum(boardInfo);
 
         imageList = new ArrayList<>();
         imageList.add(getResources().getDrawable(R.drawable.img1, null));
         imageList.add(getResources().getDrawable(R.drawable.img5, null));
 
         boardCommentList = new ArrayList<>();
-        boardCommentList.add(new Board_comment(5,-1,"도희","댓글내용",LocalDateTime.of(21,5,22,12,56)));
-        boardCommentList.add(new Board_comment(6,-1,"도희1","댓글내용2",LocalDateTime.of(21,5,22,12,56)));
-        boardCommentList.add(new Board_comment(7,5,"도희2","답글내용1",LocalDateTime.of(21,5,22,12,56)));
-        boardCommentList.add(new Board_comment(9,5,"도희2","답글내용2",LocalDateTime.of(21,5,22,12,56)));
-        boardCommentList.add(new Board_comment(10,-1,"도희3","댓글내용3",LocalDateTime.of(21,5,22,12,56)));
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        CommentCallable commentCallable = new CommentCallable();
+        Future<ArrayList<Board_comment>> future = executorService.submit(commentCallable);
+
+        try {
+            boardCommentList = future.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         String[] survey_strList = {"항목A", "항목B", "항목C"};
         int[] survey_countList = {5, 1, 2};
@@ -73,6 +95,72 @@ public class Board_content extends AppCompatActivity {
         showSurvey();
         showImageList();
         showCommentList();
+    }
+
+    //PUT 메소드 부르는 http 구문
+    //조회수 +1
+    public void updateViewsNum(Board_Info board) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create("body", null);
+
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:8080/Community/" + app.getGroupId() + "/views/" + board.getBoardId())
+                .addHeader("JWT", app.getJWT())
+                .put(body)
+                .build();
+
+        try {
+            client.newCall(request).execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class CommentCallable implements Callable<ArrayList<Board_comment>> {
+        public ArrayList<Board_comment> call() {
+            OkHttpClient client = new OkHttpClient();
+
+            String url = "http://10.0.2.2:8080/BoardComment/";
+            String GroupId = app.getGroupId();
+            int bid = boardInfo.getBoardId();
+
+            String httpUrl = url + GroupId + "/" + bid;
+
+            System.out.println(httpUrl);
+
+            Request request = new Request.Builder()
+                    .url(httpUrl)
+                    .get()
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+
+                JSONArray jsonArray = new JSONArray(response.body().string());
+
+                for(int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    int CID = jsonObject.getInt("C_ID");
+                    String dateTemp = jsonObject.getString("dateTime");
+                    LocalDateTime date = LocalDateTime.parse(dateTemp, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+                    String contents = jsonObject.getString("contents");
+                    int BID = jsonObject.getInt("B_ID");
+                    int UID = jsonObject.getInt("U_ID");
+                    int R_CID = jsonObject.getInt("R_CID");
+                    String name = jsonObject.getString("name");
+
+                    boardCommentList.add(new Board_comment(CID, R_CID, name, contents, date));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return boardCommentList;
+        }
     }
 
     private void showBoardInfo(){ // 게시판 내용 넣기
@@ -203,7 +291,6 @@ public class Board_content extends AppCompatActivity {
             }
         }
     }
-
 
     public void goBoardWriting(View view){
         Intent intent = new Intent(this, Board_Writing.class);

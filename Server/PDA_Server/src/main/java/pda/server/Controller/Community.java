@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pda.server.DAO.BoardOperation;
 import pda.server.DTO.Board;
+import pda.server.Handler.UserTableMapping;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class Community {
@@ -14,7 +16,6 @@ public class Community {
     @Autowired
     BoardOperation board;
     Timestamp dateTime;
-    Board Board = new Board(0,(short)1,"BoardClassTitle",dateTime,"BoardClassContents",1503238549);
 
     //게시글 목록을 보여줄 때 사용
     //상위 20개 게시글 정보를 불러옴
@@ -24,12 +25,16 @@ public class Community {
     public List<Board> boardList(@PathVariable("GroupId") String GroupId, @PathVariable("isNotice") int isNotice) {
 
         List<Board> showBoards = null;
+        String nameTemp;
+        int uidTemp;
 
         try{
             if(isNotice == 1)
-                showBoards = board.boardList(GroupId, isNotice);
-            else
-                showBoards = board.boardList2(GroupId, isNotice);
+                showBoards = board.boardList(GroupId, isNotice, 20);
+            else {
+                showBoards = board.boardList(GroupId, 1, 5);
+                showBoards.addAll(board.boardList2(GroupId, isNotice));
+            }
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -53,14 +58,26 @@ public class Community {
     }
 
     @RequestMapping(value = "/Community/{GroupId}", method = RequestMethod.POST)
-    public String boardPost(@PathVariable("GroupId") String GroupId) {
+    public String boardPost(@PathVariable("GroupId") String GroupId, @RequestBody Map<String, Object> params) {
 
-        int authUID = board.getIsAdmin(GroupId, Board.getU_ID());
+        int bid = (int)params.get("B_ID");
+        short isNotice;
+        if((int)params.get("isNotice") == 1)
+            isNotice = 1;
+        else
+            isNotice = 0;
+        String title = (String)params.get("title");
+        dateTime = new Timestamp(System.currentTimeMillis());
+        String contents = (String)params.get("contents");
+        int uid = (int)params.get("U_ID");
+
+        int authUID = board.getIsAdmin(GroupId, uid);
+
+        Board Board = new Board(bid, isNotice, title, dateTime, contents, uid, 0, "name");
 
         try{
             if(Board.getIsNotice() == 1 && authUID == 1) {
                 dateTime = new Timestamp(System.currentTimeMillis());
-                Board.setDateTime(dateTime);
                 board.boardPost(GroupId, Board);
             } else if(Board.getIsNotice() == 0) {
                 board.boardPost(GroupId, Board);
@@ -78,6 +95,7 @@ public class Community {
     public String boardDelete(@PathVariable("GroupId") String GroupId, @PathVariable("BID") int BID, @RequestAttribute String U_ID){
 
         Board temp = board.selectedBoard(GroupId, BID);
+
         int authUID = Integer.parseInt(U_ID);
 
         try {
@@ -94,9 +112,24 @@ public class Community {
     }
 
     @RequestMapping(value = "/Community/{GroupId}/{BID}", method = RequestMethod.PUT)
-    public String boardUpdate(@PathVariable("GroupId") String GroupId, @PathVariable("BID") int BID, @RequestAttribute String U_ID){
+    public String boardUpdate(@PathVariable("GroupId") String GroupId, @PathVariable("BID") int BID, @RequestBody Map<String, Object> params, @RequestAttribute String U_ID){
 
         Board temp = board.selectedBoard(GroupId, BID);
+
+        int bid = (int)params.get("B_ID");
+        short isNotice;
+        if((int)params.get("isNotice") == 1)
+            isNotice = 1;
+        else
+            isNotice = 0;
+        String title = (String)params.get("title");
+        dateTime = new Timestamp(System.currentTimeMillis());
+        String contents = (String)params.get("contents");
+        int uid = (int)params.get("U_ID");
+        int views_num = (int)params.get("views_num");
+
+        Board Board = new Board(bid, isNotice, title, dateTime, contents, uid, views_num, "name");
+
         int authUID = Integer.parseInt(U_ID);
 
         try{
@@ -110,6 +143,11 @@ public class Community {
         }
 
         return "수정";
+    }
+
+    @RequestMapping(value = "/Community/{GroupId}/views/{BID}", method = RequestMethod.PUT)
+    public void viewsNumOper(@PathVariable("GroupId") String GroupId, @PathVariable("BID") int BID) {
+        board.viewsNumOper(GroupId, BID);
     }
 
     //삭제, 수정: 해당 작업을 시도하는 이용자의 UID와 게시글의 UID가 같은지 확인
