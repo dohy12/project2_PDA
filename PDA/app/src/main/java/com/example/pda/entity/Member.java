@@ -8,9 +8,9 @@ public class Member extends User implements Serializable
 {
     private static final long serialVersionUID = -62407511042001259L;
 
-    private Integer U_ID;
-
-    private String id;
+//    private Integer U_ID;
+//
+//    private String id;
 
     private int isadmin;
 
@@ -18,28 +18,28 @@ public class Member extends User implements Serializable
 
     private int usertablenum;
 
-    private String introduction;
+//    private String introduction;
 
 
-    public Integer getUId()
-    {
-        return U_ID;
-    }
-
-    public void setUId(Integer uId)
-    {
-        this.U_ID = uId;
-    }
-
-    public String getId()
-    {
-        return id;
-    }
-
-    public void setId(String id)
-    {
-        this.id = id;
-    }
+//    public Integer getUId()
+//    {
+//        return U_ID;
+//    }
+//
+//    public void setUId(Integer uId)
+//    {
+//        this.U_ID = uId;
+//    }
+//
+//    public String getId()
+//    {
+//        return id;
+//    }
+//
+//    public void setId(String id)
+//    {
+//        this.id = id;
+//    }
 
     public int getIsadmin()
     {
@@ -71,14 +71,14 @@ public class Member extends User implements Serializable
         this.usertablenum = usertablenum;
     }
 
-    public String getIntroduction()
-    {
-        return introduction;
-    }
-
-    public void setIntroduction(String introduction)
-    {
-        this.introduction = introduction;
-    }
+//    public String getIntroduction()
+//    {
+//        return introduction;
+//    }
+//
+//    public void setIntroduction(String introduction)
+//    {
+//        this.introduction = introduction;
+//    }
 
 }

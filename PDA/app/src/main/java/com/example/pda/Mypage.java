@@ -202,7 +202,7 @@ public class Mypage extends AppCompatActivity {
             }
         };
         new Thread(networkTask).run();
-        mem = new Member(Integer.parseInt(app.getUid()), app.getID(), Integer.parseInt(app.getAge()), app.getPhone(), app.getEmail(), app.getIntro());
+        mem = new Member(Integer.parseInt(app.getUid()), app.getName(), Integer.parseInt(app.getAge()), app.getPhone(), app.getEmail(), app.getIntro());
         setMypage(mem);
         showBookList();
     }
