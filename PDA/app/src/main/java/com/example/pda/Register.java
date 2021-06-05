@@ -278,6 +278,8 @@ public class Register extends AppCompatActivity {
     {
         if(scaled != null) {
             OkHttpClient client = new OkHttpClient();
+
+            //이미지 등록은 /image/{name} 으로 포스트 요청을 해서 등록을 합니다.
             HttpUrl httpUrl = new HttpUrl.Builder()
                     .scheme("http")
                     .host(app.getHostip())
@@ -285,7 +287,10 @@ public class Register extends AppCompatActivity {
                     .addPathSegment("image")
                     .addPathSegment(name)
                     .build();
+
             System.out.println(httpUrl);
+
+            //Bitmap으로 되어있는 이미지를 requestbody에 넣는 과정
             ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
             scaled.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
@@ -295,6 +300,7 @@ public class Register extends AppCompatActivity {
                     .url(httpUrl)
                     .post(reqBody)
                     .build();
+
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
