@@ -186,7 +186,7 @@ public class SelectGroup extends AppCompatActivity {
 
             container.addView(l);
             for(int j=0;j<maxJ ; j++){
-                View v = inflater.inflate(R.layout.group_layout, null);
+                View v = inflater.inflate(R.layout.group_layout_waiting, null);
                 l.addView(v);
 
                 HttpUrl httpUrl = new HttpUrl.Builder()
@@ -201,6 +201,15 @@ public class SelectGroup extends AppCompatActivity {
                 Glide.with(this).load(httpUrl.toString()).into((ImageView)v.findViewById(R.id.group_layout_profile));
                 LinearLayout groupLayout = v.findViewById(R.id.group_layout);
                 groupLayout.setClipToOutline(true);
+
+
+                /// group_id 넣기
+                ((TextView)v.findViewById(R.id.group_groupID)).setText("5");
+
+                /// "신청 대기중" TextView 숨기기
+                v.findViewById(R.id.group_waitingCheck).setVisibility(View.GONE);
+
+                /*
                 groupLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -210,6 +219,7 @@ public class SelectGroup extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+                 */
             }
         }
     }
@@ -227,7 +237,7 @@ public class SelectGroup extends AppCompatActivity {
 
             Awaiting_container.addView(l);
             for(int j=0;j<maxJ ; j++){
-                View v = inflater.inflate(R.layout.group_layout, null);
+                View v = inflater.inflate(R.layout.group_layout_waiting, null);
                 l.addView(v);
 
                 HttpUrl httpUrl = new HttpUrl.Builder()
@@ -242,6 +252,9 @@ public class SelectGroup extends AppCompatActivity {
                 Glide.with(this).load(httpUrl.toString()).into((ImageView)v.findViewById(R.id.group_layout_profile));
                 LinearLayout groupLayout = v.findViewById(R.id.group_layout);
                 groupLayout.setClipToOutline(true);
+
+                /// group_id 넣기
+                ((TextView)v.findViewById(R.id.group_groupID)).setText("5");
             }
         }
     }
