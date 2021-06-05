@@ -39,9 +39,9 @@ public class memberList extends AppCompatActivity {
         ///툴바 세팅/////////////
         toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
+
         ((ImageView)findViewById(R.id.memberList_profileImage)).setImageBitmap(app.getProfile());
         findViewById(R.id.memberList_profileImage).setClipToOutline(true);
-        ((TextView)findViewById(R.id.memList_name)).setText(app.getName()+"(" + app.getAge() + ")");
 
         container = (LinearLayout) findViewById(R.id.memberList_container);
         container_new = (LinearLayout) findViewById(R.id.memberList_container_new);
@@ -54,7 +54,6 @@ public class memberList extends AppCompatActivity {
         textView.setText(app.getName() + "(" + app.getAge().toString() + ")");
         textView = findViewById(R.id.memList_phone);
         textView.setText(app.getPhone());
-
         memList = new ArrayList<>();
         getMemberList();
     }
