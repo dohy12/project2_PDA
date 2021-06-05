@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AlbumAdd"></activity>
+        <activity android:name=".ImageUrlTest"></activity>
+        <activity android:name=".AlbumAdd" />
         <activity android:name=".AlbumContent" />
         <activity android:name=".Album" />
         <activity android:name=".IntroductionModifying" />
@@ -27,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
         <activity android:name=".ShowReply" />
         <activity android:name=".memberList" />
         <activity android:name=".Mypage" />
@@ -39,7 +40,6 @@
         <activity android:name=".SelectGroup" />
         <activity android:name=".MembershipFeeList">
 
-            
             <!-- 웹뷰 및 ISP 등의 어플 인증후 앱으로 다시 호출하기 위한 스키마 설정 -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

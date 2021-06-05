@@ -68,7 +68,7 @@ public class AlbumContent extends AppCompatActivity {
     }
 
     public void goShowReply(View view){
-        Intent intent = new Intent(this, ShowReply.class);
+        Intent intent = new Intent(this, ImageUrlTest.class);
         startActivity(intent);
     }
 
