@@ -54,6 +54,12 @@ public class Login extends AppCompatActivity {
         }
     };
 
+    final Handler logbuthandler = new Handler(){
+        public void handleMessage(Message msg){
+            loginBtn(true);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,8 +119,6 @@ public class Login extends AppCompatActivity {
                     System.out.println("로그인 실패");
                     Message msg = serverhandler.obtainMessage();
                     serverhandler.sendMessage(msg);
-
-                    loginBtn(true);
                 }
 
                 @Override
@@ -165,6 +169,7 @@ public class Login extends AppCompatActivity {
                 {
                     byte[] image = response.body().bytes();
                     app.setProfile(BitmapFactory.decodeByteArray(image, 0, image.length));
+                    logbuthandler.sendMessage(logbuthandler.obtainMessage());
                     startActivity(intent);
                 }
                 else

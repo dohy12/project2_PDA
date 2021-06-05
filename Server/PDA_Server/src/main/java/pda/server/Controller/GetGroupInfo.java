@@ -31,12 +31,14 @@ public class GetGroupInfo {
     {
         List<group> result = new ArrayList<>();
         String temp = groups.getJoinedGroups(Math.abs(ID.hashCode())%10, Integer.parseInt(U_ID));
-        List<String> gids = new ArrayList<>(Arrays.asList(temp.split(",")));
-        for(String gid: gids)
-        {
-            group g = groups.getGroupInfos(gid);
-            g.setGroupId(gid);
-            result.add(g);
+        System.out.println("Joined"+temp+"end");
+        if(temp.length() != 0) {
+            List<String> gids = new ArrayList<>(Arrays.asList(temp.split(",")));
+            for (String gid : gids) {
+                group g = groups.getGroupInfos(gid);
+                g.setGroupId(gid);
+                result.add(g);
+            }
         }
         return result;
     }
@@ -46,12 +48,14 @@ public class GetGroupInfo {
     {
         List<group> result = new ArrayList<>();
         String temp = groups.getAwaitingGroups(Math.abs(ID.hashCode())%10, Integer.parseInt(U_ID));;
-        List<String> gids = new ArrayList<>(Arrays.asList(temp.split(",")));
-        for(String gid: gids)
-        {
-            group g = groups.getGroupInfos(gid);
-            g.setGroupId(gid);
-            result.add(g);
+        System.out.println("awaiting" +temp+"end");
+        if(temp.length() != 0) {
+            List<String> gids = new ArrayList<>(Arrays.asList(temp.split(",")));
+            for (String gid : gids) {
+                group g = groups.getGroupInfos(gid);
+                g.setGroupId(gid);
+                result.add(g);
+            }
         }
         return result;
     }
