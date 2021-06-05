@@ -72,7 +72,7 @@ public class Board extends AppCompatActivity {
     private void showBoardList(){
 
         for(int i=0;i<boardInfoList.size();i++) {
-            Board_Info boardInfo = boardInfoList.get(i);
+            final Board_Info boardInfo = boardInfoList.get(i);
             View v = inflater.inflate(R.layout.board, null);
             container.addView(v);
 
@@ -97,15 +97,16 @@ public class Board extends AppCompatActivity {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goBoardContent(view);
+                    goBoardContent(view, boardInfo);
                 }
             });
 
         }
     }
 
-    public void goBoardContent(View view){
+    public void goBoardContent(View view, Board_Info selectedBoard){
         Intent intent = new Intent(this, Board_content.class);
+        intent.putExtra("selectedBoard", selectedBoard);
         startActivity(intent);
     }
 
