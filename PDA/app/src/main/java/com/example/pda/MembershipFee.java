@@ -1,6 +1,7 @@
 package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -48,11 +49,12 @@ public class MembershipFee extends AppCompatActivity {
     private LayoutInflater inflater;
     private LinearLayout container;
     private int total = 0;
-    private int toPay = 0;
     private List<DueInfos> dueInfos;
     private List<PayInfos> payInfos;
     private List<Integer> userdueInfos;
     private String GroupId, JWT;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RetrofitService service1;
     ArrayList<FeeUsage> tempList;
 
     Toolbar toolbar;
@@ -69,8 +71,6 @@ public class MembershipFee extends AppCompatActivity {
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         container = findViewById(R.id.container);
 
-        tempList = new ArrayList<>();
-
         String origin = "http://18.206.18.154:8080/";
         GroupId = app.getGroupId();
         JWT = app.getJWT();
@@ -80,10 +80,32 @@ public class MembershipFee extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        RetrofitService service1 = retrofit.create(RetrofitService.class);
+        service1 = retrofit.create(RetrofitService.class);
+        getDataAndShow();
+
+        swipeRefreshLayout = findViewById(R.id.swiperefreshlayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                /* swipe 시 진행할 동작 */
+                getDataAndShow();
+
+                /* 업데이트가 끝났음을 알림 */
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+    }
+    private void getDataAndShow() {
+        int toPay = 0;
+        total = 0;
+        dueInfos = null;
+        payInfos = null;
+        userdueInfos = null;
+        tempList = new ArrayList<>();
 
         Call<List<PayInfos>> call1 = service1.getPayInfos(GroupId, JWT);
-
+        //LinearLayout
         call1.enqueue(new Callback<List<PayInfos>>() { //비동기
             @Override
             public void onResponse(Call<List<PayInfos>> call, Response<List<PayInfos>> response) {
@@ -227,6 +249,7 @@ public class MembershipFee extends AppCompatActivity {
     }
 
     private void showList(){
+        container.removeAllViews();
         for(int i=0;i<tempList.size();i++) {
             View v = inflater.inflate(R.layout.fee_usage_list, null);
             container.addView(v, 0);
