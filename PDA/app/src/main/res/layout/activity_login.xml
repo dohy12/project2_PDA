@@ -91,6 +91,7 @@
                 android:layout_marginBottom="3dp"
                 android:background="#2c3e50">
                 <TextView
+                    android:id="@+id/loginBtn"
                     android:textSize="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"

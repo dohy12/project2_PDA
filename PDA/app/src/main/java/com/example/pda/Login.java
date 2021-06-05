@@ -40,6 +40,8 @@ public class Login extends AppCompatActivity {
         public void handleMessage(Message msg){
             alert.setMessage("서버와의 연결이 원활하지 않습니다.").setPositiveButton("확인", null);
             alert.show();
+
+            loginBtn(true);
         }
     };
 
@@ -47,6 +49,8 @@ public class Login extends AppCompatActivity {
         public void handleMessage(Message msg){
             alert.setMessage("프로필 사진 불러오기 실패").setPositiveButton("확인", null);
             alert.show();
+
+            loginBtn(true);
         }
     };
 
@@ -55,6 +59,10 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);;
         alert = new AlertDialog.Builder(this);
+    }
+
+    private void loginBtn(boolean enable){
+        findViewById(R.id.loginBtn).setEnabled(enable);
     }
 
     public void goSelectGroup(View view){
@@ -66,6 +74,8 @@ public class Login extends AppCompatActivity {
             alert.show();
         }
         else {
+            loginBtn(false);
+
             String ID = ((EditText)findViewById(R.id.ID)).getText().toString();
             String PW = ((EditText)findViewById(R.id.PW)).getText().toString();
             app.setID(ID);
@@ -92,6 +102,8 @@ public class Login extends AppCompatActivity {
                 public void handleMessage(Message msg){
                     alert.setMessage("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.").setPositiveButton("확인", null);
                     alert.show();
+
+                    loginBtn(true);
                 }
             };
 
@@ -101,6 +113,8 @@ public class Login extends AppCompatActivity {
                     System.out.println("로그인 실패");
                     Message msg = serverhandler.obtainMessage();
                     serverhandler.sendMessage(msg);
+
+                    loginBtn(true);
                 }
 
                 @Override
