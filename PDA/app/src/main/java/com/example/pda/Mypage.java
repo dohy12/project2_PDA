@@ -46,6 +46,7 @@ public class Mypage extends AppCompatActivity {
     private String Intro;
     private String Email;
     private String Age;
+    private String UID;
     private String Receiver;
 
     AppCompatActivity activity;
@@ -72,14 +73,14 @@ public class Mypage extends AppCompatActivity {
         Intro = intent.getStringExtra("Intro");
         Email = intent.getStringExtra("Email");
         Age = intent.getStringExtra("Age");
+        UID = intent.getStringExtra("UID");
         Receiver = intent.getStringExtra("Receiver");
 
         if (IsEnable) {
-            try {
-                getGuestBook();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            if (UID == Receiver)
+            {getGuestBook();}
+            else
+                getOtherPeopleGuestBook();
             Button btn = findViewById(R.id.SendMessage);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -133,20 +134,10 @@ public class Mypage extends AppCompatActivity {
         }
     }
 
-    private void getGuestBook() throws InterruptedException {
-        String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzEzMTU5LCJpYXQiOjE2MjI3MTEzNTl9.rkFEyerMVBy3vZlwvI-U7bfe4IUiWVCzpqlleMYyxeYHf9VCUASQ7jJ5rTjRThNpvG96FcrBucnVjQAm_WFa-Q";
+    private void getGuestBook() {
+        String JWT;
         JWT = app.getJWT();
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-//                .addInterceptor(new Interceptor() {
-//                    @NotNull
-//                    @Override
-//                    public Response intercept(@NotNull Chain chain) throws IOException {
-//                        Request newRequest = chain.request()
-//                                .newBuilder()
-//                                .addHeader("JWT", JWT).build();
-//                        return chain.proceed(newRequest);
-//                    }
-//                })
                 .build();
         String Host = "http://10.0.2.2:";
         String port = "8080";
@@ -159,28 +150,6 @@ public class Mypage extends AppCompatActivity {
                 .addHeader("JWT", JWT)
                 .build();
         final Call call = okHttpClient.newCall(request);
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                Log.d("TAG", "onFailure: ");
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                Log.d("TAG", "onResponse: " + response.body().string());
-//                System.out.println("执行");
-//                Gson gson = new Gson();
-//                Guestbook[] guestbook = gson.fromJson(response.body().string(), Guestbook[].class);
-//                for (Guestbook temp : guestbook) {
-//                    System.out.println(temp);
-//                    Date date = temp.getTime();
-//                    Instant instant = date.toInstant();
-//                    ZoneId zoneId = ZoneId.systemDefault();
-//                    LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
-//                    guestBookList.add(new GuestBook(temp.getSenderName(), temp.getContent(), localDateTime));
-//                }
-//            }
-//        });
         Runnable networkTask = new Runnable() {
             //        new Thread(new Runnable() {
             @Override
@@ -204,7 +173,52 @@ public class Mypage extends AppCompatActivity {
             }
         };
         new Thread(networkTask).run();
-        mem = new Member(Integer.parseInt(app.getUid()), app.getName(), Integer.parseInt(app.getAge()), app.getPhone(), app.getEmail(), app.getIntro());
+        mem = new Member(Integer.parseInt(UID) , Name , Integer.parseInt(Age) , Phone ,Email , Intro);
+        setMypage(mem);
+        showBookList();
+    }
+
+    private void getOtherPeopleGuestBook()
+    {
+        String JWT;
+        JWT = app.getJWT();
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .build();
+        String Host = "http://10.0.2.2:";
+        String port = "8080";
+        String AccessPath = "/GuestBook/ReceiveMessage/";
+        String url = Host + port + AccessPath + Receiver;
+        System.out.println(url);
+        final Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("JWT", JWT)
+                .build();
+        final Call call = okHttpClient.newCall(request);
+        Runnable networkTask = new Runnable() {
+            //        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = call.execute();
+                    String gsonText = Objects.requireNonNull(response.body()).string();
+                    Gson gson = new Gson();
+                    Guestbook[] guestbook = gson.fromJson(gsonText, Guestbook[].class);
+                    for (Guestbook temp : guestbook) {
+                        Date date = temp.getTime();
+                        Instant instant = date.toInstant();
+                        ZoneId zoneId = ZoneId.systemDefault();
+                        LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+                        guestBookList.add(new GuestBook(temp.getSenderName(), temp.getContent(), localDateTime));
+                    }
+//                    Log.d("TAG", "run: " + response.body().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(networkTask).run();
+        mem = new Member(Integer.parseInt(UID) , Name , Integer.parseInt(Age) , Phone ,Email , Intro);
         setMypage(mem);
         showBookList();
     }
@@ -215,7 +229,7 @@ public class Mypage extends AppCompatActivity {
         FormBody formBody = new FormBody.Builder()
                 .add("Content", text)
                 .build();
-        String JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ4IiwiZXhwIjoxNjIyNzE0NDc1LCJpYXQiOjE2MjI3MTI2NzV9.5pLwY-dBnx1372_BibTltPfQvtnflI00KsNIC9stJBy8V-s1fjftwd-OGrDXWJcwy4HHWsFW6q5omymEen8HLQ";
+        String JWT;
         JWT = app.getJWT();
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .build();
@@ -248,8 +262,6 @@ public class Mypage extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Toast.makeText(Mypage.this, msg, Toast.LENGTH_SHORT).show();
-//                    guestBookList.clear();
-//                    getGuestBook();
                 View v = inflater.inflate(R.layout.guestbook, null);
                 container.addView(v);
 
