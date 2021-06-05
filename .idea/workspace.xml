@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="547cd446-ab16-4acb-ac96-82b4e2e88bc2" name="Default Changelist" comment="" />
+    <list default="true" id="547cd446-ab16-4acb-ac96-82b4e2e88bc2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/Album.java" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/Album.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/res/layout/activity_album.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/res/layout/activity_album.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/res/layout/album_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/res/layout/album_layout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/PDA_Server/bin/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Server/PDA_Server/bin/.gitignore" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

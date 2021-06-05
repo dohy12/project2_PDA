@@ -13,10 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="200dp">
         <ImageView
+            android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/img13"/>
+            android:background="#000000"/>
         <LinearLayout
             android:padding="15dp"
             android:layout_gravity="bottom"
