@@ -1,6 +1,7 @@
 package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import okhttp3.Request;
 public class MainActivity extends AppCompatActivity {
     Drawer drawer;
     Toolbar toolbar;
+
+    ViewPager mainViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

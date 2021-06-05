@@ -16,6 +16,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class AlbumContent extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -27,7 +29,7 @@ public class AlbumContent extends AppCompatActivity {
 
     private AlbumCheckPage pageChecker;
 
-    private int count = 5;
+    private ArrayList<String> imageUrlList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +40,19 @@ public class AlbumContent extends AppCompatActivity {
         toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
 
-        pageChecker = new AlbumCheckPage(this, (LinearLayout) findViewById(R.id.albumContent_checkPage), count);
+        imageUrlList = new ArrayList<>();
+        imageUrlList.add("https://crabox.io/test/dohy/images/back1.jpg");
+        imageUrlList.add("https://crabox.io/test/dohy/images/back2.jpg");
+        imageUrlList.add("https://crabox.io/test/dohy/images/back3.jpg");
+        imageUrlList.add("https://crabox.io/test/dohy/images/back4.png");
+
+        pageChecker = new AlbumCheckPage(this, (LinearLayout) findViewById(R.id.albumContent_checkPage), imageUrlList.size());
 
         albumTitle = findViewById(R.id.album_title);
         albumPageCheckContainer = findViewById(R.id.albumContent_checkPage);
 
         viewPager = (ViewPager)findViewById(R.id.container);
-        pagerAdapter = new ImageViewPagerAdapter(this, count);
+        pagerAdapter = new ImageViewPagerAdapter(this, imageUrlList);
         viewPager.setAdapter(pagerAdapter);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

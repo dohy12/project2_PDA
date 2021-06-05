@@ -26,12 +26,18 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/main_viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"/>
+
                 <ImageView
                     android:id="@+id/mainImg"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:src="@drawable/img2"
-                    android:adjustViewBounds="true"/>
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerCrop"/>
 
                 <TableLayout
                     android:layout_width="match_parent"
