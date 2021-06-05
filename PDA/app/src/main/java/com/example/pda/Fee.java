@@ -4,13 +4,15 @@ import java.time.LocalDate;
 
 public class Fee {
     private boolean isPayed;
+    private boolean isValid;
     private String feeTitle;
     private String feeDate;
     private int feeAmount;
     public int P_ID;
 
-    public Fee(boolean isPayed, String feeTitle, String feeDate, int feeAmount){
+    public Fee(boolean isPayed, boolean isValid, String feeTitle, String feeDate, int feeAmount){
         this.isPayed = isPayed;
+        this.isValid = isValid;
         this.feeTitle = feeTitle;
         this.feeDate = feeDate;
         this.feeAmount = feeAmount;
@@ -18,6 +20,10 @@ public class Fee {
 
     public boolean isPayed() {
         return isPayed;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     public String getFeeTitle() {

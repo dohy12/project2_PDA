@@ -26,6 +26,7 @@ public class DueInfos implements Serializable { //intent간 객체 전달을 위
     private int pay;
 
     public boolean user_payed;
+    public boolean is_valid;
 
     public String get_start_date() {
         return start_date;

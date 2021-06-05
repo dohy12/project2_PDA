@@ -71,9 +71,9 @@ public class MembershipFee extends AppCompatActivity {
 
         tempList = new ArrayList<>();
 
-        String origin = "http://8fae9f085367.ngrok.io/";
-        GroupId = "deaa01013b0144e99faab90ecd670950";
-        JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNTAzMjM4NTQ5IiwiZXhwIjoxNjIyNjk1NzAzLCJpYXQiOjE2MjI2OTM5MDN9.Sj0boAjOB7AQ0d_b7tpHo5ETarDh7fghlA7piImRJQvfHVaWSIQA8IO4OzBIvBk9Irq2bv4rycNZdHlwsIcS0g";
+        String origin = "http://18.206.18.154:8080/";
+        GroupId = app.getGroupId();
+        JWT = app.getJWT();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(origin)
@@ -142,47 +142,52 @@ public class MembershipFee extends AppCompatActivity {
 
         for(int i=0; i<dueInfos.size(); i++) {
             dueInfos.get(i).user_payed = true;
+            dueInfos.get(i).is_valid = false;
         }
 
-        for(int i=0; i<dueInfos.size(); i++) {
-            for(int j=0; j<userdueInfos.size(); j++) {
-                if(dueInfos.get(i).get_PID() != userdueInfos.get(j)) { //유저가 낸 회비가 아니라면
-                    //날짜
-                    try {
-                        SimpleDateFormat df1 = new SimpleDateFormat("yyyy-mm-dd");
-                        Date now = new Date();
-                        String now_date = df1.format(now);
+        for(int i=0; i<dueInfos.size(); i++) { //유효 날짜 체킹
+            try {
+                SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
+                Date now = new Date();
+                String now_date = df1.format(now);
 
-                        Date format_now = df1.parse(now_date);
-                        Date format_start_date = df1.parse(dueInfos.get(i).get_start_date());
-                        Date format_end_date = df1.parse(dueInfos.get(i).get_end_date());
+                Date format_now = df1.parse(now_date);
+                Date format_start_date = df1.parse(dueInfos.get(i).get_start_date());
+                Date format_end_date = df1.parse(dueInfos.get(i).get_end_date());
 
-                        int compare1 = format_now.compareTo(format_start_date);
-                        if(compare1 >= 0) { //now >= start_date //현재 날짜가 유효 기간 내라면
-                            int compare2 = format_now.compareTo(format_end_date);
-                            if(compare2 <= 0) {
-                                toPay += dueInfos.get(i).get_pay();
-                                dueInfos.get(i).user_payed = false; //PAY 해야함
-                                //Log.i("P_ID", Integer.toString(dueInfos.get(i).get_PID()));
-                            }
-                        }
-
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                int compare1 = format_now.compareTo(format_start_date);
+                if (compare1 >= 0) { //now >= start_date //현재 날짜가 유효 기간 내라면
+                    int compare2 = format_now.compareTo(format_end_date);
+                    if (compare2 <= 0) {
+                        dueInfos.get(i).is_valid = true;
                     }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
+        if(userdueInfos.size() == 0) { //유저가 낸 회비가 아무것도 없다면
+            for (int i = 0; i < dueInfos.size(); i++) {
+                dueInfos.get(i).user_payed = false; //내지 않음
+                if (dueInfos.get(i).is_valid) { //유효기간 내이면
+                    toPay += dueInfos.get(i).get_pay(); //내야함
                 }
             }
         }
+        else {
+            for (int i = 0; i < dueInfos.size(); i++)
+                for (int j = 0; j < userdueInfos.size(); j++) {
+                    if (dueInfos.get(i).get_PID() != userdueInfos.get(j)) { //유저가 내지 않은 회비
+                        dueInfos.get(i).user_payed = false; //내지 않음 표시
+                    }
+                    if (!dueInfos.get(i).user_payed && dueInfos.get(i).is_valid) { //유저가 낸 회비가 아니고 유효기간 내라면
+                        toPay += dueInfos.get(i).get_pay();
+                        dueInfos.get(i).user_payed = false; //PAY 해야함
+                    }
+                }
+        }
         ((TextView)findViewById(R.id.toPay)).setText(String.format("%,d원", toPay));
-        /*
-        tempList.add(new FeeUsage(LocalDate.of(2021,5,25),"운동회 행사", -30000, 1000000));
-        tempList.add(new FeeUsage(LocalDate.of(2021,5,26),"운동회 행사2", -30000, 970000));
-        tempList.add(new FeeUsage(LocalDate.of(2021,5,27),"운동회 행사3", -50000, 920000));
-        tempList.add(new FeeUsage(LocalDate.of(2021,5,28),"운동회 행사4", -30000, 890000));
-        tempList.add(new FeeUsage(LocalDate.of(2021,5,29),"(이도희) 회비 납부", 100000, 990000));
-
-        showList();*/
     }
 
     private class DueInfosRunnable implements Runnable {

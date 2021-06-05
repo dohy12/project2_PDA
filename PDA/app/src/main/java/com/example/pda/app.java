@@ -33,7 +33,7 @@ public class app extends Application {
     private static String email = "";
     private static String intro = "";
     private static Bitmap profile;
-    private static String Hostip = "10.0.2.2";
+    private static String Hostip = "18.206.18.154";
     private static String port = "8080";
     @Override
     public void onCreate() {
@@ -41,7 +41,7 @@ public class app extends Application {
     }
     public static  void getUserInf()
     {
-        String Host = "http://10.0.2.2:";
+        String Host = "http://18.206.18.154:";
         String AccessPath = "/UserInf";
         final String url = Host + port + AccessPath;
         final OkHttpClient okHttpClient = new OkHttpClient();

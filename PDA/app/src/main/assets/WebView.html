@@ -30,14 +30,22 @@
         function get_UID() {
             return Android.return_UID();
         }
+        function get_buyer_name() {
+            return Android.return_buyer_name();
+        }
+        function get_email() {
+            return Android.return_email();
+        }
         var jwt = get_JWT();
         var GroupId = get_GroupId();
         var PID = get_PID();
         var UID = get_UID();
+        var Buyer_name = get_buyer_name();
+        var Email = get_email();
 
         // 웹뷰에서 DB의 결제 정보를 서버에서 가져옴 (JQuery ajax 이용) - 확인 완료
         var Buyer_name, Payment_name, Payment_price, Merchat_uid; //가져올 정보(사용자 이름, 회비가격, 회비이름, 주문번호)
-        var origin = "http://8fae9f085367.ngrok.io/"
+        var origin = "http://18.206.18.154:8080/"
 
         $.ajax({
             url: origin + "payments/request-infos/" + GroupId + "/" + PID,
@@ -75,6 +83,7 @@
             name: Payment_name,
             amount: Payment_price,
             buyer_name: Buyer_name,
+            buyer_email: Email,
             custom_data: {U_ID : UID, P_ID : PID, GroupId : GroupId},
             m_redirect_url: origin + "payment/success", //결제 성공 시 get method로 결제 결과 (imp_uid, merchant_uid) 보내기 - 모바일에서는 콜백 작동 x, m_redirect_url로만 결과 정보 전송 가능
             app_scheme : 'iamportapp'
