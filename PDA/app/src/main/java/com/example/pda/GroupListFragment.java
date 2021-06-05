@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,6 +48,15 @@ public class GroupListFragment extends DialogFragment {
             container.addView(v);
 
             v.findViewById(R.id.groupListImage).setClipToOutline(true);
+
+            ///
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast myToast = Toast.makeText(inflater.getContext(),"test", Toast.LENGTH_SHORT);
+                    myToast.show();
+                }
+            });
         }
     }
 }
