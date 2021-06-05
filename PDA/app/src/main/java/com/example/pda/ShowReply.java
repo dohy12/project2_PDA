@@ -24,9 +24,11 @@ public class ShowReply extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_reply);
 
+
         ///툴바 세팅/////////////
         toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
+
 
         container = (LinearLayout)findViewById(R.id.container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
