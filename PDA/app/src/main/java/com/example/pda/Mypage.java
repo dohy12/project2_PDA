@@ -37,7 +37,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Mypage extends AppCompatActivity {
-    private boolean IsEnable = false;
+    private boolean IsEnable = true;
     private LinearLayout container;
     private LayoutInflater inflater;
     private String Name;
@@ -202,7 +202,7 @@ public class Mypage extends AppCompatActivity {
             }
         };
         new Thread(networkTask).run();
-        mem = new Member(1, "이도희1", 27, "010-2890-6812", "dohy12@naver.com", "경북대학교를 다니고 있는 학생입니다 잘 부탁드립니다.");
+        mem = new Member(Integer.parseInt(app.getUid()), app.getID(), Integer.parseInt(app.getAge()), app.getPhone(), app.getEmail(), app.getIntro());
         setMypage(mem);
         showBookList();
     }
