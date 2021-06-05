@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,13 +25,31 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 public class Login extends AppCompatActivity {
     private AlertDialog.Builder alert;
     private Intent intent;
+
+    final Handler serverhandler = new Handler(){
+        public void handleMessage(Message msg){
+            alert.setMessage("서버와의 연결이 원활하지 않습니다.").setPositiveButton("확인", null);
+            alert.show();
+        }
+    };
+
+    final Handler imagehandler = new Handler(){
+        public void handleMessage(Message msg){
+            alert.setMessage("프로필 사진 불러오기 실패").setPositiveButton("확인", null);
+            alert.show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +89,6 @@ public class Login extends AppCompatActivity {
             System.out.println(httpUrl);
             System.out.println(request.headers().toString());
 
-            final Handler serverhandler = new Handler(){
-                public void handleMessage(Message msg){
-                    alert.setMessage("서버와의 연결이 원활하지 않습니다.").setPositiveButton("확인", null);
-                    alert.show();
-                }
-            };
-
             final Handler loginhandler = new Handler(){
                 public void handleMessage(Message msg){
                     alert.setMessage("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.").setPositiveButton("확인", null);
@@ -97,10 +109,9 @@ public class Login extends AppCompatActivity {
                     try {
                         JSONObject json = new JSONObject(response.body().string());
                         app.setJWT(json.getString("JWT"));
-                        app.setName(json.getString("name"));
                         app.setUid(json.getString("UID"));
                         app.getUserInf();
-                        startActivity(intent);
+                        downProfile();
                     } catch (JSONException e) {
                         Message msg = loginhandler.obtainMessage();
                         loginhandler.sendMessage(msg);
@@ -109,6 +120,47 @@ public class Login extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void downProfile()
+    {
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl httpUrl = new HttpUrl.Builder()
+                .scheme("http")
+                .host("10.0.2.2")
+                .port(8080)
+                .addPathSegment("images")
+                .addPathSegment(app.getProfilesrc())
+                .build();
+
+        Request request = new Request.Builder()
+                .url(httpUrl)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Message msg = serverhandler.obtainMessage();
+                serverhandler.sendMessage(msg);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                System.out.println(response.body().string());
+                if(response.code() == 200)
+                {
+                    byte[] image = response.body().bytes();
+                    app.setProfile(BitmapFactory.decodeByteArray(image, 0, image.length));
+                    startActivity(intent);
+                }
+                else
+                {
+                    Message msg = imagehandler.obtainMessage();
+                    imagehandler.sendMessage(msg);
+                }
+            }
+        });
     }
 
     public void goRegister(View view){
