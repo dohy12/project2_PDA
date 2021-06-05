@@ -26,8 +26,8 @@ public class GroupIdGeneration
 {
     @Autowired
     GroupGeneration groupGeneration;
-    @RequestMapping("/GroupIdGeneration/{GroupName}")
-    public Map<String,Object> IdGeneration(@PathVariable String GroupName, @PathParam("img") String img)
+    @RequestMapping("/GroupIdGeneration/{GroupName}/{GroupImg}")
+    public Map<String,Object> IdGeneration(@PathVariable("GroupName") String GroupName, @PathVariable("GroupImg") String GroupImg)
     {
         Map<String,Object> map = new HashMap<>();
         if(groupGeneration.checkDuplicate(GroupName)!=0)  // 단체 이름 중복 검색
@@ -43,7 +43,7 @@ public class GroupIdGeneration
             String str = uuid.toString();
             String uuidStr = str.substring(0, 8) + str.substring(9, 13) + str.substring(14, 18) + str.substring(19, 23) + str.substring(24); //'-' 기호를 삭제
             groupGeneration.schemaGeneration(uuidStr); // 스키마 생선
-            groupGeneration.idGeneration(GroupName,uuidStr, img); // 단체 이름, ID, 프로필 경로 기록
+            groupGeneration.idGeneration(GroupName,uuidStr, GroupImg); // 단체 이름, ID, 프로필 경로 기록
             map.put("code", 200);
             map.put("msg", "단체 생성에 성공했다");
             map.put("GroupName", GroupName);
