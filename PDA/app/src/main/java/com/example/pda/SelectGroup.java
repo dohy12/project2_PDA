@@ -45,6 +45,8 @@ public class SelectGroup extends AppCompatActivity {
     }
 
     private void setProfileInfo(){
+        ImageView profile =(ImageView) findViewById(R.id.profile_image);
+        profile.setImageBitmap(app.getProfile());
         findViewById(R.id.profile_image).setClipToOutline(true);
     }
 
