@@ -4,6 +4,15 @@ public class UserPW {
     private String U_ID;
     private String pass_Hash;
     private String pass_Salt;
+    private String profileImg;
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
 
     public String getU_ID() {
         return U_ID;

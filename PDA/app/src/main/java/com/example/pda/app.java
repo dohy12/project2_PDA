@@ -32,7 +32,6 @@ public class app extends Application {
     private static String phone = "";
     private static String email = "";
     private static String intro = "";
-    private static String profilesrc = "";
     private static Bitmap profile;
 
     @Override
@@ -68,7 +67,6 @@ public class app extends Application {
                 phone = user.getPhone();
                 age = user.getAge().toString();
                 email = user.getEmail();
-                profilesrc = user.getProfileimg();
                 if (user.getIntroduction() == null)
                     intro = "";
                 else
@@ -115,14 +113,6 @@ public class app extends Application {
                 }
             }
         });
-    }
-
-    public static String getProfilesrc() {
-        return profilesrc;
-    }
-
-    public static void setProfilesrc(String profilesrc) {
-        app.profilesrc = profilesrc;
     }
 
     public static Bitmap getProfile() {

@@ -111,7 +111,7 @@ public class Login extends AppCompatActivity {
                         app.setJWT(json.getString("JWT"));
                         app.setUid(json.getString("UID"));
                         app.getUserInf();
-                        downProfile();
+                        downProfile(json.getString("profile"));
                     } catch (JSONException e) {
                         Message msg = loginhandler.obtainMessage();
                         loginhandler.sendMessage(msg);
@@ -122,7 +122,7 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    public void downProfile()
+    public void downProfile(String src)
     {
         OkHttpClient client = new OkHttpClient();
 
@@ -131,7 +131,7 @@ public class Login extends AppCompatActivity {
                 .host("10.0.2.2")
                 .port(8080)
                 .addPathSegment("images")
-                .addPathSegment(app.getProfilesrc())
+                .addPathSegment(src)
                 .build();
 
         Request request = new Request.Builder()
@@ -147,7 +147,6 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                System.out.println(response.body().string());
                 if(response.code() == 200)
                 {
                     byte[] image = response.body().bytes();
