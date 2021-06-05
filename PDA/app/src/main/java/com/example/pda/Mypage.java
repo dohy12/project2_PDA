@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -101,6 +102,7 @@ public class Mypage extends AppCompatActivity {
     }
 
     private void setMypage(Member mem) {
+        ((ImageView)findViewById(R.id.mypage_profileImage)).setImageBitmap(app.getProfile());
         findViewById(R.id.mypage_profileImage).setClipToOutline(true);
 
         String str_name_age = mem.getName() + "(" + mem.getAge() + ")";

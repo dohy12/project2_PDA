@@ -48,6 +48,7 @@ public class SelectGroup extends AppCompatActivity {
         ImageView profile =(ImageView) findViewById(R.id.profile_image);
         profile.setImageBitmap(app.getProfile());
         findViewById(R.id.profile_image).setClipToOutline(true);
+        ((TextView)findViewById(R.id.welcome)).setText(app.getName()+ "님 반갑습니다.");
     }
 
     private void showGroupList(){

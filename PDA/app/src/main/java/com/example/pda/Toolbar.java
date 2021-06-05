@@ -58,6 +58,7 @@ public class Toolbar {
     }
 
     public void setToolbarProfile(){
+        ((ImageView)toolbarProfile.findViewById(R.id.toolbarImage)).setImageBitmap(app.getProfile());
         toolbarProfile.findViewById(R.id.toolbarImage).setClipToOutline(true);
 
         toolbarProfile.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,7 @@
 package com.example.pda;
 
+import android.graphics.Bitmap;
+
 public class Member {
     private int id;
     private String name;

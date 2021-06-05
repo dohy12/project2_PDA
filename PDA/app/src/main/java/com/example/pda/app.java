@@ -33,7 +33,8 @@ public class app extends Application {
     private static String email = "";
     private static String intro = "";
     private static Bitmap profile;
-
+    private static String Hostip = "10.0.2.2";
+    private static String port = "8080";
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,7 +42,6 @@ public class app extends Application {
     public static  void getUserInf()
     {
         String Host = "http://10.0.2.2:";
-        String port = "8080";
         String AccessPath = "/UserInf";
         final String url = Host + port + AccessPath;
         final OkHttpClient okHttpClient = new OkHttpClient();
@@ -83,8 +83,8 @@ public class app extends Application {
 
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("http")
-                .host("18.206.18.154")
-                .port(8080)
+                .host(Hostip)
+                .port(Integer.parseInt(port))
                 .addPathSegment("auth")
                 .addQueryParameter("id", ID)
                 .build();
@@ -113,6 +113,14 @@ public class app extends Application {
                 }
             }
         });
+    }
+
+    public static String getHostip() {
+        return Hostip;
+    }
+
+    public static String getPort() {
+        return port;
     }
 
     public static Bitmap getProfile() {

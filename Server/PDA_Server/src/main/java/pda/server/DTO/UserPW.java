@@ -1,6 +1,7 @@
 package pda.server.DTO;
 
 public class UserPW {
+    private String name;
     private String U_ID;
     private String pass_Hash;
     private String pass_Salt;
@@ -20,6 +21,14 @@ public class UserPW {
 
     public void setU_ID(String u_ID) {
         U_ID = u_ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPass_Hash() {

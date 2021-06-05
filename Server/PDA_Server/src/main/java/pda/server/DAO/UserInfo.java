@@ -11,7 +11,7 @@ import pda.server.DTO.UserPW;
 public interface UserInfo {
 
     //패스워드 솔트와 해쉬값을 가져온다
-    @Select("Select U_ID, pass_Hash, pass_Salt, profileImg from main.user${table} where ID = #{ID}")
+    @Select("Select U_ID, name, pass_Hash, pass_Salt, profileImg from main.user${table} where ID = #{ID}")
     UserPW getPW(@Param("table") String table, @Param("ID") String ID);
 
     @Select("Select COUNT(*) from main.user${table} where ID = #{ID}")

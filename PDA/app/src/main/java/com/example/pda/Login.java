@@ -36,7 +36,6 @@ import okhttp3.Response;
 public class Login extends AppCompatActivity {
     private AlertDialog.Builder alert;
     private Intent intent;
-
     final Handler serverhandler = new Handler(){
         public void handleMessage(Message msg){
             alert.setMessage("서버와의 연결이 원활하지 않습니다.").setPositiveButton("확인", null);
@@ -75,8 +74,8 @@ public class Login extends AppCompatActivity {
 
             HttpUrl httpUrl = new HttpUrl.Builder()
                     .scheme("http")
-                    .host("10.0.2.2")
-                    .port(8080)
+                    .host(app.getHostip())
+                    .port(Integer.parseInt(app.getPort()))
                     .addPathSegment("auth")
                     .addQueryParameter("id", ID)
                     .build();
@@ -110,6 +109,7 @@ public class Login extends AppCompatActivity {
                         JSONObject json = new JSONObject(response.body().string());
                         app.setJWT(json.getString("JWT"));
                         app.setUid(json.getString("UID"));
+                        app.setName(json.getString("name"));
                         app.getUserInf();
                         downProfile(json.getString("profile"));
                     } catch (JSONException e) {
@@ -128,8 +128,8 @@ public class Login extends AppCompatActivity {
 
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("http")
-                .host("10.0.2.2")
-                .port(8080)
+                .host(app.getHostip())
+                .port(Integer.parseInt(app.getPort()))
                 .addPathSegment("images")
                 .addPathSegment(src)
                 .build();

@@ -199,8 +199,8 @@ public class Register extends AppCompatActivity {
 
                 HttpUrl httpUrl = new HttpUrl.Builder()
                         .scheme("http")
-                        .host("10.0.2.2")
-                        .port(8080)
+                        .host(app.getHostip())
+                        .port(Integer.parseInt(app.getPort()))
                         .addPathSegment("auth")
                         .build();
 
@@ -280,8 +280,8 @@ public class Register extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
             HttpUrl httpUrl = new HttpUrl.Builder()
                     .scheme("http")
-                    .host("10.0.2.2")
-                    .port(8080)
+                    .host(app.getHostip())
+                    .port(Integer.parseInt(app.getPort()))
                     .addPathSegment("image")
                     .addPathSegment(name)
                     .build();
@@ -329,8 +329,8 @@ public class Register extends AppCompatActivity {
 
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("http")
-                .host("10.0.2.2")
-                .port(8080)
+                .host(app.getHostip())
+                .port(Integer.parseInt(app.getPort()))
                 .addPathSegment("auth")
                 .addPathSegment(((EditText)findViewById(R.id.newID)).getText().toString())
                 .build();
