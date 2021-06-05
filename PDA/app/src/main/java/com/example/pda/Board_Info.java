@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Board_Info implements Serializable {
+public class Board_Info {
     private int boardId;
     private Boolean isNotice;
     private String title;
