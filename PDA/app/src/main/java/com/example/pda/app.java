@@ -71,7 +71,6 @@ public class app extends Application {
                     intro = " ";
                 else
                     intro = user.getIntroduction();
-                GroupId = "deaa01013b0144e99faab90ecd670950";
             }
         });
 

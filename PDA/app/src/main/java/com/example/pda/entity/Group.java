@@ -1,19 +1,16 @@
 package com.example.pda.entity;
 
-import android.graphics.Bitmap;
-
 public class Group {
-    private String GroupId;
+    private String groupId;
     private String name;
-    private String src;
-    private Bitmap profile;
+    private String groupImg;
 
     public String getGroupId() {
-        return GroupId;
+        return groupId;
     }
 
     public void setGroupId(String groupId) {
-        GroupId = groupId;
+        this.groupId = groupId;
     }
 
     public String getName() {
@@ -24,19 +21,11 @@ public class Group {
         this.name = name;
     }
 
-    public String getSrc() {
-        return src;
+    public String getGroupImg() {
+        return groupImg;
     }
 
-    public void setSrc(String src) {
-        this.src = src;
-    }
-
-    public Bitmap getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Bitmap profile) {
-        this.profile = profile;
+    public void setGroupImg(String groupImg) {
+        this.groupImg = groupImg;
     }
 }
