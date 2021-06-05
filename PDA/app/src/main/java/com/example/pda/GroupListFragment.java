@@ -45,6 +45,8 @@ public class GroupListFragment extends DialogFragment {
         for(int i=0;i<10;i++){
             View v = inflater.inflate(R.layout.group_list_fragment_content, null, false);
             container.addView(v);
+
+            v.findViewById(R.id.groupListImage).setClipToOutline(true);
         }
     }
 }
