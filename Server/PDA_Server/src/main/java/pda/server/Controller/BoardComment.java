@@ -7,14 +7,13 @@ import pda.server.DTO.Comment;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class BoardComment {
 
     @Autowired
     CommentOperation comment;
-    Timestamp dateTime;
-    Comment Comment = new Comment(0, dateTime, "contents", 46, 1503238549, 0);
 
     @RequestMapping(value = "/BoardComment/{GroupId}/{BID}", method = RequestMethod.GET)
     public List<Comment> commentList(@PathVariable("GroupId") String GroupId, @PathVariable("BID") int BID) {
@@ -31,9 +30,16 @@ public class BoardComment {
     }
 
     @RequestMapping(value = "/BoardComment/{GroupId}", method = RequestMethod.POST)
-    public String commentPost(@PathVariable("GroupId") String GroupId) {
+    public String commentPost(@PathVariable("GroupId") String GroupId, @RequestBody Map<String, Object> params) {
+        int cid = (int)params.get("CID");
+        String contents = (String)params.get("contents");
+        int bid = (int)params.get("BID");
+        int uid = (int)params.get("UID");
+        Timestamp dateTime = new Timestamp(System.currentTimeMillis());
+
+        Comment Comment = new Comment(cid, dateTime, contents, bid, uid, 0);
+
         try {
-            Comment.dateTime = new Timestamp(System.currentTimeMillis());
             comment.commentPost(GroupId, Comment);
         } catch (Exception e) {
             e.printStackTrace();

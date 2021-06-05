@@ -199,6 +199,41 @@ public class Board_content extends AppCompatActivity {
 
     }
 
+    public void writeComment(View v) {
+        String contents = ((EditText)findViewById(R.id.comment)).getText().toString();
+        int uid = Integer.parseInt(app.getUid());
+
+        OkHttpClient client = new OkHttpClient();
+
+        String json = makeJSONString(0, contents, boardInfo.getBoardId(), uid);
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, json);
+
+        Request request = new Request.Builder()
+                .url("htt[://10.0.2.2:8080/BoardComment/" + app.getGroupId())
+                .post(body)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            System.out.println(response.body().string());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public String makeJSONString(int cid, String contents, int bid, int uid) {
+        String res = "{\"CID\":" + cid +
+                ",\"contents\":\"" + contents +
+                "\",\"BID\":" + bid +
+                ",\"UID\":" + uid +
+                "}";
+
+        return res;
+    }
+
     private void showBoardInfo(){ // 게시판 내용 넣기
 
         findViewById(R.id.profile_image).setClipToOutline(true);
