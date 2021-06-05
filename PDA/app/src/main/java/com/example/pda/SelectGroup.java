@@ -71,7 +71,7 @@ public class SelectGroup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_group);
-
+        alert = new AlertDialog.Builder(this);
         System.out.println(app.getJWT());
 
         container = findViewById(R.id.container);
@@ -213,7 +213,7 @@ public class SelectGroup extends AppCompatActivity {
                 groupLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        app.setGroupId(()view.findViewById());
+                        app.setGroupId();
                         app.setGroupName();
                         Intent intent = new Intent(view.getContext(), MainActivity.class);
                         startActivity(intent);
