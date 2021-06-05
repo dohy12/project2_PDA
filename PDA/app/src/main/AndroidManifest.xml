@@ -39,6 +39,7 @@
         <activity android:name=".SelectGroup" />
         <activity android:name=".MembershipFeeList">
 
+            
             <!-- 웹뷰 및 ISP 등의 어플 인증후 앱으로 다시 호출하기 위한 스키마 설정 -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
