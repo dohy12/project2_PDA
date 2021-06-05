@@ -196,30 +196,30 @@ public class SelectGroup extends AppCompatActivity {
                         .addPathSegment("images")
                         .addPathSegment(Joined.get(i).getGroupImg())
                         .build();
-
-                ((TextView)v.findViewById(R.id.group_name)).setText(Joined.get(i*3+j).getName());
+                Group gt = Joined.get(i*3+j);
+                ((TextView)v.findViewById(R.id.group_name)).setText(gt.getName());
                 Glide.with(this).load(httpUrl.toString()).into((ImageView)v.findViewById(R.id.group_layout_profile));
                 LinearLayout groupLayout = v.findViewById(R.id.group_layout);
                 groupLayout.setClipToOutline(true);
 
 
                 /// group_id 넣기
-                ((TextView)v.findViewById(R.id.group_groupID)).setText("5");
+                ((TextView)v.findViewById(R.id.group_groupID)).setText(gt.getGroupId());
 
                 /// "신청 대기중" TextView 숨기기
                 v.findViewById(R.id.group_waitingCheck).setVisibility(View.GONE);
 
-                /*
+
                 groupLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        app.setGroupId();
-                        app.setGroupName();
+                        app.setGroupId(((TextView)view.findViewById(R.id.group_groupID)).getText().toString());
+                        app.setGroupName(((TextView)view.findViewById(R.id.group_name)).getText().toString());
                         Intent intent = new Intent(view.getContext(), MainActivity.class);
                         startActivity(intent);
                     }
                 });
-                 */
+
             }
         }
     }
@@ -247,14 +247,14 @@ public class SelectGroup extends AppCompatActivity {
                         .addPathSegment("images")
                         .addPathSegment(Awaiting.get(i).getGroupImg())
                         .build();
-
-                ((TextView)v.findViewById(R.id.group_name)).setText(Awaiting.get(i*3+j).getName());
+                Group gt = Awaiting.get(i*3+j);
+                ((TextView)v.findViewById(R.id.group_name)).setText(gt.getName());
                 Glide.with(this).load(httpUrl.toString()).into((ImageView)v.findViewById(R.id.group_layout_profile));
                 LinearLayout groupLayout = v.findViewById(R.id.group_layout);
                 groupLayout.setClipToOutline(true);
 
                 /// group_id 넣기
-                ((TextView)v.findViewById(R.id.group_groupID)).setText("5");
+                ((TextView)v.findViewById(R.id.group_groupID)).setText(gt.getGroupId());
             }
         }
     }
