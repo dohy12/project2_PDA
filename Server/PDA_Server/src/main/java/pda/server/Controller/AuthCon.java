@@ -41,7 +41,6 @@ public class AuthCon {
         Map<String, Object> ret = new HashMap<String, Object>();
 
         if(pwinfo.getPass_Hash().equals(HashingF(pw, pwinfo.getPass_Salt()))) {
-            ret.put("name", pwinfo.getName());
             ret.put("UID", pwinfo.getU_ID());
             ret.put("JWT", token.doGenerateToken(pwinfo.getU_ID()));
             return ret;

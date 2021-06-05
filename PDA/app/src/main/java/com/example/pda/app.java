@@ -1,6 +1,7 @@
 package com.example.pda;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.pda.entity.User;
@@ -31,6 +32,9 @@ public class app extends Application {
     private static String phone = "";
     private static String email = "";
     private static String intro = "";
+    private static String profilesrc = "";
+    private static Bitmap profile;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -64,6 +68,7 @@ public class app extends Application {
                 phone = user.getPhone();
                 age = user.getAge().toString();
                 email = user.getEmail();
+                profilesrc = user.getProfileimg();
                 if (user.getIntroduction() == null)
                     intro = "";
                 else
@@ -110,6 +115,22 @@ public class app extends Application {
                 }
             }
         });
+    }
+
+    public static String getProfilesrc() {
+        return profilesrc;
+    }
+
+    public static void setProfilesrc(String profilesrc) {
+        app.profilesrc = profilesrc;
+    }
+
+    public static Bitmap getProfile() {
+        return profile;
+    }
+
+    public static void setProfile(Bitmap profile) {
+        app.profile = profile;
     }
 
     public static String getGroupName() {
