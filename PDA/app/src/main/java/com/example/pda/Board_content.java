@@ -10,15 +10,19 @@ import android.media.Image;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -297,5 +301,26 @@ public class Board_content extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openMenu(View view){
+        View anchor = findViewById(R.id.menu_anchor);
+        final PopupMenu popupMenu = new PopupMenu(this, anchor);
+        getMenuInflater().inflate(R.menu.menu_test, popupMenu.getMenu());
+
+        Menu menu = popupMenu.getMenu();
+
+        for(int i=0; i<5;i++)
+            menu.add(Menu.NONE, i, Menu.NONE, "메뉴"+i);
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                int i= menuItem.getItemId();
+
+                Toast.makeText(toolbar.getActivity(), i + "선택", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
 
 }
