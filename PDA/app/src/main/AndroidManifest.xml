@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AlbumAdd"></activity>
+        <activity android:name=".ImageUrlTest"></activity>
+        <activity android:name=".AlbumAdd" />
         <activity android:name=".AlbumContent" />
         <activity android:name=".Album" />
         <activity android:name=".IntroductionModifying" />
@@ -27,8 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ShowReply" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".ShowReply" />
         <activity android:name=".memberList" />
         <activity android:name=".Mypage" />
         <activity android:name=".Board" />

@@ -30,13 +30,12 @@ public class GetGroupInfo {
     public List<group> GetJoinedMyGroups(@PathVariable String ID, @RequestAttribute String U_ID)
     {
         List<group> result = new ArrayList<>();
-        String temp = groups.getJoinedGroups(Math.abs(ID.hashCode()), Integer.parseInt(U_ID));
+        String temp = groups.getJoinedGroups(Math.abs(ID.hashCode())%10, Integer.parseInt(U_ID));
         List<String> gids = new ArrayList<>(Arrays.asList(temp.split(",")));
         for(String gid: gids)
         {
-            group g = new group();
+            group g = groups.getGroupInfos(gid);
             g.setGroupId(gid);
-            g.setName(groups.getGroupName(g.getGroupId()));
             result.add(g);
         }
         return result;
@@ -46,13 +45,12 @@ public class GetGroupInfo {
     public List<group> GetAwaitingMyGroups(@PathVariable String ID, @RequestAttribute String U_ID)
     {
         List<group> result = new ArrayList<>();
-        String temp = groups.getAwaitingGroups(Math.abs(ID.hashCode()), Integer.parseInt(U_ID));;
+        String temp = groups.getAwaitingGroups(Math.abs(ID.hashCode())%10, Integer.parseInt(U_ID));;
         List<String> gids = new ArrayList<>(Arrays.asList(temp.split(",")));
         for(String gid: gids)
         {
-            group g = new group();
+            group g = groups.getGroupInfos(gid);
             g.setGroupId(gid);
-            g.setName(groups.getGroupName(g.getGroupId()));
             result.add(g);
         }
         return result;

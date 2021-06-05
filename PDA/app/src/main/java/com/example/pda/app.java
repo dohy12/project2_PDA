@@ -68,10 +68,9 @@ public class app extends Application {
                 age = user.getAge().toString();
                 email = user.getEmail();
                 if (user.getIntroduction() == null)
-                    intro = "";
+                    intro = " ";
                 else
                     intro = user.getIntroduction();
-                GroupId = "deaa01013b0144e99faab90ecd670950";
             }
         });
 

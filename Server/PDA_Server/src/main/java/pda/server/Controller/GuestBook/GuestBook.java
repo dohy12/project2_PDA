@@ -77,4 +77,17 @@ public class GuestBook
         }
         return GuestBook;
     }
+
+    @RequestMapping("/GuestBook/ReceiveMessage/{UID}")
+    public List<Guestbook> ReceiveOthersMessage(@PathVariable String UID)
+    {
+        List<Guestbook> GuestBook = new ArrayList<>();
+        for (Guestbook temp : memberOperation.ReceiveMessage(Integer.parseInt(UID)))
+        {
+            String name  = memberOperation.SearchName(UserTableMapping.UIDConversion(temp.getSender()), temp.getSender());
+            temp.setSenderName(name);
+            GuestBook.add(temp);
+        }
+        return GuestBook;
+    }
 }

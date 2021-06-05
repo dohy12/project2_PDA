@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +25,10 @@ public class Drawer {
         v.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         ImageView iv = view.findViewById(R.id.profile_image);
+        iv.setImageBitmap(app.getProfile());
         iv.setClipToOutline(true);
+        ((TextView)view.findViewById(R.id.profile_name)).setText(app.getName());
+        ((TextView)view.findViewById(R.id.profile_email)).setText(app.getEmail());
 
         int[] menuID = {
                 R.id.drawer_menu1,

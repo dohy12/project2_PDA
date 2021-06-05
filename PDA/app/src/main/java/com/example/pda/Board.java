@@ -20,14 +20,21 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 public class Board extends AppCompatActivity {
     private LinearLayout container;
     private LayoutInflater inflater;
-    ArrayList<Board_Info> boardInfoList;
+
+    ArrayList<Board_Info> boardInfoList = new ArrayList<Board_Info>();
 
     Toolbar toolbar;
 
@@ -43,12 +50,20 @@ public class Board extends AppCompatActivity {
         container = (LinearLayout)findViewById(R.id.board_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        //인자로 전달받은 boardInfoList를 사용 가능하게 하는 구문
-        Intent receive = getIntent();
-        boardInfoList = (ArrayList<Board_Info>)receive.getSerializableExtra("boardInfoList");
-        Serializable s = receive.getSerializableExtra("boardInfoList");
+        Intent myIntent = getIntent();
+        int notice = myIntent.getIntExtra("notice", 0);
 
-        System.out.println("size: " + boardInfoList.size());
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        BoardCallable boardCallable = new BoardCallable(notice);
+        Future<ArrayList<Board_Info>> future = executorService.submit(boardCallable);
+
+        try{
+            boardInfoList = future.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(boardInfoList.size());
 
         showBoardList();
 
@@ -57,7 +72,7 @@ public class Board extends AppCompatActivity {
     private void showBoardList(){
 
         for(int i=0;i<boardInfoList.size();i++) {
-            Board_Info boardInfo = boardInfoList.get(i);
+            final Board_Info boardInfo = boardInfoList.get(i);
             View v = inflater.inflate(R.layout.board, null);
             container.addView(v);
 
@@ -82,20 +97,72 @@ public class Board extends AppCompatActivity {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goBoardContent(view);
+                    goBoardContent(view, boardInfo);
                 }
             });
 
         }
     }
 
-    public void goBoardContent(View view){
+    public void goBoardContent(View view, Board_Info selectedBoard){
         Intent intent = new Intent(this, Board_content.class);
+        intent.putExtra("selectedBoard", selectedBoard);
         startActivity(intent);
     }
 
     public void goBoardWriting(View view){
         Intent intent = new Intent(this, Board_Writing.class);
         startActivity(intent);
+    }
+
+    private class BoardCallable implements Callable<ArrayList<Board_Info>> {
+        private int notice;
+
+        public BoardCallable(int notice) {
+            this.notice = notice;
+        }
+
+        public ArrayList<Board_Info> call() {
+
+            OkHttpClient client = new OkHttpClient();
+
+            String url = "http://10.0.2.2:8080/Community/";
+            String GroupId = "deaa01013b0144e99faab90ecd670950/";
+
+            String httpUrl = url + GroupId + notice;
+
+            System.out.println(httpUrl);
+
+            Request request = new Request.Builder()
+                    .url(httpUrl)
+                    .get()
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+
+                JSONArray jsonArray = new JSONArray(response.body().string());
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    int BID = jsonObject.getInt("B_ID");
+                    boolean isNotice = jsonObject.getInt("isNotice") == 1;
+                    String title = jsonObject.getString("title");
+                    String name = "최유진";
+                    LocalDateTime date = LocalDateTime.of(2021, 6, 3, 10, 30);
+                    int views_num = 999;
+                    int comments_num = 10;
+
+                    boardInfoList.add(new Board_Info(BID, isNotice, title, name, date, views_num, comments_num));
+                    System.out.println("Now: " + boardInfoList.size());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return boardInfoList;
+        }
     }
 }

@@ -49,7 +49,10 @@ public class Board_content extends AppCompatActivity {
         image_container = findViewById(R.id.board_image_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        boardInfo = new Board_Info(1 , true, "제목", "이도희", LocalDateTime.of(21,5,22,12,46),222, 5, "내용");
+        Intent myIntent = getIntent();
+        boardInfo = (Board_Info) myIntent.getSerializableExtra("selectedBoard");
+
+        //boardInfo = new Board_Info(1 , true, "제목", "이도희", LocalDateTime.of(21,5,22,12,46),222, 5, "내용");
 
         imageList = new ArrayList<>();
         imageList.add(getResources().getDrawable(R.drawable.img1, null));

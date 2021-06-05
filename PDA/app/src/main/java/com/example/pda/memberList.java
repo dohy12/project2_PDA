@@ -52,8 +52,9 @@ public class memberList extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.memList_name);
         textView.setText(app.getName() + "(" + app.getAge().toString() + ")");
-        textView = findViewById(R.id.memList_phone);
-        textView.setText(app.getPhone());
+        TextView textView2 = findViewById(R.id.memList_phone);
+//        System.out.println("app.getPhone() = " + app.getPhone());
+        textView2.setText("mobile. "+app.getPhone());
         memList = new ArrayList<>();
         getMemberList();
     }
@@ -94,7 +95,7 @@ public class memberList extends AppCompatActivity {
 
         for (int i = 0; i < memList.size(); i++) {
 
-            Member mem = memList.get(i);
+            final Member mem = memList.get(i);
 
             View v = setMemView(mem, container);
 
@@ -104,7 +105,7 @@ public class memberList extends AppCompatActivity {
             l.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goMyPage(view);
+                    goMyPage(view , mem.getName(), mem.getPhone(),mem.getEmail(),mem.getIntro(),String.valueOf(mem.getAge()),String.valueOf(mem.getId()),app.getUid());
                 }
             });
 
@@ -124,13 +125,20 @@ public class memberList extends AppCompatActivity {
         }
     }
 
-    public void goMyPage(View view) {
+    public void goMyPage(View view ,String name,String phone,String email,String intro,String age,String RUid , String MyUid ) {
         Intent intent = new Intent(this, Mypage.class);
+        intent.putExtra("Name",name);
+        intent.putExtra("Phone",phone);
+        intent.putExtra("Email",email);
+        intent.putExtra("Intro",intro);
+        intent.putExtra("Age",age);
+        intent.putExtra("Receiver",RUid);
+        intent.putExtra("UID",MyUid);
         startActivity(intent);
     }
 
     private void getMemberList() {
-        String Host = "http://10.0.2.2:";
+        String Host = "http://18.206.18.154:";
         String port = "8080";
         String AccessPath = "/GuestBook/" + app.getGroupId() + "/MemberList";
         final String url = Host + port + AccessPath;
