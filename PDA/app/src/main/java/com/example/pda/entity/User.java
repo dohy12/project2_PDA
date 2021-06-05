@@ -7,7 +7,7 @@ public class User implements Serializable
 {
     private static final long serialVersionUID = -66009210435352030L;
 
-    private Integer uId;
+    private Integer uid;
 
     private String name;
 
@@ -38,12 +38,12 @@ public class User implements Serializable
 
     public Integer getUId()
     {
-        return uId;
+        return uid;
     }
 
     public void setUId(Integer uId)
     {
-        this.uId = uId;
+        this.uid = uId;
     }
 
     public String getName()

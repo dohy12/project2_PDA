@@ -52,8 +52,9 @@ public class memberList extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.memList_name);
         textView.setText(app.getName() + "(" + app.getAge().toString() + ")");
-        textView = findViewById(R.id.memList_phone);
-        textView.setText(app.getPhone());
+        TextView textView2 = findViewById(R.id.memList_phone);
+//        System.out.println("app.getPhone() = " + app.getPhone());
+        textView2.setText(app.getPhone());
         memList = new ArrayList<>();
         getMemberList();
     }
