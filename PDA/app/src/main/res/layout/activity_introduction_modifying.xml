@@ -46,10 +46,11 @@
                     android:layout_width="60dp"
                     android:layout_height="32dp"
                     android:layout_margin="0dp"
-                    android:textColor="#FFFFFF"
-                    android:text="등록"
                     android:backgroundTint="#606060"
-                    android:textSize="10dp"/>
+                    android:onClick="onSubmitClicked"
+                    android:text="등록"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10dp" />
             </LinearLayout>
 
             <View
@@ -66,16 +67,17 @@
                 android:orientation="vertical"/>
 
             <EditText
+                android:id="@+id/EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:minHeight="300dp"
                 android:background="@null"
-                android:padding="0dp"
-                android:textSize="15dp"
                 android:gravity="top"
-                android:hint="내용"/>
+                android:hint="내용"
+                android:minHeight="300dp"
+                android:padding="0dp"
+                android:textSize="15dp" />
         </LinearLayout>
     </ScrollView>
 
