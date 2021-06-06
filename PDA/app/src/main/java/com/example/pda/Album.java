@@ -106,7 +106,6 @@ public class Album extends AppCompatActivity {
             container.addView(v);
 
             ((TextView)v.findViewById(R.id.album_title)).setText(al.getTitle());
-            ((TextView)v.findViewById(R.id.album_date)).setText(al.getDate());
 
             String str_date = al.getDate();
 
@@ -114,8 +113,8 @@ public class Album extends AppCompatActivity {
             int mm = Integer.parseInt(str_date.substring(4,6));
             int dd = Integer.parseInt(str_date.substring(6,8));
 
-            String show_date = String.format("%d. %02d. %02d",yy,mm,dd);
-
+            String show_date = String.format("%d-%02d-%02d",yy,mm,dd);
+            ((TextView)v.findViewById(R.id.album_date)).setText(show_date);
             ((TextView)v.findViewById(R.id.album_count)).setText(Integer.toString(al.getImage_cnt()));
 
             v.findViewById(R.id.album).setClipToOutline(true);
@@ -124,6 +123,11 @@ public class Album extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(), AlbumContent.class);
                     intent.putExtra("PID",al.getA_ID());
+                    intent.putExtra("Title",al.getTitle());
+                    intent.putExtra("Loc",al.getLocation());
+                    intent.putExtra("Intro",al.getAlbum_intro());
+                    intent.putExtra("Date",al.getDate());
+
                     startActivity(intent);
                 }
             });

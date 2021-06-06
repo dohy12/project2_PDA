@@ -47,6 +47,11 @@ public class AlbumContent extends AppCompatActivity {
 
     private int PID;
 
+    private String title;
+    private String location;
+    private String intro;
+    private String date;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +62,10 @@ public class AlbumContent extends AppCompatActivity {
         ////////////////////////
 
         PID = getIntent().getIntExtra("PID", 0);
+        title = getIntent().getStringExtra("Title");
+        location = getIntent().getStringExtra("Loc");
+        intro = getIntent().getStringExtra("Intro");
+        date = getIntent().getStringExtra("Date");
 
         imageUrlList = new ArrayList<>();
         getImageUrlList();
@@ -152,18 +161,75 @@ public class AlbumContent extends AppCompatActivity {
         Menu menu = popupMenu.getMenu();
 
         menu.add(Menu.NONE, 0, Menu.NONE, "상세 정보");
-        menu.add(Menu.NONE, 1, Menu.NONE, "앨범 수정");
-        menu.add(Menu.NONE, 2, Menu.NONE, "앨범 삭제");
+        menu.add(Menu.NONE, 1, Menu.NONE, "앨범 삭제");
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 int i= menuItem.getItemId();
 
-                Toast.makeText(toolbar.getActivity(), i + "선택", Toast.LENGTH_SHORT).show();
+                switch (i){
+                    case 0:
+                        showAlbumDetail();
+                        break;
+
+                    case 1:
+                        deleteAlbum();
+                        break;
+                }
                 return false;
             }
         });
         popupMenu.show();
+    }
+
+    private void showAlbumDetail(){
+        AlbumInfoFragment fragment = new AlbumInfoFragment(title, location, intro, date);
+
+        fragment.show(getSupportFragmentManager(),"tag");
+
+    }
+
+
+    private void deleteAlbum(){
+        String JWT;
+        JWT = app.getJWT();
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .build();
+
+        String Host = "http://10.0.2.2:";
+        String port = "8080";
+        String AccessPath = "/album/";
+        String url = Host + port + AccessPath + app.getGroupId() + "/" + PID;
+        System.out.println(url);
+
+
+        final Request request = new Request.Builder()
+                .url(url)
+                .delete()
+                .addHeader("JWT", JWT)
+                .build();
+        final Call call = okHttpClient.newCall(request);
+        Runnable networkTask = new Runnable() {
+            //        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = call.execute();
+
+                    ((Album)Album.mContext).refresh();
+
+                    Intent intent = new Intent(AlbumContent.this, Album.class);
+                    startActivity(intent);
+
+                    finish();
+
+//                    Log.d("TAG", "run: " + response.body().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(networkTask).run();
     }
 }

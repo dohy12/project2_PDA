@@ -81,4 +81,9 @@ public class AlbumCon {
         return images;
     }
 
+    @DeleteMapping("/album/{GroupId}/{P_ID}")
+    public void deleteAlbum(@PathVariable("GroupId") String GroupId, @PathVariable("P_ID") int P_ID){
+        albumOperation.deleteAlbum(GroupId, P_ID);
+    }
+
 }
