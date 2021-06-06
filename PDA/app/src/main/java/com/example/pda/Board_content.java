@@ -24,6 +24,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -230,7 +232,8 @@ public class Board_content extends AppCompatActivity {
     private class CommentDeletion implements Callable<String> {
         private int cid;
 
-        public CommentDeletion(int cid) {
+        public CommentDeletion(int cid)
+        {
             this.cid = cid;
         }
 
@@ -241,7 +244,6 @@ public class Board_content extends AppCompatActivity {
             String url = "http://10.0.2.2:8080/BoardComment/";
             //빌드 후 ip 수정
             String groupId = app.getGroupId();
-            int cid = Integer.parseInt(((TextView)findViewById(R.id.comments_id)).getText().toString());
             int uid = Integer.parseInt(app.getUid());
 
             String httpUrl = url + groupId + "/" + cid + "/" + uid;
@@ -378,12 +380,26 @@ public class Board_content extends AppCompatActivity {
             Board_comment bc = boardCommentList.get(i);
             View v = inflater.inflate(R.layout.board_comments, null);
 
+            String profile = null;
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            getURL getUrl = new getURL();
+            Future<String> future = executorService.submit(getUrl);
+
+            try {
+                profile = future.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            String url = "/images/" + profile;
+
+            Glide.with(this).load(url).into((ImageView)v.findViewById(R.id.profile_image));
             v.findViewById(R.id.profile_image).setClipToOutline(true);
 
             ((TextView)v.findViewById(R.id.comments_id)).setText(Integer.toString(bc.getCommentID()));
             ((TextView)v.findViewById(R.id.comments_name)).setText(bc.getName());
             ((TextView)v.findViewById(R.id.comments_contents)).setText(bc.getComments());
-
+            System.out.println(((TextView)v.findViewById(R.id.comments_id)).getText());
             String formatDate = bc.getDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
             ((TextView)v.findViewById(R.id.comments_date)).setText(formatDate);
 
@@ -413,6 +429,38 @@ public class Board_content extends AppCompatActivity {
                 }
             });
 
+        }
+    }
+
+    private class getURL implements Callable<String> {
+        public String call() {
+
+            OkHttpClient client = new OkHttpClient();
+
+            String url = "http://10.0.2.2:8080/BoardComment/";
+            //빌드 후 ip 수정
+            int uid = Integer.parseInt(app.getUid());
+
+            String httpUrl = url + uid;
+
+            System.out.println(httpUrl);
+
+            Request request = new Request.Builder()
+                    .url(httpUrl)
+                    .get()
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            String result = null;
+
+            try {
+                Response response = client.newCall(request).execute();
+                result = response.body().string();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return result;
         }
     }
 
@@ -475,17 +523,16 @@ public class Board_content extends AppCompatActivity {
                         }
 
                 }
-                        return false;
+                return false;
             }
         });
         popupMenu.show();
     }
 
     public void openCommentMenu(View view){
-        final int cid = Integer.parseInt(((TextView)view.findViewById(R.id.comments_id)).getText().toString());
         final PopupMenu popupMenu = new PopupMenu(this, view);
         getMenuInflater().inflate(R.menu.menu_test, popupMenu.getMenu());
-
+        final int cid = Integer.parseInt(((TextView)view.findViewById(R.id.comments_id)).getText().toString());
         Menu menu = popupMenu.getMenu();
 
         menu.add(Menu.NONE, 0, Menu.NONE, "수정");
