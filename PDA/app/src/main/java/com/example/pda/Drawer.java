@@ -85,6 +85,13 @@ public class Drawer {
         @Override
         public Object call() throws Exception {
             Intent intent = new Intent(activity, Mypage.class);
+            intent.putExtra("Name",app.getName());
+            intent.putExtra("Phone",app.getPhone());
+            intent.putExtra("Email",app.getEmail());
+            intent.putExtra("Intro",app.getIntro());
+            intent.putExtra("Age",app.getAge());
+            intent.putExtra("UID",app.getUid());
+            intent.putExtra("Receiver",app.getUid());
             activity.startActivity(intent);
             return null;
         }
