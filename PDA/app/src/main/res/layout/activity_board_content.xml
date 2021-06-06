@@ -222,10 +222,11 @@
                     android:textColor="#000000"/>
 
                 <ImageView
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="20dp"
+                    android:onClick="reloadComments"
+                    android:layout_width="13dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/icon9"/>
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/icon9" />
             </LinearLayout>
 
             <View

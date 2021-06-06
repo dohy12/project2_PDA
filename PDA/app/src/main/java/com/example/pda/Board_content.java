@@ -2,11 +2,9 @@ package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,7 +34,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -71,6 +67,9 @@ public class Board_content extends AppCompatActivity {
         image_container = findViewById(R.id.board_image_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
+        comments_container.removeAllViews();
+
+
         //Board에서 인자로 넘겨준 Board_Info 객체 받는 부분
         Intent myIntent = getIntent();
         boardInfo = (Board_Info) myIntent.getSerializableExtra("selectedBoard");
@@ -81,18 +80,6 @@ public class Board_content extends AppCompatActivity {
         imageList = new ArrayList<>();
         imageList.add(getResources().getDrawable(R.drawable.img1, null));
         imageList.add(getResources().getDrawable(R.drawable.img5, null));
-
-        boardCommentList = new ArrayList<>();
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        CommentCallable commentCallable = new CommentCallable();
-        Future<ArrayList<Board_comment>> future = executorService.submit(commentCallable);
-
-        try {
-            boardCommentList = future.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         String[] survey_strList = {"항목A", "항목B", "항목C"};
         int[] survey_countList = {5, 1, 2};
@@ -223,10 +210,18 @@ public class Board_content extends AppCompatActivity {
         try {
             Response response = client.newCall(request).execute();
             System.out.println(response.body().string());
+            comments_container.removeAllViews();
+            showCommentList();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void reloadComments(View view)
+    {
+        comments_container.removeAllViews();
+        showCommentList();
     }
 
     private class CommentDeletion implements Callable<String> {
@@ -376,6 +371,17 @@ public class Board_content extends AppCompatActivity {
     }
 
     private void showCommentList(){
+        boardCommentList = new ArrayList<>();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        CommentCallable commentCallable = new CommentCallable();
+        Future<ArrayList<Board_comment>> future = executorService.submit(commentCallable);
+
+        try {
+            boardCommentList = future.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         for(int i=0;i<boardCommentList.size();i++) {
             Board_comment bc = boardCommentList.get(i);
             View v = inflater.inflate(R.layout.board_comments, null);
@@ -430,6 +436,8 @@ public class Board_content extends AppCompatActivity {
             });
 
         }
+
+        ((TextView)findViewById(R.id.board_comments_num)).setText("댓글" + boardCommentList.size());
     }
 
     private class getURL implements Callable<String> {
