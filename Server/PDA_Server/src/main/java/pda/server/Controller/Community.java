@@ -73,7 +73,7 @@ public class Community {
 
         int authUID = board.getIsAdmin(GroupId, uid);
 
-        Board Board = new Board(bid, isNotice, title, dateTime, contents, uid, 0, "name");
+        Board Board = new Board(bid, isNotice, title, dateTime, contents, uid, 0, "name", 0);
 
         try{
             if(Board.getIsNotice() == 1 && authUID == 1) {
@@ -105,7 +105,7 @@ public class Community {
                 return "삭제 권한이 없습니다.";
             }
         } catch (Exception e) {
-            return "Error: \"boardDelete()\" Failed";
+            return "Error: \"boardDelete()\" Failed\n" + e.getMessage();
         }
 
         return "삭제";
@@ -128,7 +128,7 @@ public class Community {
         int uid = (int)params.get("U_ID");
         int views_num = (int)params.get("views_num");
 
-        Board Board = new Board(bid, isNotice, title, dateTime, contents, uid, views_num, "name");
+        Board Board = new Board(bid, isNotice, title, dateTime, contents, uid, views_num, "name", 0);
 
         int authUID = Integer.parseInt(U_ID);
 

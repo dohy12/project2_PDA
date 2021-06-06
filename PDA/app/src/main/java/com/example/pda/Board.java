@@ -128,7 +128,9 @@ public class Board extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://18.206.18.154:8080/Community/";
+            String url = "http://10.0.2.2:8080/Community/";
+            //서버에 api 빌드 후 경로 수정
+            //comments_num 받아오는 부분이 아직 빌드 되지 않았음
             String GroupId = "deaa01013b0144e99faab90ecd670950/";
 
             String httpUrl = url + GroupId + notice;
@@ -157,10 +159,11 @@ public class Board extends AppCompatActivity {
                     String tempDate = jsonObject.getString("dateTime");
                     LocalDateTime date;
                     date = LocalDateTime.parse(tempDate, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+                    String contents = jsonObject.getString("contents");
                     int views_num = jsonObject.getInt("views_num");
-                    int comments_num = 10;
+                    int comments_num = jsonObject.getInt("comments_num");
 
-                    boardInfoList.add(new Board_Info(BID, isNotice, title, name, date, views_num, comments_num));
+                    boardInfoList.add(new Board_Info(BID, isNotice, title, name, date, views_num, comments_num, contents));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

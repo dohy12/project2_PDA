@@ -9,7 +9,7 @@ public interface BoardOperation {
     //상위 20개 게시글 읽어오기
     //글이 등록된 시간(dateTime) 기준 최근 20개 게시글
     //isNotice = 1 즉 공지글 보기일 경우 전체 공지글 보기, isNotice = 0 즉 전체글 보기일 경우 상단 5개 공지글 이후에 일반 게시글 15개
-    @Select("select B.* , userTable.name" +
+    @Select("select B.* , userTable.name, ifnull(C.comments_num, 0) as comments_num" +
             " from ${GroupId}.board B" +
             " LEFT Join" +
             " (select U_ID," +
@@ -27,11 +27,15 @@ public interface BoardOperation {
             " end as name" +
             " from ${GroupId}.user) userTable" +
             " On B.U_ID = userTable.U_ID" +
+            " LEFT Join" +
+            " (select b_id, count(*) as comments_num" +
+            " from ${GroupId}.board_comment group by b_id) C" +
+            " On B.b_id = C.b_id" +
             " where isNotice = 1" +
             " order by date desc limit ${limit}")
     public List<Board> boardList(@Param("GroupId") String GroupId, @Param("isNotice") int isNotice, @Param("limit") int limit);
 
-    @Select("select B.* , userTable.name" +
+    @Select("select B.* , userTable.name, ifnull(C.comments_num, 0) as comments_num" +
             " from ${GroupId}.board B" +
             " LEFT Join" +
             " (select U_ID," +
@@ -49,6 +53,10 @@ public interface BoardOperation {
             " end as name" +
             " from ${GroupId}.user) userTable" +
             " On B.U_ID = userTable.U_ID" +
+            " LEFT Join" +
+            " (select b_id, count(*) as comments_num" +
+            " from ${GroupId}.board_comment group by b_id) C" +
+            " On B.b_id = C.b_id" +
             " where isNotice = 0" +
             " order by date desc limit 15")
     public List<Board> boardList2(@Param("GroupId") String GroupId, @Param("isNotice") int isNotice);
@@ -58,7 +66,7 @@ public interface BoardOperation {
     public List<Board> searchBoard(@Param("GroupId") String GroupId, @Param("Keyword") String Keyword);
 
     //선택한 하나의 글 정보 읽어오기
-    @Select("select B.* , userTable.name" +
+    @Select("select B.* , userTable.name, ifnull(C.comments_num, 0) as comments_num" +
             " from ${GroupId}.board B" +
             " LEFT Join" +
             " (select U_ID," +
@@ -76,6 +84,10 @@ public interface BoardOperation {
             " end as name" +
             " from ${GroupId}.user) userTable" +
             " On B.U_ID = userTable.U_ID" +
+            " LEFT Join" +
+            " (select b_id, count(*) as comments_num" +
+            " from ${GroupId}.board_comment group by b_id) C" +
+            " On B.b_id = C.b_id" +
             " where B.B_ID = ${BID}")
     public Board selectedBoard(@Param("GroupId") String GroupId, @Param("BID") int BID);
 

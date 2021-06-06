@@ -71,6 +71,8 @@ public class Board_Writing extends AppCompatActivity {
             EditText title = (EditText)findViewById(R.id.title);
             contents.setText(beforeContents);
             title.setText(beforeTitle);
+
+            System.out.println(beforeContents);
         }
     }
 
@@ -109,8 +111,7 @@ public class Board_Writing extends AppCompatActivity {
             String title = ((EditText)findViewById(R.id.title)).getText().toString();
             String contents = ((EditText)findViewById(R.id.contents)).getText().toString();
             int notice;
-            int uid = 1288490188;
-            //그룹 가입 후 변경
+            int uid = Integer.parseInt(app.getUid());
 
             CheckBox isNotice = (CheckBox)findViewById(R.id.isNotice);
             if(isNotice.isChecked()) notice = 1;
@@ -136,6 +137,8 @@ public class Board_Writing extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
+        finish();
     }
     //POST 메소드에 전달할 정보를 JSON String 으로 변환
     public String makeJSONString(int BID, int isNotice, String title, String contents, int UID, int views_num) {

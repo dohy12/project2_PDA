@@ -202,7 +202,7 @@ public class Board_content extends AppCompatActivity {
 
     public void writeComment(View v) {
         String contents = ((EditText)findViewById(R.id.comment)).getText().toString();
-        int uid = 1503238549;
+        int uid = Integer.parseInt(app.getUid());
         //그룹 가입 후 수정
         //app.getUid() 사용할 예정
 
@@ -235,6 +235,39 @@ public class Board_content extends AppCompatActivity {
                 "}";
 
         return res;
+    }
+
+    private class CommentDeletion implements Callable<String> {
+
+        public String call() {
+
+            OkHttpClient client = new OkHttpClient();
+
+            String url = "http://10.0.2.2:8080/BoardComment/";
+            String groupId = app.getGroupId();
+            int cid = Integer.parseInt(((TextView)findViewById(R.id.comments_id)).getText().toString());
+
+            String httpUrl = url + groupId + "/" + cid;
+
+            System.out.println(httpUrl);
+
+            Request request = new Request.Builder()
+                    .url(httpUrl)
+                    .delete()
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            String result = null;
+
+            try {
+                Response response = client.newCall(request).execute();
+                result = response.body().string();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
     }
 
     private void showBoardInfo(){ // 게시판 내용 넣기
@@ -363,6 +396,16 @@ public class Board_content extends AppCompatActivity {
                         ((LinearLayout)childV.findViewById(R.id.comments_reply_container)).addView(v);
                 }
             }
+
+            v.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    openCommentMenu(view);
+
+                    return true;
+                }
+            });
+
         }
     }
 
@@ -404,10 +447,13 @@ public class Board_content extends AppCompatActivity {
                         }
 
                         Toast.makeText(toolbar.getActivity(), del, Toast.LENGTH_SHORT).show();
+                        System.out.println(del);
+
+                        break;
 
                     case 0:
                         //작성자 동일할 때 수정 가능
-                        if(app.getUid() == boardInfo.getName()) {
+                        if(app.getName().equals(boardInfo.getName())) {
 
                             //새로운 Activity Board_Modify 열어야 함
                             Toast.makeText(toolbar.getActivity(), "수정", Toast.LENGTH_SHORT).show();
@@ -416,11 +462,51 @@ public class Board_content extends AppCompatActivity {
                             intent.putExtra("selectedBoard", boardInfo);
                             startActivity(intent);
                         } else {
-                            //Toast.makeText(toolbar.getActivity(), "수정 권한이 없습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(toolbar.getActivity(), app.getName() + boardInfo.getName() + "수정 권한이 없습니다.", Toast.LENGTH_SHORT).show();
                         }
 
                 }
                         return false;
+            }
+        });
+        popupMenu.show();
+    }
+
+    public void openCommentMenu(View view){
+        final PopupMenu popupMenu = new PopupMenu(this, view);
+        getMenuInflater().inflate(R.menu.menu_test, popupMenu.getMenu());
+
+        Menu menu = popupMenu.getMenu();
+
+        menu.add(Menu.NONE, 0, Menu.NONE, "수정");
+        menu.add(Menu.NONE, 1, Menu.NONE, "삭제");
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                int i= menuItem.getItemId();
+
+                switch(i){
+                    case 1:
+                        ExecutorService executorService = Executors.newSingleThreadExecutor();
+                        CommentDeletion commentDeletion = new CommentDeletion();
+                        Future<String> future = executorService.submit(commentDeletion);
+
+                        String del = null;
+
+                        try {
+                            del = future.get();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        Toast.makeText(toolbar.getActivity(), del, Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case 0:
+                        Toast.makeText(toolbar.getActivity(), "수정", Toast.LENGTH_SHORT).show();
+                }
+                return false;
             }
         });
         popupMenu.show();
