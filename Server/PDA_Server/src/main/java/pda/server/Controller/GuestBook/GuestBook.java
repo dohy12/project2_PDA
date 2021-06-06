@@ -32,7 +32,11 @@ public class GuestBook
             oneMember.setJointime(oneMember.getJointime());
             oneMember.setUsertablenum(UserTableMapping.UIDConversion(oneMember.getUId()));
             oneMember.setIsadmin(oneMember.getIsadmin());
-            MemberList.add(oneMember); //합쳐서 완전한 회원 정보  받기
+//            System.out.println("memberOperation.GetJoinTime(oneMember.getUId()) = " + memberOperation.GetJoinTime(GroupId,oneMember.getUId()));
+            if (memberOperation.GetJoinTime(GroupId, oneMember.getUId()) != null)
+            {
+                MemberList.add(oneMember); //합쳐서 완전한 회원 정보  받기
+            }
         }
         return MemberList;
     }

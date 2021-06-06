@@ -22,4 +22,7 @@ public interface GetGroups {
 
     @Select("SELECT Name, GroupImg FROM main.GroupNameMapping where GroupId = #{GroupId}")
     group getGroupInfos(@Param("GroupId") String GroupId);
+
+    @Select("select GroupId, GroupImg from GroupNameMapping where Name = #{Name}")
+    group getAGroupInfos(@Param("Name") String Name);
 }

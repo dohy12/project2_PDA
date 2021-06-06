@@ -39,6 +39,12 @@ public class JoinGroup
         {
             memberOperation.UpdateAwaitingCertification(num, GroupId, Integer.parseInt(U_ID));
         }
+        awaitingCertification = memberOperation.AwaitingCertification(num, Integer.parseInt(U_ID));
+        if (awaitingCertification.substring(0, 1).compareTo(",") == 0)
+        {
+            System.out.println(awaitingCertification.substring(0, 1));
+            memberOperation.UpdateAwaitingCertification(num, awaitingCertification.substring(1), Integer.parseInt(U_ID));
+        }
         memberOperation.AddUser(GroupId, Integer.parseInt(U_ID), id);
         result.put("result", "가입 신청 되었습니다");
         return result;
