@@ -32,4 +32,5 @@ public interface AlbumOperation {
         "order by P_ID DESC;")
     public List<Album> getAlbumList(@Param("GroupId") String GroupId);
 
+
 }

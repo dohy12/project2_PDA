@@ -46,7 +46,7 @@ public class imageCon {
         try{
             InputStream in = file.getInputStream();
             BufferedImage bufferedImage = ImageIO.read(in);
-            ImageIO.write(bufferedImage, "png", new File("C:/Users/User/Documents/GitHub/project2_PDA/Server/PDA_Server/images/"+src));
+            ImageIO.write(bufferedImage, "png", new File("/home/ubuntu/Server/images/"+src));
             //ImageIO.write(bufferedImage, "png", new File("/home/ubuntu/Server/images/"+src)); 잠시 로컬에서 테스트 중입니다.
             
             albumOperation.insertAlbumPicture(groupId, src, A_ID);
