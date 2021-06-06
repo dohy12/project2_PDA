@@ -9,6 +9,25 @@ public class Member {
     private String phone;
     private String email;
     private String intro;
+    private String profileimg;
+
+    public String getProfileimg() {
+        return profileimg;
+    }
+
+    public void setProfileimg(String profileimg) {
+        this.profileimg = profileimg;
+    }
+
+    public Member(int id, String name, int age, String phone, String email, String intro, String profileimg) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.phone = phone;
+        this.email = email;
+        this.intro = intro;
+        this.profileimg = profileimg;
+    }
 
     public Member(int id, String name, int age, String phone, String email, String intro){
         this.id = id;

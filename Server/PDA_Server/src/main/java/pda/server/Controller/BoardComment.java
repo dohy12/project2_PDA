@@ -29,6 +29,14 @@ public class BoardComment {
         return showComments;
     }
 
+    @RequestMapping(value = "/BoardComment/{UID}", method = RequestMethod.GET)
+    public String getProfileImage(@PathVariable("UID") int UID) {
+        int Num = UID / (2147483647 / 10);
+        String url = comment.getProfileImage(Num, UID);
+
+        return url;
+    }
+
     @RequestMapping(value = "/BoardComment/{GroupId}", method = RequestMethod.POST)
     public String commentPost(@PathVariable("GroupId") String GroupId, @RequestBody Map<String, Object> params) {
         int cid = (int)params.get("CID");
@@ -37,7 +45,7 @@ public class BoardComment {
         int uid = (int)params.get("UID");
         Timestamp dateTime = new Timestamp(System.currentTimeMillis());
 
-        Comment Comment = new Comment(cid, dateTime, contents, bid, uid, 0);
+        Comment Comment = new Comment(cid, dateTime, contents, bid, uid, 0, "name");
 
         try {
             comment.commentPost(GroupId, Comment);
@@ -48,40 +56,37 @@ public class BoardComment {
         return "작성";
     }
 
-    @RequestMapping(value = "/BoardComment/{GroupId}/{CID}", method = RequestMethod.DELETE)
-    public String commentDelete(@PathVariable("GroupId") String GroupId, @PathVariable("CID") int CID, @RequestAttribute String U_ID) {
-        Comment temp = comment.selectedComment(GroupId, CID);
-        int authUID = Integer.parseInt(U_ID);
+    @RequestMapping(value = "/BoardComment/{GroupId}/{CID}/{UID}", method = RequestMethod.DELETE)
+    public String commentDelete(@PathVariable("GroupId") String GroupId, @PathVariable("CID") int CID, @PathVariable("UID") int UID) {
+        Comment Comment = comment.selectedComment(GroupId, CID);
 
-        try {
-            if(temp.getU_ID() == authUID) {
-                comment.commentDelete(GroupId, CID);
-            } else {
-                return "삭제 권한이 없습니다.";
-            }
-        } catch (Exception e) {
-            return "Error: \"commentDelete()\" Failed";
-        }
+        if (UID == Comment.getU_ID())
+            comment.commentDelete(GroupId, CID);
+        else
+            return "삭제 권한이 없습니다.";
 
         return "삭제";
     }
 
     @RequestMapping(value = "/BoardComment/{GroupId}/{CID}", method = RequestMethod.PUT)
-    public String commentUpdate(@PathVariable("GroupId") String GroupId, @PathVariable("CID") int CID, @RequestAttribute String U_ID){
+    public String commentUpdate(@PathVariable("GroupId") String GroupId, @PathVariable("CID") int CID, @RequestBody Map<String, Object> params){
+
         Comment temp = comment.selectedComment(GroupId, CID);
-        int authUID = Integer.parseInt(U_ID);
 
-        try{
-            if(temp.getU_ID() == authUID){
-                temp.setContents("mod");
-                comment.commentUpdate(GroupId, temp, CID);
-            } else {
-                return "수정 권한이 없습니다.";
+        int cid = (int)params.get("CID");
+        String contents = (String)params.get("contents");
+        int uid = (int)params.get("UID");
+
+        if(uid == temp.getU_ID()){
+            Comment Comment = new Comment(cid, temp.getDateTime(), contents, temp.getB_ID(), temp.getU_ID(), temp.getR_CID(), temp.getName());
+            try{
+                comment.commentUpdate(GroupId, Comment, CID);
+            } catch(Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            return "Error: \"commentUpdate()\" Failed";
+        } else {
+            return "수정 권한이 없습니다.";
         }
-
         return "수정";
     }
 }

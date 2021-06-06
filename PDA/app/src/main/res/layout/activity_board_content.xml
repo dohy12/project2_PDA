@@ -190,14 +190,15 @@
 
                 <TextView
                     android:id="@+id/board_container"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="60dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000"
-                    android:textSize="12dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="60dp"
                     android:lineSpacingExtra="8dp"
-                    android:text="@string/test_tring"/>
+                    android:text="@string/test_tring"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                    android:textColor="#000000"
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <View
@@ -221,10 +222,11 @@
                     android:textColor="#000000"/>
 
                 <ImageView
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="20dp"
+                    android:onClick="reloadComments"
+                    android:layout_width="13dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/icon9"/>
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/icon9" />
             </LinearLayout>
 
             <View
@@ -269,11 +271,12 @@
                 android:textSize="14dp" />
 
             <Button
+                android:id="@+id/postORput"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="5dp"
                 android:background="#909090"
-                android:onClick="writeComment"
+                android:onClick="postOrPutBtn"
                 android:text="등록"
                 android:textColor="#ffffff"
                 android:textSize="12dp" />

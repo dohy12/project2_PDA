@@ -20,7 +20,7 @@ public class GetGroupInfo {
 
     //모든 그룹 가져오기
     @GetMapping("/groups")
-    public List<group> GetAGroups()
+    public List<group> GetGroups()
     {
         return groups.getAllGroups();
     }
@@ -58,5 +58,17 @@ public class GetGroupInfo {
             }
         }
         return result;
+    }
+
+    @GetMapping("/groups/{GroupName}")
+    public List<group> GetAGroups(@PathVariable String GroupName)
+    {
+        List<group> g;
+        g = groups.getSearchGroupInfos(GroupName);
+        for (group group : g)
+        {
+            group.setName(groups.getGroupName(group.getGroupId()));
+        }
+        return g;
     }
 }

@@ -16,7 +16,6 @@ public class Community {
     @Autowired
     BoardOperation board;
     Timestamp dateTime;
-
     //게시글 목록을 보여줄 때 사용
     //상위 20개 게시글 정보를 불러옴
     //URL의 isNotice로 공지사항과 일반게시글 구분
@@ -73,7 +72,7 @@ public class Community {
 
         int authUID = board.getIsAdmin(GroupId, uid);
 
-        Board Board = new Board(bid, isNotice, title, dateTime, contents, uid, 0, "name");
+        Board Board = new Board(bid, isNotice, title, dateTime, contents, uid, 0, "name", 0);
 
         try{
             if(Board.getIsNotice() == 1 && authUID == 1) {
@@ -105,7 +104,7 @@ public class Community {
                 return "삭제 권한이 없습니다.";
             }
         } catch (Exception e) {
-            return "Error: \"boardDelete()\" Failed";
+            return "Error: \"boardDelete()\" Failed\n" + e.getMessage();
         }
 
         return "삭제";
@@ -123,12 +122,11 @@ public class Community {
         else
             isNotice = 0;
         String title = (String)params.get("title");
-        dateTime = new Timestamp(System.currentTimeMillis());
         String contents = (String)params.get("contents");
         int uid = (int)params.get("U_ID");
         int views_num = (int)params.get("views_num");
 
-        Board Board = new Board(bid, isNotice, title, dateTime, contents, uid, views_num, "name");
+        Board Board = new Board(bid, isNotice, title, temp.getDateTime(), contents, uid, views_num, "name", 0);
 
         int authUID = Integer.parseInt(U_ID);
 

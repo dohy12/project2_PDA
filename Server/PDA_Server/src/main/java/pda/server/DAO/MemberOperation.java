@@ -1,7 +1,7 @@
 package pda.server.DAO;
 
 import org.apache.ibatis.annotations.*;
-//import pda.server.DTO.Guestbook;
+import pda.server.DTO.Guestbook;
 import pda.server.DTO.Member;
 import pda.server.DTO.User;
 
@@ -11,7 +11,9 @@ import java.util.Map;
 @Mapper
 public interface MemberOperation
 {
-	/*
+    @Select("select profileImg from main.user${Num} where U_ID = #{UID}")
+    public String profileimg(@Param("Num") int Num, @Param("UID") int UID);
+
     @Select("select * from ${GroupID}.user ")
     public Member[] MemberList(@Param("GroupID") String GroupID);
 
@@ -64,5 +66,8 @@ public interface MemberOperation
     public List<Guestbook> ReceiveMessage(@Param("Receiver") int Receiver);
 
     @Select("select name from main.user${Num} where U_ID = #{UID}")
-    public String SearchName(@Param("Num") int Num, @Param("UID") int UID);*/
+    public String SearchName(@Param("Num") int Num, @Param("UID") int UID);
+
+    @Select("select JoinTime from ${GroupID}.user where U_ID = #{U_ID} ")
+    public Map<String,Object> GetJoinTime(@Param("GroupID") String GroupID,@Param("U_ID") int UID);
 }

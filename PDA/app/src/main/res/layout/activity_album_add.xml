@@ -45,6 +45,8 @@
                     android:layout_weight="1"/>
 
                 <Button
+                    android:id="@+id/sendButton"
+                    android:onClick="sendToServer"
                     android:layout_width="60dp"
                     android:layout_height="35dp"
                     android:layout_margin="0dp"
@@ -153,49 +155,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
 
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.3dp"
-                android:background="#909090"/>
-            <LinearLayout
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:paddingLeft="15dp"
-                    android:textColor="#000000"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="행사 참여 인원  "/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="(15명)"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:padding="5dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+인원 추가"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:id="@+id/name_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
 
             <View
                 android:layout_width="match_parent"

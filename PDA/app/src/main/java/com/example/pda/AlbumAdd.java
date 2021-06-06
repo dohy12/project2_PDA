@@ -2,6 +2,7 @@ package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,14 +29,34 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class AlbumAdd extends AppCompatActivity {
-    private LinearLayout name_container;
     private LinearLayout image_container;
     private LayoutInflater inflater;
+
+    private Bitmap scaled;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int PICK_FROM_ALBUM = 1;
@@ -42,6 +64,39 @@ public class AlbumAdd extends AppCompatActivity {
     private WebView webView;
     private Dialog dialog;
     private TextView tv_address;
+
+    private Map<Integer, Bitmap> imageBitMapMap;
+    private int imageBitMapChecker;
+
+    private AlertDialog.Builder alert;
+
+    private String alertmsg = "";
+
+    final Handler serverhandler = new Handler(){
+        public void handleMessage(Message msg){
+            alert.setMessage("업로드에 실패하였습니다.").setPositiveButton("확인", null);
+            alert.show();
+
+            btnEnable(true);
+        }
+    };
+
+    final Handler alerthander = new Handler(){
+        public void handleMessage(Message msg){
+            alert.setMessage(alertmsg).setPositiveButton("확인", null);
+            alert.show();
+        }
+    };
+
+
+    final Handler testhandler = new Handler(){
+        public void handleMessage(Message msg){
+            alert.setMessage("업로드 완료.").setPositiveButton("확인", null);
+            alert.show();
+
+            btnEnable(true);
+        }
+    };
 
     Toolbar toolbar;
     @Override
@@ -54,13 +109,16 @@ public class AlbumAdd extends AppCompatActivity {
         ////////////////////////
 
         image_container = findViewById(R.id.image_container);
-        name_container = findViewById(R.id.name_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
         tv_address = findViewById(R.id.album_add_location);
 
+        imageBitMapMap = new HashMap<>();
+        imageBitMapChecker = 0;
+
+        alert = new AlertDialog.Builder(this);
+
         setDate();
-        testNameContainer();
     }
 
     public void addImage(View view){
@@ -131,11 +189,20 @@ public class AlbumAdd extends AppCompatActivity {
                 iv.setImageBitmap(scaled);
                 Glide.with(this).load(uri).into(iv);
 
+
+                ///imageBitMapMap에 bitmap 추가
+                imageBitMapMap.put(imageBitMapChecker, scaled);
+                ((TextView)imageAddView.findViewById(R.id.album_list_id)).setText(Integer.toString(imageBitMapChecker));
+                imageBitMapChecker++;
+                //////////////////////////
+
                 ((TextView)imageAddView.findViewById(R.id.title)).setText(uri.toString());
 
                 imageAddView.findViewById(R.id.deleteButton).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        int id = Integer.parseInt(((TextView)imageAddView.findViewById(R.id.album_list_id)).getText().toString());
+                        imageBitMapMap.remove(id);
                         image_container.removeView(imageAddView);
                     }
                 });
@@ -150,14 +217,6 @@ public class AlbumAdd extends AppCompatActivity {
         }
     }
 
-    private void testNameContainer(){
-        for(int i=0;i<5;i++){
-            View nameAddView = inflater.inflate(R.layout.album_people, null);
-            name_container.addView(nameAddView);
-
-            nameAddView.findViewById(R.id.profile_image).setClipToOutline(true);
-        }
-    }
 
     private void init_webView() {
         // WebView 설정
@@ -214,7 +273,6 @@ public class AlbumAdd extends AppCompatActivity {
         // web client 를 chrome 으로 설정
         webView.setWebChromeClient(webChromeClient);
 
-
         // webview url load. php 파일 주소
         webView.loadUrl("https://crabox.io/test/dohy/daum3.php");
 
@@ -233,5 +291,137 @@ public class AlbumAdd extends AppCompatActivity {
     public void editAddressOnclick(View View){
         init_webView();
     }
+
+    public void sendToServer(View view){
+        btnEnable(false);
+
+        String title = ((EditText)findViewById(R.id.album_add_title)).getText().toString();
+        String date_str = ((TextView)findViewById(R.id.album_date)).getText().toString();
+        String location = ((TextView)findViewById(R.id.album_add_location)).getText().toString();
+        String intro = ((EditText)findViewById(R.id.album_add_intro)).getText().toString();
+        int uid = Integer.parseInt(app.getUid());
+
+        int yy = Integer.parseInt(date_str.substring(0,4));
+        int mm = Integer.parseInt(date_str.substring(6,8));
+        int dd = Integer.parseInt(date_str.substring(10,12));
+
+        String date_format = String.format("%d%02d%02d",yy,mm,dd);
+
+        Album_info albumInfo = new Album_info(-1, title, date_format, location, uid, intro);
+        String json = albumInfo.showJsonString();
+
+        System.out.println("json : " + json);
+
+        //////////////////////////////////////
+        OkHttpClient client = new OkHttpClient();
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, json);
+
+        Request request = new Request.Builder()
+                .url("http://"+ app.getHostip() +":8080/album/" + app.getGroupId())
+                .post(body)
+                .build();
+
+        try {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    Message msg = serverhandler.obtainMessage();
+                    serverhandler.sendMessage(msg);
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    Object jsonResult = response.body().string();
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(String.valueOf(jsonResult));
+
+                        int a_id = jsonObject.getInt("A_ID");
+
+                        sendImageToServer(a_id);
+
+                        finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void sendImageToServer(int a_id){
+        for(Integer key : imageBitMapMap.keySet()){
+            System.out.println("key : "+key);
+            uploadImage(a_id, imageBitMapMap.get(key), key);
+        }
+    }
+
+    public void uploadImage(int a_id, Bitmap bitmap, int bitmap_id)
+    {
+        //String name = "album_" + a_id + "_" + bitmap_id + ".png";
+        OkHttpClient client = new OkHttpClient();
+
+        //이미지 등록은 /image/{name} 으로 포스트 요청을 해서 등록을 합니다.
+        HttpUrl httpUrl = new HttpUrl.Builder()
+                .scheme("http")
+                .host(app.getHostip())
+                .port(Integer.parseInt(app.getPort()))
+                .addPathSegment("image_album")
+                .addPathSegment(app.getGroupId())
+                .addPathSegment(Integer.toString(a_id))
+                .addPathSegment(Integer.toString(bitmap_id))
+                .build();
+
+        System.out.println(httpUrl);
+
+        //Bitmap으로 되어있는 이미지를 requestbody에 넣는 과정
+        ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        final RequestBody reqBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("image", "", RequestBody.create(MultipartBody.FORM, byteArray)).build();
+
+
+        Request request = new Request.Builder()
+                .url(httpUrl)
+                .post(reqBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Message msg = serverhandler.obtainMessage();
+                serverhandler.sendMessage(msg);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if (response.code() != 200) {
+                    System.out.println(response.body().string());
+                    alertmsg = "이미지 저장 실패";
+                    Message msg = alerthander.obtainMessage();
+                    alerthander.sendMessage(msg);
+                }
+                else{
+
+                }
+            }
+        });
+
+
+    }
+
+
+    private void btnEnable(boolean enable){
+        findViewById(R.id.sendButton).setEnabled(enable);
+    }
+
+
 
 }

@@ -11,8 +11,9 @@ public class Board {
     public int U_ID;
     public int views_num;
     public String name;
+    public int comments_num;
 
-    public Board(int B_ID, short isNotice, String title, Timestamp dateTime, String contents, int U_ID, int views_num, String name) {
+    public Board(int B_ID, short isNotice, String title, Timestamp dateTime, String contents, int U_ID, int views_num, String name, int comments_num) {
         this.setB_ID(B_ID);
         this.setIsNotice(isNotice);
         this.setTitle(title);
@@ -21,6 +22,7 @@ public class Board {
         this.setU_ID(U_ID);
         this.setViews_num(views_num);
         this.setName(name);
+        this.setCommentsNum(comments_num);
     }
 
     public int getB_ID(){
@@ -70,5 +72,8 @@ public class Board {
 
     public int getViews_num() { return views_num; }
     public void setViews_num(int views_num) { this.views_num = views_num; }
+
+    public int getCommentsNum() { return comments_num; }
+    public void setCommentsNum(int comments_num) { this.comments_num = comments_num; }
 
 }

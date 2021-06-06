@@ -15,6 +15,18 @@ public class Guestbook implements Serializable
 
     private String content;
 
+    private String profileimg;
+
+    public String getProfileimg()
+    {
+        return profileimg;
+    }
+
+    public void setProfileimg(String profileimg)
+    {
+        this.profileimg = profileimg;
+    }
+
     public String getSenderName()
     {
         return senderName;

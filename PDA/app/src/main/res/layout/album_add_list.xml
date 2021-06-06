@@ -9,6 +9,11 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <TextView
+        android:id="@+id/album_list_id"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="-1"/>
 
     <ImageView
         android:id="@+id/image"
