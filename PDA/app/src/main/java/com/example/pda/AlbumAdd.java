@@ -20,6 +20,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +31,12 @@ import com.bumptech.glide.Glide;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class AlbumAdd extends AppCompatActivity {
     private LinearLayout name_container;
@@ -233,5 +240,46 @@ public class AlbumAdd extends AppCompatActivity {
     public void editAddressOnclick(View View){
         init_webView();
     }
+
+    public void sendToServer(View view){
+        String title = ((EditText)findViewById(R.id.album_add_title)).getText().toString();
+        String date_str = ((TextView)findViewById(R.id.album_date)).getText().toString();
+        String location = ((TextView)findViewById(R.id.album_add_location)).getText().toString();
+        String intro = ((EditText)findViewById(R.id.album_add_intro)).getText().toString();
+        int uid = Integer.parseInt(app.getUid());
+
+        int yy = Integer.parseInt(date_str.substring(0,4));
+        int mm = Integer.parseInt(date_str.substring(6,8));
+        int dd = Integer.parseInt(date_str.substring(10,12));
+
+        String date_format = String.format("%d%02d%02d",yy,mm,dd);
+
+        Album_info albumInfo = new Album_info(-1, title, date_format, location, uid, intro);
+        String json = albumInfo.showJsonString();
+
+        System.out.println("json : " + json);
+
+        //////////////////////////////////////
+        OkHttpClient client = new OkHttpClient();
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, json);
+
+
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:8080/album/" + app.getGroupId())
+                .post(body)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            System.out.println(response.body().string());
+            
+            finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }

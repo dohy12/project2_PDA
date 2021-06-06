@@ -125,7 +125,7 @@ public class memberList extends AppCompatActivity {
         }
     }
 
-    public void goMyPage(View view ,String name,String phone,String email,String intro,String age,String RUid , String MyUid ) {
+    public void goMyPage(View view ,String name,String phone,String email,String intro,String age, String RUid , String MyUid ) {
         Intent intent = new Intent(this, Mypage.class);
         intent.putExtra("Name",name);
         intent.putExtra("Phone",phone);
