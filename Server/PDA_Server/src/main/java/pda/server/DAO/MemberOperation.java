@@ -64,4 +64,7 @@ public interface MemberOperation
 
     @Select("select name from main.user${Num} where U_ID = #{UID}")
     public String SearchName(@Param("Num") int Num, @Param("UID") int UID);
+
+    @Select("select JoinTime from ${GroupID}.user where U_ID = #{U_ID} ")
+    public Map<String,Object> GetJoinTime(@Param("GroupID") String GroupID,@Param("U_ID") int UID);
 }
