@@ -2,6 +2,7 @@ package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -73,7 +74,6 @@ public class SelectGroup extends AppCompatActivity {
         setContentView(R.layout.activity_select_group);
         alert = new AlertDialog.Builder(this);
         System.out.println(app.getJWT());
-
         container = findViewById(R.id.container);
         Awaiting_container = findViewById(R.id.container_waiting);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -260,7 +260,7 @@ public class SelectGroup extends AppCompatActivity {
     }
 
     public void applyGroup(View view){
-        GroupListFragment fragment = new GroupListFragment();
+        GroupListFragment fragment = new GroupListFragment(this);
 
         fragment.show(getSupportFragmentManager(),"tag");
 

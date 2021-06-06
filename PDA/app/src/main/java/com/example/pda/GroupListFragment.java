@@ -1,17 +1,21 @@
 package com.example.pda;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
 import com.example.pda.entity.Group;
 import com.google.gson.Gson;
 
@@ -20,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import okhttp3.Call;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -27,6 +32,14 @@ import okhttp3.Response;
 public class GroupListFragment extends DialogFragment {
     private LinearLayout container;
     private LayoutInflater inflater;
+    private AppCompatActivity activity;
+
+    public GroupListFragment() {
+    }
+
+    public GroupListFragment(AppCompatActivity activity) {
+        this.activity = activity;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +77,7 @@ public class GroupListFragment extends DialogFragment {
         String Host = "http://18.206.18.154:";
         String port = "8080";
         String AccessPath = "/groups/";
-        final String url = Host + port + AccessPath + URLEncoder.encode(Search,"utf-8");
+        final String url = Host + port + AccessPath + URLEncoder.encode(Search, "utf-8");
         final OkHttpClient okHttpClient = new OkHttpClient();
         final Request request = new Request.Builder()
                 .url(url)
@@ -73,7 +86,6 @@ public class GroupListFragment extends DialogFragment {
                 .build();
         final Call call = okHttpClient.newCall(request);
         Runnable networkTask = new Runnable() {
-            //        new Thread(new Runnable() {
             @Override
             public void run() {
                 Response response = null;
@@ -90,14 +102,14 @@ public class GroupListFragment extends DialogFragment {
                 }
                 Gson gson = new Gson();
                 Group group = gson.fromJson(string, Group.class);
-                showList(Search,group.getGroupId());
+                showList(Search, group.getGroupId(), group.getGroupImg());
 
             }
         };
         new Thread(networkTask).run();
     }
 
-    private void showList(String groupName, final String GID) {
+    private void showList(String groupName, final String GID, String GImg) {
         String GroupId = GID;
         View v = inflater.inflate(R.layout.group_list_fragment_content, null, false);
         container.addView(v);
@@ -105,6 +117,15 @@ public class GroupListFragment extends DialogFragment {
         v.findViewById(R.id.groupListImage).setClipToOutline(true);
         TextView viewById = v.findViewById(R.id.groupListName);
         viewById.setText(groupName);
+
+        HttpUrl httpUrl = new HttpUrl.Builder()
+                .scheme("http")
+                .host(app.getHostip())
+                .port(Integer.parseInt(app.getPort()))
+                .addPathSegment("images")
+                .addPathSegment(GImg)
+                .build();
+        Glide.with(activity).load(httpUrl.toString()).into((ImageView) v.findViewById(R.id.groupListImage));
         ///
         v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,8 +137,7 @@ public class GroupListFragment extends DialogFragment {
         });
     }
 
-    private void joinGroup(String GID)
-    {
+    private void joinGroup(String GID) {
         String Host = "http://18.206.18.154:";
         String port = "8080";
         String AccessPath = "/JoinGroup/";
@@ -130,7 +150,6 @@ public class GroupListFragment extends DialogFragment {
                 .build();
         final Call call = okHttpClient.newCall(request);
         Runnable networkTask = new Runnable() {
-            //        new Thread(new Runnable() {
             @Override
             public void run() {
                 Response response = null;
