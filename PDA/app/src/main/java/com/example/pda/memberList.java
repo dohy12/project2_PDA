@@ -100,7 +100,7 @@ public class memberList extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     accept(app.getGroupId(),String.valueOf(mem.getId()));
-                    alert.setMessage("프로필 사진 불러오기 실패").setPositiveButton("확인", null);
+                    alert.setMessage("승인 되다").setPositiveButton("확인", null);
                     alert.show();
                 }
             });
