@@ -115,6 +115,7 @@ public class Board extends AppCompatActivity {
         Intent intent = new Intent(this, Board_Writing.class);
         intent.putExtra("selectedBoard", fake);
         startActivity(intent);
+        
     }
 
     private class BoardCallable implements Callable<ArrayList<Board_Info>> {

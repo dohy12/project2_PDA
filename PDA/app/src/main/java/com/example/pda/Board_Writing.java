@@ -153,8 +153,6 @@ public class Board_Writing extends AppCompatActivity {
             }
         }
 
-
-
         finish();
     }
 

@@ -28,7 +28,7 @@ public interface SurveyOperation {
     public int nextOID(@Param("GroupId") String GroupId);
 
     //post 요청시 db에 survey 등록
-    @Insert("insert into ${GroupId}.board_survey values(${Survey.S_ID}, '${Survey.title}', ${Survey.B_ID})")
+    @Insert("insert into ${GroupId}.board_survey values(${Survey.S_ID}, '${Survey.title}', now(), now(), ${Survey.B_ID})")
     public void surveyPost(@Param("GroupId") String GroupId, @Param("Survey") Survey Survey);
 
     //option 등록
