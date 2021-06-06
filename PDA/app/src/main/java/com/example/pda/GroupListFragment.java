@@ -1,6 +1,7 @@
 package com.example.pda;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,7 +133,7 @@ public class GroupListFragment extends DialogFragment {
                 @Override
                 public void onClick(View view) {
                     joinGroup(GroupId);
-                    Toast myToast = Toast.makeText(inflater.getContext(), "test", Toast.LENGTH_SHORT);
+                    Toast myToast = Toast.makeText(inflater.getContext(), "신청 성공", Toast.LENGTH_SHORT);
                     myToast.show();
                 }
             });
@@ -166,6 +167,8 @@ public class GroupListFragment extends DialogFragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                Intent intent = new Intent(activity, SelectGroup.class);
+                activity.startActivity(intent);
 
             }
         };
