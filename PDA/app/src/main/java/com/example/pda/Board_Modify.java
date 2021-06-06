@@ -83,7 +83,7 @@ public class Board_Modify extends AppCompatActivity {
         RequestBody body = RequestBody.create(JSON, json);
 
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8080/Community/" + app.getGroupId() + "/" + boardInfo.getBoardId())
+                .url("http://18.206.18.154:8080/Community/" + app.getGroupId() + "/" + boardInfo.getBoardId())
                 .addHeader("JWT", app.getJWT())
                 .put(body)
                 .build();

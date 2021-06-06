@@ -35,7 +35,7 @@ public interface CommentOperation {
     public Comment selectedComment(@Param("GroupId") String GroupId, @Param("CID") int CID);
 
     //댓글 입력하기
-    @Insert("insert into ${GroupId}.board_comment values(${Comment.C_ID}, ${Comment.dateTime}, \"${Comment.contents}\", ${Comment.B_ID}, ${Comment.U_ID}, ${Comment.R_CID})")
+    @Insert("insert into ${GroupId}.board_comment values(${Comment.C_ID}, \"${Comment.dateTime}\", \"${Comment.contents}\", ${Comment.B_ID}, ${Comment.U_ID}, null)")
     public void commentPost(@Param("GroupId") String GroupId, @Param("Comment") Comment Comment);
 
     //댓글 삭제하기

@@ -35,6 +35,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -110,7 +111,7 @@ public class Board_content extends AppCompatActivity {
         RequestBody body = RequestBody.create("body", null);
 
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8080/Community/" + app.getGroupId() + "/views/" + board.getBoardId())
+                .url("http://18.206.18.154:8080/Community/" + app.getGroupId() + "/views/" + board.getBoardId())
                 .addHeader("JWT", app.getJWT())
                 .put(body)
                 .build();
@@ -126,7 +127,7 @@ public class Board_content extends AppCompatActivity {
         public ArrayList<Board_comment> call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://10.0.2.2:8080/BoardComment/";
+            String url = "http://18.206.18.154:8080/BoardComment/";
             String GroupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -171,7 +172,7 @@ public class Board_content extends AppCompatActivity {
         public String call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://10.0.2.2:8080/Community/";
+            String url = "http://18.206.18.154:8080/Community/";
             String groupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -201,7 +202,9 @@ public class Board_content extends AppCompatActivity {
 
     public void writeComment(View v) {
         String contents = ((EditText)findViewById(R.id.comment)).getText().toString();
-        int uid = Integer.parseInt(app.getUid());
+        int uid = 1503238549;
+        //그룹 가입 후 수정
+        //app.getUid() 사용할 예정
 
         OkHttpClient client = new OkHttpClient();
 
@@ -211,7 +214,7 @@ public class Board_content extends AppCompatActivity {
         RequestBody body = RequestBody.create(JSON, json);
 
         Request request = new Request.Builder()
-                .url("htt[://10.0.2.2:8080/BoardComment/" + app.getGroupId())
+                .url("http://18.206.18.154:8080/BoardComment/" + app.getGroupId())
                 .post(body)
                 .build();
 

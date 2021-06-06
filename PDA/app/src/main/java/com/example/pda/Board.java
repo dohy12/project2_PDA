@@ -125,7 +125,7 @@ public class Board extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://10.0.2.2:8080/Community/";
+            String url = "http://18.206.18.154:8080/Community/";
             String GroupId = "deaa01013b0144e99faab90ecd670950/";
 
             String httpUrl = url + GroupId + notice;
