@@ -3,7 +3,7 @@ package pda.server.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pda.server.DAO.MemberOperation;
-import pda.server.DTO.Guestbook;
+//import pda.server.DTO.Guestbook;
 import pda.server.DTO.Member;
 import pda.server.Handler.UserTableMapping;
 
@@ -12,6 +12,7 @@ import java.util.*;
 @RestController
 public class JoinGroup
 {
+	/*
     @Autowired
     MemberOperation memberOperation;
 
@@ -99,6 +100,6 @@ public class JoinGroup
 //            throw new RestException(HttpStatus.UNAUTHORIZED, "권한 없습니다");
 //        }
         return memberOperation.WaitingList(GroupId);
-    }
+    }*/
 
 }

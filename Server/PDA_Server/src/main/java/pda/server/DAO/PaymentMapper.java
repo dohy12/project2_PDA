@@ -55,11 +55,21 @@ public interface PaymentMapper {
 	@Select("SELECT * FROM ${GroupId}.payment_result WHERE P_ID=${P_ID} AND U_ID=#{U_ID}")
 	public Map<String, Object> select_result_infos(@Param("GroupId") String GroupId, @Param("P_ID") int P_ID, int U_ID);
 	
-	//단체 소개 관련 정보 불러오기 (메인 스키마, 그룹 테이블)
-	@Select("SELECT contents, image_src FROM main.groupinfo WHERE GroupId='${GroupId}'")
-	public Map<String, Object> select_group_intros(@Param("GroupId") String GroupId);
+	@Delete("DELETE FROM ${GroupId}.intro_img")
+	public void delete_intro_img(@Param("GroupId") String GroupId);
 	
-	//단체 소개 관련 정보 수정하기 (메인 스키마, 그룹 테이블)
-	@Update("UPDATE main.groupinfo SET contents='${contents}', image_src='${image_src}' WHERE GroupId='${GroupId}'")
-	public void update_group_intros(@Param("GroupId") String GroupId, @Param("contents") String contents, @Param("image_src") String image_src);
+	@Insert("INSERT INTO ${GroupId}.intro_img(image_src, intro_ID) VALUES ('${image_src}', 1)")
+	public void insert_intro_img(@Param("GroupId") String GroupId, @Param("image_src") String image_src);
+	
+	@Select("SELECT image_src FROM ${GroupId}.intro_img")
+	public List<String> select_intro_img(@Param("GroupId") String GroupId);
+	
+	@Delete("DELETE FROM ${GroupId}.introduction")
+	public void delete_intro_contents(@Param("GroupId") String GroupId);
+	
+	@Insert("INSERT INTO ${GroupId}.introduction(contents) VALUES ('${contents}')")
+	public void insert_intro_contents(@Param("GroupId") String GroupId, @Param("contents") String contents);
+	
+	@Select("SELECT contents FROM ${GroupId}.introduction")
+	public String select_intro_contents(@Param("GroupId") String GroupId);
 }

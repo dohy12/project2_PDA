@@ -3,7 +3,7 @@ package pda.server.Controller.GuestBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pda.server.DAO.MemberOperation;
-import pda.server.DTO.Guestbook;
+//import pda.server.DTO.Guestbook;
 import pda.server.DTO.Member;
 import pda.server.Handler.UserTableMapping;
 
@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 public class GuestBook
 {
+	/*
     @Autowired
     MemberOperation memberOperation;
 
@@ -89,5 +90,5 @@ public class GuestBook
             GuestBook.add(temp);
         }
         return GuestBook;
-    }
+    }*/
 }

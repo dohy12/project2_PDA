@@ -17,11 +17,11 @@ public class UserInf
     @Autowired
     MemberOperation memberOperation;
 
-    @RequestMapping("/UserInf")
+    /*@RequestMapping("/UserInf")
     public Member GetUserInf(@RequestAttribute String U_ID)
     {
         System.out.println("U_ID = " + U_ID);
         return memberOperation.details(UserTableMapping.UIDConversion(Integer.parseInt(U_ID)), Integer.parseInt(U_ID));
-    }
+    }*/
 
 }

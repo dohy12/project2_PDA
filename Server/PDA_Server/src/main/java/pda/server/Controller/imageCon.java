@@ -21,7 +21,7 @@ public class imageCon {
         try{
             InputStream in = file.getInputStream();
             BufferedImage bufferedImage = ImageIO.read(in);
-            ImageIO.write(bufferedImage, "png", new File("/home/ubuntu/Server/images/"+src));
+            ImageIO.write(bufferedImage, "png", new File("home/ubuntu/Server/images/"+src));
             throw new RestException(HttpStatus.OK, "이미지 저장 성공");
         } catch (IOException e) {
             throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 저장 실패");

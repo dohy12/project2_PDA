@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -127,24 +129,48 @@ public class PaymentController {
 	{
 		return paymentMapper.select_result_infos(GroupId, P_ID, Integer.parseInt(U_ID));
 	}
-
 	
-	//단체 소개 관련 정보 불러오기 (확인 완료)
-	@RequestMapping(path = "/groups/intros/{GroupId}", method = RequestMethod.GET)
-	public Map<String, Object> select_group_intros(@PathVariable String GroupId)
+	//이미지 url 저장
+	@RequestMapping(path = "/groups/image/{GroupId}", method = RequestMethod.DELETE)
+	public String delete_intro_image(@PathVariable String GroupId)
 	{
-		return paymentMapper.select_group_intros(GroupId);
+	    paymentMapper.delete_intro_img(GroupId);
+	    return "성공";
 	}
 	
-	//10.단체 소개 관련 정보 수정하기 (메인 스키마, 그룹 테이블) (확인 완료)
-	@RequestMapping(path = "/groups/intros", method = RequestMethod.PUT)
-	public String update_group_intros(@RequestBody Map<String, Object> param)
+	@RequestMapping(path = "/groups/image/{GroupId}/{image_src}", method = RequestMethod.GET)
+	public String insert_intro_img(@PathVariable String GroupId, @PathVariable String image_src)
 	{
-		String GroupId = (String)param.get("GroupId");
-		String contents = (String)param.get("contents");
-		String image_src = (String)param.get("image_src");
-	    paymentMapper.update_group_intros(GroupId, contents, image_src);
+	    paymentMapper.insert_intro_img(GroupId, image_src);
 	    return "성공";
+	}
+	
+	@RequestMapping(path = "/groups/image/{GroupId}", method = RequestMethod.GET)
+	public List<String> select_intro_img(@PathVariable String GroupId)
+	{
+	    return paymentMapper.select_intro_img(GroupId);
+	}
+	
+	
+	//이미지 url 저장
+	@RequestMapping(path = "/groups/contents/{GroupId}", method = RequestMethod.DELETE)
+	public String delete_intro_contents(@PathVariable String GroupId)
+	{
+	    paymentMapper.delete_intro_contents(GroupId);
+	    return "성공";
+	}
+	
+	@RequestMapping(path = "/groups/contents/{GroupId}/{contents}", method = RequestMethod.GET)
+	public String insert_intro_contents(@PathVariable String GroupId, @PathVariable String contents)
+	{
+	    paymentMapper.insert_intro_contents(GroupId, contents);
+	    return "성공";
+	}
+	
+	@RequestMapping(path = "/groups/contents/{GroupId}", method = RequestMethod.GET)
+	public String select_intro_contents(@PathVariable String GroupId)
+	{
+	    return paymentMapper.select_intro_contents(GroupId);
 	}
 	
 	//결제 위변조 검증 후 결제 결과 db 저장
