@@ -29,6 +29,14 @@ public class BoardComment {
         return showComments;
     }
 
+    @RequestMapping(value = "/BoardComment/{UID}", method = RequestMethod.GET)
+    public String getProfileImage(@PathVariable("UID") int UID) {
+        int Num = UID / (2147483647 / 10);
+        String url = comment.getProfileImage(Num, UID);
+
+        return url;
+    }
+
     @RequestMapping(value = "/BoardComment/{GroupId}", method = RequestMethod.POST)
     public String commentPost(@PathVariable("GroupId") String GroupId, @RequestBody Map<String, Object> params) {
         int cid = (int)params.get("CID");

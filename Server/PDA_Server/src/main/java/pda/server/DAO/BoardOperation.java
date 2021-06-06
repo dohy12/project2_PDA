@@ -96,8 +96,9 @@ public interface BoardOperation {
     public int getIsAdmin(@Param("GroupId") String GroupId, @Param("UID") int UID);
 
     //uid로 name 읽어오기
-    @Select("select name from main.user${Num} where U_ID = &{UID}")
+    @Select("select name from main.user${Num} where U_ID = ${UID}")
     public String getName(@Param("Num") int Num, @Param("UID") int UID);
+
 
     //게시글 작성하기, 매개변수 타입 수정 필요
     @Insert("insert into ${GroupId}.board values(${Board.B_ID}, ${Board.isNotice}, \"${Board.title}\", \"${Board.dateTime}\", \"${Board.contents}\", ${Board.U_ID}, ${Board.views_num})")

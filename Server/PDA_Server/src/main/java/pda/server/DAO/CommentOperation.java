@@ -52,6 +52,10 @@ public interface CommentOperation {
             " where C_ID = ${CID}")
     public Comment selectedComment(@Param("GroupId") String GroupId, @Param("CID") int CID);
 
+    //profile image url
+    @Select("select profileImg from main.user${Num} where U_ID = ${UID}")
+    public String getProfileImage(@Param("Num") int Num, @Param("UID") int UID);
+
     //댓글 입력하기
     @Insert("insert into ${GroupId}.board_comment values(${Comment.C_ID}, \"${Comment.dateTime}\", \"${Comment.contents}\", ${Comment.B_ID}, ${Comment.U_ID}, null)")
     public void commentPost(@Param("GroupId") String GroupId, @Param("Comment") Comment Comment);
