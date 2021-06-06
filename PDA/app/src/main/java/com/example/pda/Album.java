@@ -61,7 +61,7 @@ public class Album extends AppCompatActivity {
                 .build();
 
 
-        String Host = "http://" + "10.0.2.2" + ":";
+        String Host = "http://" + app.getHostip() + ":";
         String port = "8080";
         String AccessPath = "/album/";
         String url = Host + port + AccessPath + app.getGroupId();
@@ -107,7 +107,6 @@ public class Album extends AppCompatActivity {
             ((TextView)v.findViewById(R.id.album_title)).setText(al.getTitle());
             ((TextView)v.findViewById(R.id.album_date)).setText(al.getDate());
             ((TextView)v.findViewById(R.id.album_count)).setText(Integer.toString(al.getImage_cnt()));
-            ((TextView)v.findViewById(R.id.album_comment_count)).setText(Integer.toString(al.getComment_cnt()));
 
             v.findViewById(R.id.album).setClipToOutline(true);
             v.findViewById(R.id.album).setOnClickListener(new View.OnClickListener() {

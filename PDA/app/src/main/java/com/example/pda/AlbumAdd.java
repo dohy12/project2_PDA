@@ -319,7 +319,7 @@ public class AlbumAdd extends AppCompatActivity {
         RequestBody body = RequestBody.create(JSON, json);
 
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8080/album/" + app.getGroupId())
+                .url("http://"+ app.getHostip() +":8080/album/" + app.getGroupId())
                 .post(body)
                 .build();
 
@@ -371,7 +371,7 @@ public class AlbumAdd extends AppCompatActivity {
         //이미지 등록은 /image/{name} 으로 포스트 요청을 해서 등록을 합니다.
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("http")
-                .host("10.0.2.2")
+                .host(app.getHostip())
                 .port(Integer.parseInt(app.getPort()))
                 .addPathSegment("image_album")
                 .addPathSegment(app.getGroupId())
