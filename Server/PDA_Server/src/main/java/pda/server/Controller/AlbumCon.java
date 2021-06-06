@@ -35,8 +35,12 @@ public class AlbumCon {
             System.out.printf("date : %s\n",album.getDate());            
 
             System.out.printf("groupid : %s\n",GroupId);
+
             albumOperation.albumPost(GroupId, album);
-            result.put("result", "앨범 추가 완료");
+            int A_ID = albumOperation.getAlbumID();
+
+            System.out.printf("aid : %d\n",A_ID);
+            result.put("A_ID", A_ID);
         }
         catch (Exception e)
         {
