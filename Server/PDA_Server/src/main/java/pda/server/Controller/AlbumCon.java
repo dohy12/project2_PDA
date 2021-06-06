@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.List;
+
 @RestController
 public class AlbumCon {
 
@@ -48,6 +50,21 @@ public class AlbumCon {
         }
 
         return result;
+    }
+
+    
+    @RequestMapping(value = "/album/{GroupId}", method = RequestMethod.GET)
+    public List<Album> getAlbumList(@PathVariable("GroupId") String GroupId) {
+
+        List<Album> albums = null;
+
+        try {
+            albums = albumOperation.getAlbumList(GroupId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return albums;
     }
 
 }

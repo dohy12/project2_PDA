@@ -26,6 +26,7 @@
             android:background="#80000000"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/album_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
@@ -36,19 +37,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/album_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
                     android:textColor="#ffffff"
                     android:text="2021.05.17"/>
-
-                <TextView
-                    android:layout_marginLeft="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:textColor="#ffffff"
-                    android:text="30명 참여"/>
 
                 <View
                     android:layout_width="0dp"
@@ -61,6 +55,7 @@
                     android:src="@drawable/icon16"/>
 
                 <TextView
+                    android:id="@+id/album_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
@@ -74,6 +69,7 @@
                     android:src="@drawable/icon17"/>
 
                 <TextView
+                    android:id="@+id/album_comment_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
