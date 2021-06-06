@@ -215,7 +215,7 @@ public class Board_content extends AppCompatActivity {
 
     }
 
-    public void reloadComments()
+    public void reloadComments(View view)
     {
         comments_container.removeAllViews();
         showCommentList();
