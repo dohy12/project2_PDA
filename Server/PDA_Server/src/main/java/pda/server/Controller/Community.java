@@ -1,5 +1,6 @@
 package pda.server.Controller;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pda.server.DAO.BoardOperation;
@@ -54,6 +55,11 @@ public class Community {
     public List<Board> searchBoard(@PathVariable("GroupId") String GroupId, @PathVariable("Keyword") String Keyword) {
 
         return board.searchBoard(GroupId, Keyword);
+    }
+
+    @RequestMapping(value = "/Community/{GroupId}/next", method = RequestMethod.GET)
+    public int nextBID(@PathVariable("GroupId") String GroupId){
+        return board.nextBID(GroupId);
     }
 
     @RequestMapping(value = "/Community/{GroupId}", method = RequestMethod.POST)

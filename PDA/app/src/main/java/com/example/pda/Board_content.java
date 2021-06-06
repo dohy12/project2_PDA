@@ -203,6 +203,7 @@ public class Board_content extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url("http://18.206.18.154:8080/BoardComment/" + app.getGroupId())
                 .post(body)
+                .addHeader("JWT", app.getJWT())
                 .build();
 
         try {
