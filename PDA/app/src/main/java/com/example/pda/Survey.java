@@ -1,7 +1,5 @@
 package com.example.pda;
 
-import java.util.ArrayList;
-
 public class Survey {
     private int select; //뭐 골랐는지  -1:셀렉트 안함
     private String surveyTitle;

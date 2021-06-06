@@ -99,6 +99,11 @@ public interface BoardOperation {
     @Select("select name from main.user${Num} where U_ID = ${UID}")
     public String getName(@Param("Num") int Num, @Param("UID") int UID);
 
+    //다음 auto_increment값 읽어오기
+    //설문 추가 및 이미지 추가에 사용
+    @Select("select auto_increment from information_schema.tables where table_name = 'board' and table_schema = '${GroupId}'")
+    public int nextBID(@Param("GroupId") String GroupId);
+
 
     //게시글 작성하기, 매개변수 타입 수정 필요
     @Insert("insert into ${GroupId}.board values(${Board.B_ID}, ${Board.isNotice}, \"${Board.title}\", \"${Board.dateTime}\", \"${Board.contents}\", ${Board.U_ID}, ${Board.views_num})")
