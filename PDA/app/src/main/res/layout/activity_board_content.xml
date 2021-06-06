@@ -271,12 +271,11 @@
                 android:textSize="14dp" />
 
             <Button
-                android:id="@+id/postORput"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="5dp"
                 android:background="#909090"
-                android:onClick="postOrPutBtn"
+                android:onClick="writeComment"
                 android:text="등록"
                 android:textColor="#ffffff"
                 android:textSize="12dp" />
