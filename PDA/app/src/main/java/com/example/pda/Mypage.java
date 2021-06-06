@@ -275,7 +275,7 @@ public class Mypage extends AppCompatActivity {
                 container.addView(v);
 
                 v.findViewById(R.id.profile_image).setClipToOutline(true);
-
+                ((ImageView)v.findViewById(R.id.profile_image)).setImageBitmap(app.getProfile());
                 ((TextView) v.findViewById(R.id.guestBook_name)).setText(Name);
                 ((TextView) v.findViewById(R.id.guestBook_comment)).setText(text);
                 Date date = new Date();
