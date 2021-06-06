@@ -227,16 +227,6 @@ public class Board_content extends AppCompatActivity {
 
     }
 
-    public String makeJSONString(int cid, String contents, int bid, int uid) {
-        String res = "{\"CID\":" + cid +
-                ",\"contents\":\"" + contents +
-                "\",\"BID\":" + bid +
-                ",\"UID\":" + uid +
-                "}";
-
-        return res;
-    }
-
     private class CommentDeletion implements Callable<String> {
 
         public String call() {
@@ -244,10 +234,12 @@ public class Board_content extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
 
             String url = "http://10.0.2.2:8080/BoardComment/";
+            //빌드 후 ip 수정
             String groupId = app.getGroupId();
             int cid = Integer.parseInt(((TextView)findViewById(R.id.comments_id)).getText().toString());
+            int uid = Integer.parseInt(app.getUid());
 
-            String httpUrl = url + groupId + "/" + cid;
+            String httpUrl = url + groupId + "/" + cid + "/" + uid;
 
             System.out.println(httpUrl);
 
@@ -268,6 +260,16 @@ public class Board_content extends AppCompatActivity {
 
             return result;
         }
+    }
+
+    public String makeJSONString(int cid, String contents, int bid, int uid) {
+        String res = "{\"CID\":" + cid +
+                ",\"contents\":\"" + contents +
+                "\",\"BID\":" + bid +
+                ",\"UID\":" + uid +
+                "}";
+
+        return res;
     }
 
     private void showBoardInfo(){ // 게시판 내용 넣기
@@ -448,6 +450,8 @@ public class Board_content extends AppCompatActivity {
 
                         Toast.makeText(toolbar.getActivity(), del, Toast.LENGTH_SHORT).show();
                         System.out.println(del);
+
+                        finish();
 
                         break;
 

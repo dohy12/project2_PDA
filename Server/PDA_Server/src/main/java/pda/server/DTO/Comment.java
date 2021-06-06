@@ -11,13 +11,14 @@ public class Comment {
     public int R_CID;
     public String name;
 
-    public Comment(int C_ID, Timestamp dateTime, String contents, int B_ID, int U_ID, int R_CID) {
+    public Comment(int C_ID, Timestamp dateTime, String contents, int B_ID, int U_ID, int R_CID, String name) {
         this.setC_ID(C_ID);
         this.setB_ID(B_ID);
         this.setDateTime(dateTime);
         this.setContents(contents);
         this.setU_ID(U_ID);
         this.setR_CID(R_CID);
+        this.setName(name);
     }
 
     public int getC_ID() { return C_ID; }

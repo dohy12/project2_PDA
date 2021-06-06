@@ -31,7 +31,25 @@ public interface CommentOperation {
     public List<Comment> commentList(@Param("GroupId") String GroupId, @Param("BID") int BID);
 
     //하나의 댓글 선택하기
-    @Select("select * from ${GroupId}.board_comment where C_ID = ${CID}")
+    @Select("select C.C_ID, C.date, C.contents, C.B_ID, C.U_ID, ifNull(C.R_CID, -1) , userTable.name" +
+            " from ${GroupId}.board_comment C" +
+            " LEFT Join" +
+            " (select U_ID," +
+            " case" +
+            " when(U_ID between 0 and 214748363) THEN (select name from main.user0 where ${GroupId}.user.U_ID = main.user0.U_ID)" +
+            " when(U_ID between 214748364 and 429496727) THEN (select name from main.user1 where ${GroupId}.user.U_ID = main.user1.U_ID)" +
+            " when(U_ID between 429496728 and 644245091) THEN (select name from main.user2 where ${GroupId}.user.U_ID = main.user2.U_ID)" +
+            " when(U_ID between 644245092 and 858993455) THEN (select name from main.user3 where ${GroupId}.user.U_ID = main.user3.U_ID)" +
+            " when(U_ID between 858993456 and 1073741819) THEN (select name from main.user4 where ${GroupId}.user.U_ID = main.user4.U_ID)" +
+            " when(U_ID between 1073741820 and 1288490183) THEN (select name from main.user5 where ${GroupId}.user.U_ID = main.user5.U_ID)" +
+            " when(U_ID between 1288490184 and 1503238547) THEN (select name from main.user6 where ${GroupId}.user.U_ID = main.user6.U_ID)" +
+            " when(U_ID between 1503238548 and 1717986911) THEN (select name from main.user7 where ${GroupId}.user.U_ID = main.user7.U_ID)" +
+            " when(U_ID between 1717986912 and 1932735275) THEN (select name from main.user8 where ${GroupId}.user.U_ID = main.user8.U_ID)" +
+            " Else (select name from main.user9 where ${GroupId}.user.U_ID = main.user9.U_ID)" +
+            " end as name" +
+            " from ${GroupId}.user) userTable" +
+            " On C.U_ID = userTable.U_ID" +
+            " where C_ID = ${CID}")
     public Comment selectedComment(@Param("GroupId") String GroupId, @Param("CID") int CID);
 
     //댓글 입력하기
