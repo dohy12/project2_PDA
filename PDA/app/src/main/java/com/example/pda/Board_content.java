@@ -228,6 +228,11 @@ public class Board_content extends AppCompatActivity {
     }
 
     private class CommentDeletion implements Callable<String> {
+        private int cid;
+
+        public CommentDeletion(int cid) {
+            this.cid = cid;
+        }
 
         public String call() {
 
@@ -477,6 +482,7 @@ public class Board_content extends AppCompatActivity {
     }
 
     public void openCommentMenu(View view){
+        final int cid = Integer.parseInt(((TextView)view.findViewById(R.id.comments_id)).getText().toString());
         final PopupMenu popupMenu = new PopupMenu(this, view);
         getMenuInflater().inflate(R.menu.menu_test, popupMenu.getMenu());
 
@@ -493,7 +499,7 @@ public class Board_content extends AppCompatActivity {
                 switch(i){
                     case 1:
                         ExecutorService executorService = Executors.newSingleThreadExecutor();
-                        CommentDeletion commentDeletion = new CommentDeletion();
+                        CommentDeletion commentDeletion = new CommentDeletion(cid);
                         Future<String> future = executorService.submit(commentDeletion);
 
                         String del = null;
