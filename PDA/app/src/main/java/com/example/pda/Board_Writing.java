@@ -40,8 +40,11 @@ public class Board_Writing extends AppCompatActivity {
     private LinearLayout survey_container;
     private LayoutInflater inflater;
     int survey_ch=0;
+    Board_Info boardInfo;
 
     Toolbar toolbar;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,40 +59,84 @@ public class Board_Writing extends AppCompatActivity {
         survey_container = (LinearLayout)findViewById(R.id.boardWriting_survey_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         //tvList = new ArrayList<>();
+
+        Intent myIntent = getIntent();
+        boardInfo = (Board_Info) myIntent.getSerializableExtra("selectedBoard");
+
+        if(boardInfo.getBoardId() != 0) {
+            String beforeContents = boardInfo.getContents();
+            String beforeTitle = boardInfo.getTitle();
+
+            EditText contents = (EditText)findViewById(R.id.contents);
+            EditText title = (EditText)findViewById(R.id.title);
+            contents.setText(beforeContents);
+            title.setText(beforeTitle);
+        }
     }
 
     //등록 버튼 onClick 메소드
     public void wirteBoard(View v) {
-        String title = ((EditText)findViewById(R.id.title)).getText().toString();
-        String contents = ((EditText)findViewById(R.id.contents)).getText().toString();
-        int notice;
-        int uid = Integer.parseInt(app.getUid());
+        if(boardInfo.getBoardId() == 0) {
+            String title = ((EditText) findViewById(R.id.title)).getText().toString();
+            String contents = ((EditText) findViewById(R.id.contents)).getText().toString();
+            int notice;
+            int uid = Integer.parseInt(app.getUid());
 
-        CheckBox isNotice = (CheckBox)findViewById(R.id.isNotice);
-        if(isNotice.isChecked()) notice = 1;
-        else notice = 0;
+            CheckBox isNotice = (CheckBox) findViewById(R.id.isNotice);
+            if (isNotice.isChecked()) notice = 1;
+            else notice = 0;
 
-        OkHttpClient client = new OkHttpClient();
+            OkHttpClient client = new OkHttpClient();
 
-        String json = makeJSONString(0, notice, title, contents, uid, 0);
+            String json = makeJSONString(0, notice, title, contents, uid, 0);
 
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(JSON, json);
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(JSON, json);
 
-        Request request = new Request.Builder()
-                .url("http://18.206.18.154:8080/Community/" + app.getGroupId())
-                .addHeader("JWT", app.getJWT())
-                .post(body)
-                .build();
+            Request request = new Request.Builder()
+                    .url("http://18.206.18.154:8080/Community/" + app.getGroupId())
+                    .addHeader("JWT", app.getJWT())
+                    .post(body)
+                    .build();
 
-        try {
-            Response response = client.newCall(request).execute();
-            System.out.println(response.body().string());
-        } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                Response response = client.newCall(request).execute();
+                System.out.println(response.body().string());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            String title = ((EditText)findViewById(R.id.title)).getText().toString();
+            String contents = ((EditText)findViewById(R.id.contents)).getText().toString();
+            int notice;
+            int uid = 1288490188;
+            //그룹 가입 후 변경
+
+            CheckBox isNotice = (CheckBox)findViewById(R.id.isNotice);
+            if(isNotice.isChecked()) notice = 1;
+            else notice = 0;
+
+            OkHttpClient client = new OkHttpClient();
+
+            String json = makeJSONString(0, notice, title, contents, uid, 0);
+
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(JSON, json);
+
+            Request request = new Request.Builder()
+                    .url("http://18.206.18.154:8080/Community/" + app.getGroupId() + "/" + boardInfo.getBoardId())
+                    .addHeader("JWT", app.getJWT())
+                    .put(body)
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                System.out.println(response.body().string());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
-
     //POST 메소드에 전달할 정보를 JSON String 으로 변환
     public String makeJSONString(int BID, int isNotice, String title, String contents, int UID, int views_num) {
 

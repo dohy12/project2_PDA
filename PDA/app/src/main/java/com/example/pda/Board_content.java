@@ -367,13 +367,10 @@ public class Board_content extends AppCompatActivity {
     }
 
     public void goBoardWriting(View view){
+        LocalDateTime date = LocalDateTime.now();
+        Board_Info fake = new Board_Info(0,false, "", "", date, 0, 0);
         Intent intent = new Intent(this, Board_Writing.class);
-        startActivity(intent);
-    }
-
-    public void goBoardModify(View view){
-        Intent intent = new Intent(this, Board_Modify.class);
-        intent.putExtra("selectedBoard", boardInfo);
+        intent.putExtra("selectedBoard", fake);
         startActivity(intent);
     }
 
@@ -409,11 +406,18 @@ public class Board_content extends AppCompatActivity {
                         Toast.makeText(toolbar.getActivity(), del, Toast.LENGTH_SHORT).show();
 
                     case 0:
-                        //새로운 Activity Board_Modify 열어야 함
-                        Toast.makeText(toolbar.getActivity(), "수정", Toast.LENGTH_SHORT).show();
+                        //작성자 동일할 때 수정 가능
+                        if(app.getUid() == boardInfo.getName()) {
 
-                        Intent intent = new Intent(toolbar.getActivity(), Board_Writing.class);
-                        startActivity(intent);
+                            //새로운 Activity Board_Modify 열어야 함
+                            Toast.makeText(toolbar.getActivity(), "수정", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(toolbar.getActivity(), Board_Writing.class);
+                            intent.putExtra("selectedBoard", boardInfo);
+                            startActivity(intent);
+                        } else {
+                            //Toast.makeText(toolbar.getActivity(), "수정 권한이 없습니다.", Toast.LENGTH_SHORT).show();
+                        }
 
                 }
                         return false;

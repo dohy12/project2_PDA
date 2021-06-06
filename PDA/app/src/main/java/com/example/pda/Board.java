@@ -110,7 +110,10 @@ public class Board extends AppCompatActivity {
     }
 
     public void goBoardWriting(View view){
+        LocalDateTime date = LocalDateTime.now();
+        Board_Info fake = new Board_Info(0,false, "", "", date, 0, 0);
         Intent intent = new Intent(this, Board_Writing.class);
+        intent.putExtra("selectedBoard", fake);
         startActivity(intent);
     }
 

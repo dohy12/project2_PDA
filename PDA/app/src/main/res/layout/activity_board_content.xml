@@ -190,14 +190,15 @@
 
                 <TextView
                     android:id="@+id/board_container"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="60dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000"
-                    android:textSize="12dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="60dp"
                     android:lineSpacingExtra="8dp"
-                    android:text="@string/test_tring"/>
+                    android:text="@string/test_tring"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                    android:textColor="#000000"
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <View
