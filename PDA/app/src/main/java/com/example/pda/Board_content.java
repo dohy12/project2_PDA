@@ -69,6 +69,9 @@ public class Board_content extends AppCompatActivity {
         image_container = findViewById(R.id.board_image_container);
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
+        comments_container.removeAllViews();
+
+
         //Board에서 인자로 넘겨준 Board_Info 객체 받는 부분
         Intent myIntent = getIntent();
         boardInfo = (Board_Info) myIntent.getSerializableExtra("selectedBoard");
@@ -79,19 +82,7 @@ public class Board_content extends AppCompatActivity {
         imageList = new ArrayList<>();
         imageList.add(getResources().getDrawable(R.drawable.img1, null));
         imageList.add(getResources().getDrawable(R.drawable.img5, null));
-
-        boardCommentList = new ArrayList<>();
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        CommentCallable commentCallable = new CommentCallable();
-        Future<ArrayList<Board_comment>> future = executorService.submit(commentCallable);
-
-        try {
-            boardCommentList = future.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        
         String[] survey_strList = {"항목A", "항목B", "항목C"};
         int[] survey_countList = {5, 1, 2};
         survey = new Survey(-1, "설문조사 제목", survey_strList, survey_countList);
@@ -221,6 +212,8 @@ public class Board_content extends AppCompatActivity {
         try {
             Response response = client.newCall(request).execute();
             System.out.println(response.body().string());
+            comments_container.removeAllViews();
+            showCommentList();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -374,6 +367,17 @@ public class Board_content extends AppCompatActivity {
     }
 
     private void showCommentList(){
+        boardCommentList = new ArrayList<>();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        CommentCallable commentCallable = new CommentCallable();
+        Future<ArrayList<Board_comment>> future = executorService.submit(commentCallable);
+
+        try {
+            boardCommentList = future.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         for(int i=0;i<boardCommentList.size();i++) {
             Board_comment bc = boardCommentList.get(i);
             View v = inflater.inflate(R.layout.board_comments, null);
