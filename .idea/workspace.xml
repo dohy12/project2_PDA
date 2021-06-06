@@ -2,10 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="547cd446-ab16-4acb-ac96-82b4e2e88bc2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/Album.java" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/Album.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/res/layout/activity_album.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/res/layout/activity_album.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/AlbumAdd.java" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/AlbumAdd.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/AlbumContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/AlbumContent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/Album_info.java" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/Album_info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/java/com/example/pda/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/res/layout/activity_album_add.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/res/layout/activity_album_add.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/res/layout/activity_album_content.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/res/layout/activity_album_content.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PDA/app/src/main/res/layout/album_add_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/res/layout/album_add_list.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PDA/app/src/main/res/layout/album_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PDA/app/src/main/res/layout/album_layout.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/PDA_Server/bin/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Server/PDA_Server/bin/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/PDA_Server/src/main/java/pda/server/config/ImageConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/PDA_Server/src/main/java/pda/server/config/ImageConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,10 +48,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="732" y="327" key="FileChooserDialogImpl" timestamp="1621682718385">
+    <state x="732" y="327" key="FileChooserDialogImpl" timestamp="1623003202164">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="732" y="327" key="FileChooserDialogImpl/0.0.1920.1040/-1920.3.1920.1040@0.0.1920.1040" timestamp="1621682718385" />
+    <state x="732" y="327" key="FileChooserDialogImpl/0.0.1920.1040/-1920.3.1920.1040@0.0.1920.1040" timestamp="1623003202164" />
     <state x="644" y="396" key="com.intellij.ide.util.TipDialog" timestamp="1621682698490">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
