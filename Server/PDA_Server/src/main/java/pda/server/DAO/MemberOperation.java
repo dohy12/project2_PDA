@@ -11,6 +11,9 @@ import java.util.Map;
 @Mapper
 public interface MemberOperation
 {
+    @Select("select profileImg from main.user${Num} where U_ID = #{UID}")
+    public String profileimg(@Param("Num") int Num, @Param("UID") int UID);
+
     @Select("select * from ${GroupID}.user ")
     public Member[] MemberList(@Param("GroupID") String GroupID);
 

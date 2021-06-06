@@ -54,13 +54,31 @@ public class GuestBook
     }
 
     @RequestMapping("/GuestBook/{GroupId}/waitingToJoin")
-    public List<Integer> waitingToJoin(@PathVariable String GroupId , @RequestParam(name = "U_ID" ,required = false) String UID)
+    public List<Member> waitingToJoin(@PathVariable String GroupId , @RequestParam(name = "U_ID" ,required = false) String UID)
     {
 //        if (memberOperation.isAdmin(GroupId, Integer.parseInt(UID))!=1)
 //        {
 //            throw new RestException(HttpStatus.UNAUTHORIZED,"권한 없습니다");
 //        }
-        return memberOperation.waitingToJoin(GroupId);
+//        return memberOperation.waitingToJoin(GroupId);
+
+        Member[] partialInf;
+        partialInf = memberOperation.MemberList(GroupId); // 단체 유저 테이블에서 부분 회원 정보  받기
+        List<Member> MemberList = new ArrayList<>();
+        for (Member partial : partialInf)
+        {
+            Member oneMember =  memberOperation.details(UserTableMapping.UIDConversion(partial.getUId()),partial.getUId()); //메인 유저 테이블에서 더 상세한 정보 받기
+            oneMember.setIntroduction(partial.getIntroduction());
+            oneMember.setJointime(oneMember.getJointime());
+            oneMember.setUsertablenum(UserTableMapping.UIDConversion(oneMember.getUId()));
+            oneMember.setIsadmin(oneMember.getIsadmin());
+//            System.out.println("memberOperation.GetJoinTime(oneMember.getUId()) = " + memberOperation.GetJoinTime(GroupId,oneMember.getUId()));
+            if (memberOperation.GetJoinTime(GroupId, oneMember.getUId()) == null)
+            {
+                MemberList.add(oneMember); //합쳐서 완전한 회원 정보  받기
+            }
+        }
+        return MemberList;
     }
 
     @RequestMapping("/GuestBook/SendMessage/{MemberUID}")
@@ -77,6 +95,8 @@ public class GuestBook
         {
             String name  = memberOperation.SearchName(UserTableMapping.UIDConversion(temp.getSender()), temp.getSender());
             temp.setSenderName(name);
+            String profileimg = memberOperation.profileimg(UserTableMapping.UIDConversion(temp.getSender()), temp.getSender());
+            temp.setProfileimg(profileimg);
             GuestBook.add(temp);
         }
         return GuestBook;
@@ -90,6 +110,8 @@ public class GuestBook
         {
             String name  = memberOperation.SearchName(UserTableMapping.UIDConversion(temp.getSender()), temp.getSender());
             temp.setSenderName(name);
+            String profileimg = memberOperation.profileimg(UserTableMapping.UIDConversion(temp.getSender()), temp.getSender());
+            temp.setProfileimg(profileimg);
             GuestBook.add(temp);
         }
         return GuestBook;

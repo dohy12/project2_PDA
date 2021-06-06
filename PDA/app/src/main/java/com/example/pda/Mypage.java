@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.pda.entity.Guestbook;
 import com.google.gson.Gson;
 
@@ -31,6 +32,7 @@ import java.util.Objects;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -125,7 +127,14 @@ public class Mypage extends AppCompatActivity {
             container.addView(v);
 
             v.findViewById(R.id.profile_image).setClipToOutline(true);
-
+            HttpUrl httpUrl = new HttpUrl.Builder()
+                    .scheme("http")
+                    .host(app.getHostip())
+                    .port(Integer.parseInt(app.getPort()))
+                    .addPathSegment("images")
+                    .addPathSegment(guestBook.getProfileimg())
+                    .build();
+            Glide.with(this).load(httpUrl.toString()).into((ImageView) v.findViewById(R.id.profile_image));
             ((TextView) v.findViewById(R.id.guestBook_name)).setText(guestBook.getName());
             ((TextView) v.findViewById(R.id.guestBook_comment)).setText(guestBook.getComment());
 
@@ -164,7 +173,7 @@ public class Mypage extends AppCompatActivity {
                         Instant instant = date.toInstant();
                         ZoneId zoneId = ZoneId.systemDefault();
                         LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
-                        guestBookList.add(new GuestBook(temp.getSenderName(), temp.getContent(), localDateTime));
+                        guestBookList.add(new GuestBook(temp.getSenderName(), temp.getContent(), localDateTime , temp.getProfileimg() ));
                     }
 //                    Log.d("TAG", "run: " + response.body().string());
                 } catch (IOException e) {
@@ -209,7 +218,7 @@ public class Mypage extends AppCompatActivity {
                         Instant instant = date.toInstant();
                         ZoneId zoneId = ZoneId.systemDefault();
                         LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
-                        guestBookList.add(new GuestBook(temp.getSenderName(), temp.getContent(), localDateTime));
+                        guestBookList.add(new GuestBook(temp.getSenderName(), temp.getContent(), localDateTime ,temp.getProfileimg()));
                     }
 //                    Log.d("TAG", "run: " + response.body().string());
                 } catch (IOException e) {

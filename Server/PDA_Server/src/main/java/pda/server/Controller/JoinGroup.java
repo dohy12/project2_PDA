@@ -42,7 +42,6 @@ public class JoinGroup
         awaitingCertification = memberOperation.AwaitingCertification(num, Integer.parseInt(U_ID));
         if (awaitingCertification.substring(0, 1).compareTo(",") == 0)
         {
-            System.out.println(awaitingCertification.substring(0, 1));
             memberOperation.UpdateAwaitingCertification(num, awaitingCertification.substring(1), Integer.parseInt(U_ID));
         }
         memberOperation.AddUser(GroupId, Integer.parseInt(U_ID), id);
@@ -74,6 +73,11 @@ public class JoinGroup
                 groupsStr.append(",");
             }
             memberOperation.UpdateJoinedGroups(num, groupsStr.deleteCharAt(groupsStr.length() - 1).toString(), MemberUID);
+            joinedGroups = memberOperation.JoinedGroups(num, MemberUID);
+            if (joinedGroups.substring(0, 1).compareTo(",")==0)
+            {
+                memberOperation.UpdateJoinedGroups(num, joinedGroups.substring(1), MemberUID);
+            }
         }
         else
         {
