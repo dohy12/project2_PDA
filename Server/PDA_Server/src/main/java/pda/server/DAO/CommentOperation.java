@@ -57,7 +57,7 @@ public interface CommentOperation {
     public String getProfileImage(@Param("Num") int Num, @Param("UID") int UID);
 
     //댓글 입력하기
-    @Insert("insert into ${GroupId}.board_comment values(${Comment.C_ID}, \"${Comment.dateTime}\", \"${Comment.contents}\", ${Comment.B_ID}, ${Comment.U_ID}, null)")
+    @Insert("insert into ${GroupId}.board_comment values(${Comment.C_ID}, \"${Comment.dateTime}\", \"${Comment.contents}\", ${Comment.B_ID}, ${Comment.U_ID}, ${Comment.R_CID})")
     public void commentPost(@Param("GroupId") String GroupId, @Param("Comment") Comment Comment);
 
     //댓글 삭제하기

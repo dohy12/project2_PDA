@@ -49,6 +49,7 @@ public class Board_content extends AppCompatActivity {
     ArrayList<Drawable> imageList;
     ArrayList<Board_comment> boardCommentList;
     Board_Info boardInfo;
+    int cid;
 
     Survey survey = null;
 
@@ -192,9 +193,8 @@ public class Board_content extends AppCompatActivity {
 
     public void postOrPutBtn(View v) {
         String postORput = ((Button)v).getText().toString();
-        final int cid = Integer.parseInt(((TextView)v.findViewById(R.id.comments_id)).getText().toString());
 
-        if(postORput.equals("작성") == true)
+        if(postORput.equals("등록") == true)
             writeComment(v);
         else {
             updateComment(v, cid);
@@ -208,13 +208,18 @@ public class Board_content extends AppCompatActivity {
 
         OkHttpClient client = new OkHttpClient();
 
-        String json = makeJSONString(0, contents, boardInfo.getBoardId(), uid);
+        String json = null;
+
+        json = makeJSONString(0, contents, boardInfo.getBoardId(), uid, cid);
+
+        System.out.println(json);
 
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, json);
 
         Request request = new Request.Builder()
-                .url("http://18.206.18.154:8080/BoardComment/" + app.getGroupId())
+                .url("http://10.0.2.2:8080/BoardComment/" + app.getGroupId())
+                //빌드 후 일괄 수정
                 .post(body)
                 .build();
 
@@ -230,6 +235,8 @@ public class Board_content extends AppCompatActivity {
         ((EditText)findViewById(R.id.comment)).setText("");
         ((EditText)findViewById(R.id.comment)).setInputType(0);
 
+        cid = 0;
+
 
     }
 
@@ -239,7 +246,7 @@ public class Board_content extends AppCompatActivity {
 
         OkHttpClient client = new OkHttpClient();
 
-        String json = makeJSONString(0, contents, boardInfo.getBoardId(), uid);
+        String json = makeJSONString(0, contents, boardInfo.getBoardId(), uid, -1);
 
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, json);
@@ -257,6 +264,11 @@ public class Board_content extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        ((EditText)findViewById(R.id.comment)).setText("");
+        ((EditText)findViewById(R.id.comment)).setInputType(0);
+
+        cid = 0;
 
     }
 
@@ -279,7 +291,7 @@ public class Board_content extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://10.0.2.2:8080/BoardComment/";
+            String url = "http://18.206.18.154:8080/BoardComment/";
             //빌드 후 ip 수정
             String groupId = app.getGroupId();
             int uid = Integer.parseInt(app.getUid());
@@ -299,6 +311,8 @@ public class Board_content extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 result = response.body().string();
+                comments_container.removeAllViews();
+                showCommentList();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -307,11 +321,12 @@ public class Board_content extends AppCompatActivity {
         }
     }
 
-    public String makeJSONString(int cid, String contents, int bid, int uid) {
+    public String makeJSONString(int cid, String contents, int bid, int uid, int rcid) {
         String res = "{\"CID\":" + cid +
                 ",\"contents\":\"" + contents +
                 "\",\"BID\":" + bid +
                 ",\"UID\":" + uid +
+                ",\"RCID\":" + rcid +
                 "}";
 
         return res;
@@ -597,11 +612,12 @@ public class Board_content extends AppCompatActivity {
     public void openCommentMenu(final View view){
         final PopupMenu popupMenu = new PopupMenu(this, view);
         getMenuInflater().inflate(R.menu.menu_test, popupMenu.getMenu());
-        final int cid = Integer.parseInt(((TextView)view.findViewById(R.id.comments_id)).getText().toString());
+        cid = Integer.parseInt(((TextView)view.findViewById(R.id.comments_id)).getText().toString());
         Menu menu = popupMenu.getMenu();
 
         menu.add(Menu.NONE, 0, Menu.NONE, "수정");
         menu.add(Menu.NONE, 1, Menu.NONE, "삭제");
+        menu.add(Menu.NONE, 2, Menu.NONE, "대댓글");
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -624,9 +640,22 @@ public class Board_content extends AppCompatActivity {
 
                         Toast.makeText(toolbar.getActivity(), del, Toast.LENGTH_SHORT).show();
 
+                        cid = 0;
                         break;
                     case 0:
+                        ((Button)findViewById(R.id.postORput)).setText("수정");
                         Toast.makeText(toolbar.getActivity(), "수정", Toast.LENGTH_SHORT).show();
+                        String contents = null;
+                        for(int iter = 0; i < boardCommentList.size(); i++) {
+                            Board_comment comm = boardCommentList.get(iter);
+                            if (comm.getCommentID() == cid)
+                                contents = comm.getComments();
+                        }
+                        ((EditText)findViewById(R.id.comment)).setText(contents);
+                        break;
+                    case 2:
+                        Toast.makeText(toolbar.getActivity(), "대댓글", Toast.LENGTH_SHORT).show();
+                        ((EditText)findViewById(R.id.comment)).requestFocus();
                 }
                 return false;
             }

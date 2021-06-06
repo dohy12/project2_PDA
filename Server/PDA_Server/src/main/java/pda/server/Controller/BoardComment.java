@@ -44,8 +44,9 @@ public class BoardComment {
         int bid = (int)params.get("BID");
         int uid = (int)params.get("UID");
         Timestamp dateTime = new Timestamp(System.currentTimeMillis());
+        int rcid = (int)params.get("RCID");
 
-        Comment Comment = new Comment(cid, dateTime, contents, bid, uid, 0, "name");
+        Comment Comment = new Comment(cid, dateTime, contents, bid, uid, rcid, "name");
 
         try {
             comment.commentPost(GroupId, Comment);
