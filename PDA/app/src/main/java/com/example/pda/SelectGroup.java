@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -68,10 +69,15 @@ public class SelectGroup extends AppCompatActivity {
         }
     };
 
+    public static Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_group);
+
+        mContext = this;
+
         alert = new AlertDialog.Builder(this);
         System.out.println(app.getJWT());
         container = findViewById(R.id.container);
@@ -264,5 +270,9 @@ public class SelectGroup extends AppCompatActivity {
 
         fragment.show(getSupportFragmentManager(),"tag");
 
+    }
+
+    public void logOut(){
+        finish();
     }
 }

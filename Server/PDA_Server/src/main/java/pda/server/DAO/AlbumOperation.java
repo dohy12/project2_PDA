@@ -32,5 +32,6 @@ public interface AlbumOperation {
         "order by P_ID DESC;")
     public List<Album> getAlbumList(@Param("GroupId") String GroupId);
 
-
+    @Select("select image_src from ${GroupId}.pictures where P_ID = ${P_ID};")
+    public String[] getImageList(@Param("GroupId") String GroupId, @Param("P_ID") int P_ID);
 }

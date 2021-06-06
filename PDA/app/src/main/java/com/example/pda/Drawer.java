@@ -152,6 +152,8 @@ public class Drawer {
     class logout implements Callable{
         @Override
         public Object call() throws Exception {
+            ((SelectGroup)SelectGroup.mContext).logOut();
+
             activity.finish();
             return null;
         }

@@ -67,4 +67,18 @@ public class AlbumCon {
         return albums;
     }
 
+    @RequestMapping(value = "/album/images/{GroupId}/{P_ID}", method = RequestMethod.GET)
+    public String[] getImageList(@PathVariable("GroupId") String GroupId, @PathVariable("P_ID") int P_ID) {
+
+        String images[] = null;
+
+        try {
+            images = albumOperation.getImageList(GroupId, P_ID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return images;
+    }
+
 }

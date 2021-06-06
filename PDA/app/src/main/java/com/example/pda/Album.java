@@ -2,6 +2,7 @@ package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,10 +33,14 @@ public class Album extends AppCompatActivity {
 
     Toolbar toolbar;
 
+    public static Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
+
+        mContext = this;
 
         ///툴바 세팅/////////////
         toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
@@ -95,7 +100,7 @@ public class Album extends AppCompatActivity {
 
     private void showList(){
         for(int i=0;i<album_infoList.size();i++){
-            Album_info al = album_infoList.get(i);
+            final Album_info al = album_infoList.get(i);
 
             View v = inflater.inflate(R.layout.album_layout, null);
             container.addView(v);
@@ -108,7 +113,7 @@ public class Album extends AppCompatActivity {
             int yy = Integer.parseInt(str_date.substring(0,4));
             int mm = Integer.parseInt(str_date.substring(4,6));
             int dd = Integer.parseInt(str_date.substring(6,8));
-            
+
             String show_date = String.format("%d. %02d. %02d",yy,mm,dd);
 
             ((TextView)v.findViewById(R.id.album_count)).setText(Integer.toString(al.getImage_cnt()));
@@ -118,6 +123,7 @@ public class Album extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(), AlbumContent.class);
+                    intent.putExtra("PID",al.getA_ID());
                     startActivity(intent);
                 }
             });
@@ -134,5 +140,9 @@ public class Album extends AppCompatActivity {
     public void goAlbumAdd(View view){
         Intent intent = new Intent(this, AlbumAdd.class);
         startActivity(intent);
+    }
+
+    public void refresh(){
+        finish();
     }
 }

@@ -52,6 +52,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static java.lang.Thread.sleep;
+
 public class AlbumAdd extends AppCompatActivity {
     private LinearLayout image_container;
     private LayoutInflater inflater;
@@ -341,8 +343,6 @@ public class AlbumAdd extends AppCompatActivity {
                         int a_id = jsonObject.getInt("A_ID");
 
                         sendImageToServer(a_id);
-
-                        finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -409,7 +409,12 @@ public class AlbumAdd extends AppCompatActivity {
                     alerthander.sendMessage(msg);
                 }
                 else{
+                    ((Album)Album.mContext).refresh();
 
+                    Intent intent = new Intent(AlbumAdd.this, Album.class);
+                    startActivity(intent);
+
+                    finish();
                 }
             }
         });

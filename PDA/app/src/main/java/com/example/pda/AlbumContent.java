@@ -16,7 +16,21 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class AlbumContent extends AppCompatActivity {
 
@@ -31,6 +45,8 @@ public class AlbumContent extends AppCompatActivity {
 
     private ArrayList<String> imageUrlList;
 
+    private int PID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +56,64 @@ public class AlbumContent extends AppCompatActivity {
         toolbar = new Toolbar(findViewById(R.id.toolbar), null, 2, this);
         ////////////////////////
 
-        imageUrlList = new ArrayList<>();
-        imageUrlList.add("https://crabox.io/test/dohy/images/back1.jpg");
-        imageUrlList.add("https://crabox.io/test/dohy/images/back2.jpg");
-        imageUrlList.add("https://crabox.io/test/dohy/images/back3.jpg");
-        imageUrlList.add("https://crabox.io/test/dohy/images/back4.png");
+        PID = getIntent().getIntExtra("PID", 0);
 
+        imageUrlList = new ArrayList<>();
+        getImageUrlList();
+    }
+
+    private void getImageUrlList(){
+        String JWT;
+        JWT = app.getJWT();
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .build();
+
+        String Host = "http://10.0.2.2:";
+        String port = "8080";
+        String AccessPath = "/album/images/";
+        String url = Host + port + AccessPath + app.getGroupId() + "/" + PID;
+        System.out.println(url);
+
+
+        final Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("JWT", JWT)
+                .build();
+        final Call call = okHttpClient.newCall(request);
+        Runnable networkTask = new Runnable() {
+            //        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = call.execute();
+                    String imagesText = response.body().string();
+
+                    JsonParser jsonParser = new JsonParser();
+                    JsonArray jsonArray = (JsonArray) jsonParser.parse(imagesText);
+
+                    for(int i=0;i<jsonArray.size(); i++){
+
+                        String imgUrl = "http://"+ app.getHostip() +":8080/images/" + jsonArray.get(i).toString().substring(1,jsonArray.get(i).toString().length()-1);
+                        imageUrlList.add(imgUrl);
+
+                        System.out.println(imgUrl);
+                    }
+                    setPageChecker();
+
+//                    Log.d("TAG", "run: " + response.body().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(networkTask).run();
+
+
+    }
+
+
+    private void setPageChecker(){
         pageChecker = new AlbumCheckPage(this, (LinearLayout) findViewById(R.id.albumContent_checkPage), imageUrlList.size());
 
         albumTitle = findViewById(R.id.album_title);
@@ -63,7 +131,7 @@ public class AlbumContent extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                albumTitle.setText("사진" + position);
+                albumTitle.setText("사진" + (position+1));
                 pageChecker.setPageChecker(position);
             }
 
@@ -83,8 +151,9 @@ public class AlbumContent extends AppCompatActivity {
 
         Menu menu = popupMenu.getMenu();
 
-        for(int i=0; i<5;i++)
-            menu.add(Menu.NONE, i, Menu.NONE, "메뉴"+i);
+        menu.add(Menu.NONE, 0, Menu.NONE, "상세 정보");
+        menu.add(Menu.NONE, 1, Menu.NONE, "앨범 수정");
+        menu.add(Menu.NONE, 2, Menu.NONE, "앨범 삭제");
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override

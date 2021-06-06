@@ -33,7 +33,7 @@
                 android:textColor="#FFFFFF"
                 android:gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="가을 대운동회 사진"/>
+                android:text="사진1"/>
 
             <ImageView
                 android:onClick="openMenu"
