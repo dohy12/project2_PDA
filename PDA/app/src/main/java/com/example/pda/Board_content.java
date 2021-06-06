@@ -2,11 +2,9 @@ package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,7 +32,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -82,7 +78,7 @@ public class Board_content extends AppCompatActivity {
         imageList = new ArrayList<>();
         imageList.add(getResources().getDrawable(R.drawable.img1, null));
         imageList.add(getResources().getDrawable(R.drawable.img5, null));
-        
+
         String[] survey_strList = {"항목A", "항목B", "항목C"};
         int[] survey_countList = {5, 1, 2};
         survey = new Survey(-1, "설문조사 제목", survey_strList, survey_countList);
@@ -212,12 +208,17 @@ public class Board_content extends AppCompatActivity {
         try {
             Response response = client.newCall(request).execute();
             System.out.println(response.body().string());
-            comments_container.removeAllViews();
-            showCommentList();
+            reloadComments();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void reloadComments()
+    {
+        comments_container.removeAllViews();
+        showCommentList();
     }
 
     private class CommentDeletion implements Callable<String> {
@@ -418,6 +419,8 @@ public class Board_content extends AppCompatActivity {
             });
 
         }
+
+        ((TextView)findViewById(R.id.board_comments_num)).setText("댓글" + boardCommentList.size());
     }
 
     public void goBoardWriting(View view){
