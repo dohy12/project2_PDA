@@ -407,9 +407,14 @@ public class Board_content extends AppCompatActivity {
                         }
 
                         Toast.makeText(toolbar.getActivity(), del, Toast.LENGTH_SHORT).show();
+
                     case 0:
                         //새로운 Activity Board_Modify 열어야 함
                         Toast.makeText(toolbar.getActivity(), "수정", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(toolbar.getActivity(), Board_Writing.class);
+                        startActivity(intent);
+
                 }
                         return false;
             }
