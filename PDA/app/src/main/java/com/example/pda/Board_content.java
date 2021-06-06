@@ -276,6 +276,20 @@ public class Board_content extends AppCompatActivity {
 
     private void showBoardInfo(){ // 게시판 내용 넣기
 
+        String profile = null;
+        ExecutorService executorService2 = Executors.newSingleThreadExecutor();
+        getURL getUrl = new getURL();
+        Future<String> future2 = executorService2.submit(getUrl);
+
+        try {
+            profile = future2.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String url = "http://18.206.18.154:8080/images/" + profile;
+
+        Glide.with(this).load(url).into((ImageView)findViewById(R.id.profile_image));
         findViewById(R.id.profile_image).setClipToOutline(true);
 
         Boolean isNotice = boardInfo.getNotice();//공지 체크
@@ -387,17 +401,17 @@ public class Board_content extends AppCompatActivity {
             View v = inflater.inflate(R.layout.board_comments, null);
 
             String profile = null;
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            ExecutorService executorService2 = Executors.newSingleThreadExecutor();
             getURL getUrl = new getURL();
-            Future<String> future = executorService.submit(getUrl);
+            Future<String> future2 = executorService2.submit(getUrl);
 
             try {
-                profile = future.get();
+                profile = future2.get();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            String url = "/images/" + profile;
+            String url = "http://18.206.18.154:8080/images/" + profile;
 
             Glide.with(this).load(url).into((ImageView)v.findViewById(R.id.profile_image));
             v.findViewById(R.id.profile_image).setClipToOutline(true);
