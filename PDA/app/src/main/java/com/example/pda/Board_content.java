@@ -228,6 +228,12 @@ public class Board_content extends AppCompatActivity {
     }
 
     private class CommentDeletion implements Callable<String> {
+        private int cid;
+
+        public CommentDeletion(int cid)
+        {
+            this.cid = cid;
+        }
 
         public String call() {
 
@@ -236,7 +242,6 @@ public class Board_content extends AppCompatActivity {
             String url = "http://10.0.2.2:8080/BoardComment/";
             //빌드 후 ip 수정
             String groupId = app.getGroupId();
-            int cid = Integer.parseInt(((TextView)findViewById(R.id.comments_id)).getText().toString());
             int uid = Integer.parseInt(app.getUid());
 
             String httpUrl = url + groupId + "/" + cid + "/" + uid;
@@ -378,7 +383,7 @@ public class Board_content extends AppCompatActivity {
             ((TextView)v.findViewById(R.id.comments_id)).setText(Integer.toString(bc.getCommentID()));
             ((TextView)v.findViewById(R.id.comments_name)).setText(bc.getName());
             ((TextView)v.findViewById(R.id.comments_contents)).setText(bc.getComments());
-
+            System.out.println(((TextView)v.findViewById(R.id.comments_id)).getText());
             String formatDate = bc.getDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
             ((TextView)v.findViewById(R.id.comments_date)).setText(formatDate);
 
@@ -479,7 +484,7 @@ public class Board_content extends AppCompatActivity {
     public void openCommentMenu(View view){
         final PopupMenu popupMenu = new PopupMenu(this, view);
         getMenuInflater().inflate(R.menu.menu_test, popupMenu.getMenu());
-
+        final int cid = Integer.parseInt(((TextView)view.findViewById(R.id.comments_id)).getText().toString());
         Menu menu = popupMenu.getMenu();
 
         menu.add(Menu.NONE, 0, Menu.NONE, "수정");
@@ -493,7 +498,7 @@ public class Board_content extends AppCompatActivity {
                 switch(i){
                     case 1:
                         ExecutorService executorService = Executors.newSingleThreadExecutor();
-                        CommentDeletion commentDeletion = new CommentDeletion();
+                        CommentDeletion commentDeletion = new CommentDeletion(cid);
                         Future<String> future = executorService.submit(commentDeletion);
 
                         String del = null;
