@@ -2,6 +2,7 @@ package com.example.pda;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,10 +29,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -50,6 +57,28 @@ public class AlbumAdd extends AppCompatActivity {
     private Dialog dialog;
     private TextView tv_address;
 
+    private ArrayList<String> imageUrlList;
+
+    private AlertDialog.Builder alert;
+
+    final Handler serverhandler = new Handler(){
+        public void handleMessage(Message msg){
+            alert.setMessage("업로드에 실패하였습니다.").setPositiveButton("확인", null);
+            alert.show();
+
+            btnEnable(true);
+        }
+    };
+
+    final Handler testhandler = new Handler(){
+        public void handleMessage(Message msg){
+            alert.setMessage("업로드 완료.").setPositiveButton("확인", null);
+            alert.show();
+
+            btnEnable(true);
+        }
+    };
+
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +94,10 @@ public class AlbumAdd extends AppCompatActivity {
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
         tv_address = findViewById(R.id.album_add_location);
+
+        imageUrlList = new ArrayList<>();
+
+        alert = new AlertDialog.Builder(this);
 
         setDate();
         testNameContainer();
@@ -242,6 +275,8 @@ public class AlbumAdd extends AppCompatActivity {
     }
 
     public void sendToServer(View view){
+        btnEnable(false);
+
         String title = ((EditText)findViewById(R.id.album_add_title)).getText().toString();
         String date_str = ((TextView)findViewById(R.id.album_date)).getText().toString();
         String location = ((TextView)findViewById(R.id.album_add_location)).getText().toString();
@@ -265,19 +300,35 @@ public class AlbumAdd extends AppCompatActivity {
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, json);
 
-
         Request request = new Request.Builder()
                 .url("http://10.0.2.2:8080/album/" + app.getGroupId())
                 .post(body)
                 .build();
-        try {
-            Response response = client.newCall(request).execute();
-            System.out.println(response.body().string());
 
-            finish();
+
+        try {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    Message msg = serverhandler.obtainMessage();
+                    serverhandler.sendMessage(msg);
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    Message msg = testhandler.obtainMessage();
+                    testhandler.sendMessage(msg);
+                    finish();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void btnEnable(boolean enable){
+        findViewById(R.id.sendButton).setEnabled(enable);
     }
 
 
