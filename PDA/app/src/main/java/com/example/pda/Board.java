@@ -131,7 +131,7 @@ public class Board extends AppCompatActivity {
             String url = "http://10.0.2.2:8080/Community/";
             //서버에 api 빌드 후 경로 수정
             //comments_num 받아오는 부분이 아직 빌드 되지 않았음
-            String GroupId = "deaa01013b0144e99faab90ecd670950/";
+            String GroupId = app.getGroupId() + "/";
 
             String httpUrl = url + GroupId + notice;
 
