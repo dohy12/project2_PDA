@@ -446,6 +446,7 @@ public class Board_Writing extends AppCompatActivity {
 
         Future<Integer> futureBID = executorService.submit(nextBID);
         Future<Integer> futureSID = executorService.submit(nextSID);
+        Future<Integer> futureOID = executorService.submit(nextOID);
 
         int bid = 0;
         int sid = 0;
@@ -454,6 +455,7 @@ public class Board_Writing extends AppCompatActivity {
         try {
             bid = futureBID.get();
             sid = futureSID.get();
+            oid = futureOID.get();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -463,15 +465,8 @@ public class Board_Writing extends AppCompatActivity {
             View cont = findViewById(id);
             String option = ((TextView) cont.findViewById(R.id.option)).getText().toString();
 
-            Future<Integer> futureOID = executorService.submit(nextOID);
-            try{
-                oid = futureOID.get();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
             options.add(new Survey_Option(sid, oid, option));
-            results.add(new Survey_Result(oid, 0));
+            results.add(new Survey_Result(oid++, 0));
         }
 
         String title = ((EditText)findViewById(R.id.insert_title)).getText().toString();
