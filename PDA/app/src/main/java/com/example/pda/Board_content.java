@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,7 +66,7 @@ public class Board_content extends AppCompatActivity {
         comments_container = findViewById(R.id.board_comments_container);
         survey_container = findViewById(R.id.board_survey_container);
         image_container = findViewById(R.id.board_image_container);
-        inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
         comments_container.removeAllViews();
 
@@ -135,7 +136,7 @@ public class Board_content extends AppCompatActivity {
 
                 JSONArray jsonArray = new JSONArray(response.body().string());
 
-                for(int i = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                     int CID = jsonObject.getInt("C_ID");
@@ -189,11 +190,21 @@ public class Board_content extends AppCompatActivity {
 
     }
 
+    public void postOrPutBtn(View v) {
+        String postORput = ((Button)v).getText().toString();
+        final int cid = Integer.parseInt(((TextView)v.findViewById(R.id.comments_id)).getText().toString());
+
+        if(postORput.equals("작성") == true)
+            writeComment(v);
+        else {
+            updateComment(v, cid);
+            ((Button)v).setText("등록");
+        }
+    }
+
     public void writeComment(View v) {
-        String contents = ((EditText)findViewById(R.id.comment)).getText().toString();
+        String contents = ((EditText) findViewById(R.id.comment)).getText().toString();
         int uid = Integer.parseInt(app.getUid());
-        //그룹 가입 후 수정
-        //app.getUid() 사용할 예정
 
         OkHttpClient client = new OkHttpClient();
 
@@ -216,7 +227,39 @@ public class Board_content extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        ((EditText)findViewById(R.id.comment)).setText("");
+        ((EditText)findViewById(R.id.comment)).setInputType(0);
+
+
     }
+
+    public void updateComment(View v, int cid) {
+        String contents = ((EditText) findViewById(R.id.comment)).getText().toString();
+        int uid = Integer.parseInt(app.getUid());
+
+        OkHttpClient client = new OkHttpClient();
+
+        String json = makeJSONString(0, contents, boardInfo.getBoardId(), uid);
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, json);
+
+        Request request = new Request.Builder()
+                .url("http://18.206.18.154:8080/BoardComment/" + app.getGroupId() + "/" + cid)
+                .put(body)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            System.out.println(response.body().string());
+            comments_container.removeAllViews();
+            showCommentList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     public void reloadComments(View view)
     {
@@ -551,7 +594,7 @@ public class Board_content extends AppCompatActivity {
         popupMenu.show();
     }
 
-    public void openCommentMenu(View view){
+    public void openCommentMenu(final View view){
         final PopupMenu popupMenu = new PopupMenu(this, view);
         getMenuInflater().inflate(R.menu.menu_test, popupMenu.getMenu());
         final int cid = Integer.parseInt(((TextView)view.findViewById(R.id.comments_id)).getText().toString());

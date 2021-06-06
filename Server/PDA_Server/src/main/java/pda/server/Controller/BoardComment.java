@@ -68,15 +68,16 @@ public class BoardComment {
         return "삭제";
     }
 
-    @RequestMapping(value = "/BoardComment/{GroupId}/{CID}/{UID}", method = RequestMethod.PUT)
-    public String commentUpdate(@PathVariable("GroupId") String GroupId, @PathVariable("CID") int CID, @PathVariable("UID") int UID, @RequestBody Map<String, Object> params){
+    @RequestMapping(value = "/BoardComment/{GroupId}/{CID}", method = RequestMethod.PUT)
+    public String commentUpdate(@PathVariable("GroupId") String GroupId, @PathVariable("CID") int CID, @RequestBody Map<String, Object> params){
 
         Comment temp = comment.selectedComment(GroupId, CID);
 
-        int cid = (int)params.get("C_ID");
+        int cid = (int)params.get("CID");
         String contents = (String)params.get("contents");
+        int uid = (int)params.get("UID");
 
-        if(UID == temp.getU_ID()){
+        if(uid == temp.getU_ID()){
             Comment Comment = new Comment(cid, temp.getDateTime(), contents, temp.getB_ID(), temp.getU_ID(), temp.getR_CID(), temp.getName());
             try{
                 comment.commentUpdate(GroupId, Comment, CID);
