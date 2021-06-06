@@ -61,11 +61,14 @@ public class GetGroupInfo {
     }
 
     @GetMapping("/groups/{GroupName}")
-    public group GetAGroups(@PathVariable String GroupName)
+    public List<group> GetAGroups(@PathVariable String GroupName)
     {
-        group g;
-        g = groups.getAGroupInfos(GroupName);
-        g.setName(GroupName);
+        List<group> g;
+        g = groups.getSearchGroupInfos(GroupName);
+        for (group group : g)
+        {
+            group.setName(groups.getGroupName(group.getGroupId()));
+        }
         return g;
     }
 }

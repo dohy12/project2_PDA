@@ -101,40 +101,42 @@ public class GroupListFragment extends DialogFragment {
                     e.printStackTrace();
                 }
                 Gson gson = new Gson();
-                Group group = gson.fromJson(string, Group.class);
-                showList(Search, group.getGroupId(), group.getGroupImg());
+                Group[] groups = gson.fromJson(string, Group[].class);
+                showList(groups);
 
             }
         };
         new Thread(networkTask).run();
     }
 
-    private void showList(String groupName, final String GID, String GImg) {
-        String GroupId = GID;
-        View v = inflater.inflate(R.layout.group_list_fragment_content, null, false);
-        container.addView(v);
+    private void showList(Group[] groups) {
+        for (Group group : groups) {
+            final String GroupId = group.getGroupId();
+            View v = inflater.inflate(R.layout.group_list_fragment_content, null, false);
+            container.addView(v);
 
-        v.findViewById(R.id.groupListImage).setClipToOutline(true);
-        TextView viewById = v.findViewById(R.id.groupListName);
-        viewById.setText(groupName);
+            v.findViewById(R.id.groupListImage).setClipToOutline(true);
+            TextView viewById = v.findViewById(R.id.groupListName);
+            viewById.setText(group.getName());
 
-        HttpUrl httpUrl = new HttpUrl.Builder()
-                .scheme("http")
-                .host(app.getHostip())
-                .port(Integer.parseInt(app.getPort()))
-                .addPathSegment("images")
-                .addPathSegment(GImg)
-                .build();
-        Glide.with(activity).load(httpUrl.toString()).into((ImageView) v.findViewById(R.id.groupListImage));
-        ///
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                joinGroup(GID);
-                Toast myToast = Toast.makeText(inflater.getContext(), "test", Toast.LENGTH_SHORT);
-                myToast.show();
-            }
-        });
+            HttpUrl httpUrl = new HttpUrl.Builder()
+                    .scheme("http")
+                    .host(app.getHostip())
+                    .port(Integer.parseInt(app.getPort()))
+                    .addPathSegment("images")
+                    .addPathSegment(group.getGroupImg())
+                    .build();
+            Glide.with(activity).load(httpUrl.toString()).into((ImageView) v.findViewById(R.id.groupListImage));
+            ///
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    joinGroup(GroupId);
+                    Toast myToast = Toast.makeText(inflater.getContext(), "test", Toast.LENGTH_SHORT);
+                    myToast.show();
+                }
+            });
+        }
     }
 
     private void joinGroup(String GID) {

@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
-public interface GetGroups {
+public interface GetGroups
+{
 
     @Select("SELECT * FROM main.GroupNameMapping")
     List<group> getAllGroups();
@@ -23,6 +24,9 @@ public interface GetGroups {
     @Select("SELECT Name, GroupImg FROM main.GroupNameMapping where GroupId = #{GroupId}")
     group getGroupInfos(@Param("GroupId") String GroupId);
 
-    @Select("select GroupId, GroupImg from GroupNameMapping where Name = #{Name}")
-    group getAGroupInfos(@Param("Name") String Name);
+    @Select("select GroupId, GroupImg from GroupNameMapping where Name like '%${Name}%'")
+    List<group> getSearchGroupInfos(@Param("Name") String Name);
+
+    @Select("SELECT Name FROM main.GroupNameMapping where GroupId = #{GroupId}")
+    String getGroupName(@Param("GroupId") String GroupId);
 }
