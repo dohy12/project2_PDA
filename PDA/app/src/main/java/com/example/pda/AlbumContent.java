@@ -75,10 +75,6 @@ public class AlbumContent extends AppCompatActivity {
 
     }
 
-    public void goShowReply(View view){
-        Intent intent = new Intent(this, ShowReply.class);
-        startActivity(intent);
-    }
 
     public void openMenu(View view){
         View anchor = findViewById(R.id.menu_anchor);

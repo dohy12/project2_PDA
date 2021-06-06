@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/swiperefreshlayout"
+    android:orientation="vertical"
     tools:context=".Board_content">
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
     <include
         layout="@layout/toolbar"
@@ -91,7 +86,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
-                    android:textSize="16sp"
+                    android:textSize="12dp"
                     android:lineSpacingExtra="8dp"
                     android:text="@string/test_tring"/>
             </LinearLayout>
@@ -100,4 +95,3 @@
     </ScrollView>
 
 </LinearLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
