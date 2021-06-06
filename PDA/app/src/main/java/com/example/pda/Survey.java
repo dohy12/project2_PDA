@@ -16,6 +16,7 @@ public class Survey {
     public int getSelect() {
         return select;
     }
+    public void setSelect(int select) { this.select = select; }
 
     public String getSurveyTitle() {
         return surveyTitle;
@@ -28,4 +29,5 @@ public class Survey {
     public int[] getSurveyList_count() {
         return surveyList_count;
     }
+    public void setSurveyList_count(int[] surveyList_count) { this.surveyList_count = surveyList_count; }
 }

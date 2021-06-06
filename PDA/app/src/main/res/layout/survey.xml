@@ -38,8 +38,9 @@
         android:id="@+id/survey_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#000000"
         android:gravity="right"
-        android:text="투표하기"/>
+        android:onClick="surveyOn"
+        android:text="투표하기"
+        android:textColor="#000000" />
 
 </LinearLayout>

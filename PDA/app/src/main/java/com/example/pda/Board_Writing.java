@@ -46,6 +46,7 @@ public class Board_Writing extends AppCompatActivity {
     private LayoutInflater inflater;
     int survey_ch=0;
     Board_Info boardInfo;
+    int nextbid = 0;
 
     ArrayList<Survey_Option> options = new ArrayList<Survey_Option>();
     ArrayList<Survey_Result> results = new ArrayList<Survey_Result>();
@@ -99,7 +100,7 @@ public class Board_Writing extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String json = makeJSONString(0, notice, title, contents, uid, 0);
+            String json = makeJSONString(nextbid, notice, title, contents, uid, 0);
 
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(JSON, json);
@@ -457,6 +458,8 @@ public class Board_Writing extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        nextbid = bid;
 
 
         for(int id = 0; id < survey_ch; id++) {

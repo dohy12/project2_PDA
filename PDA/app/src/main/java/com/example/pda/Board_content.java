@@ -45,9 +45,12 @@ public class Board_content extends AppCompatActivity {
     private LayoutInflater inflater;
     ArrayList<Drawable> imageList;
     ArrayList<Board_comment> boardCommentList;
+    ArrayList<JoinedSurvey> joinedSurveyList;
     Board_Info boardInfo;
-
     Survey survey = null;
+    String[] survey_strList = new String[5];
+    int[] survey_countList = new int[5];
+    int size = 0;
 
     Toolbar toolbar;
 
@@ -79,12 +82,38 @@ public class Board_content extends AppCompatActivity {
         imageList.add(getResources().getDrawable(R.drawable.img1, null));
         imageList.add(getResources().getDrawable(R.drawable.img5, null));
 
-        String[] survey_strList = {"항목A", "항목B", "항목C"};
-        int[] survey_countList = {5, 1, 2};
-        survey = new Survey(-1, "설문조사 제목", survey_strList, survey_countList);
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        isExist isExist = new isExist();
+        Future<Integer> futureExist = executorService.submit(isExist);
+        int exist = 0;
+        try {
+            exist = futureExist.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(exist > 0) {
+            SurveyCallable SurveyCallable = new SurveyCallable();
+            Future<ArrayList<JoinedSurvey>> future = executorService.submit(SurveyCallable);
+
+            try {
+                joinedSurveyList = future.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            for (int i = 0; i < joinedSurveyList.size(); i++) {
+                survey_strList[i] = joinedSurveyList.get(i).contents;
+                survey_countList[i] = joinedSurveyList.get(i).voted;
+            }
+            survey = new Survey(-1, joinedSurveyList.get(0).title, survey_strList, survey_countList);
+            size = joinedSurveyList.size();
+        }
 
         showBoardInfo();
-        showSurvey();
+        if(exist > 0)
+            showSurvey();
         showImageList();
         showCommentList();
     }
@@ -107,6 +136,81 @@ public class Board_content extends AppCompatActivity {
             client.newCall(request).execute();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private class isExist implements Callable<Integer> {
+        public Integer call() {
+            OkHttpClient client = new OkHttpClient();
+
+            String url = "http://10.0.2.2:8080/Survey/";
+            String GroupId = app.getGroupId();
+            int bid = boardInfo.getBoardId();
+
+            String httpUrl = url + GroupId + "/exist/" + bid;
+
+            Request request = new Request.Builder()
+                    .url(httpUrl)
+                    .get()
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            int result = 0;
+
+            try {
+                Response response = client.newCall(request).execute();
+                result = Integer.parseInt(response.body().string());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+    }
+
+    private class SurveyCallable implements Callable<ArrayList<JoinedSurvey>> {
+        public ArrayList<JoinedSurvey> call() {
+            OkHttpClient client = new OkHttpClient();
+
+            String url = "http://10.0.2.2:8080/Survey/";
+            String GroupId = app.getGroupId();
+            int bid = boardInfo.getBoardId();
+
+            String httpUrl = url + GroupId + "/" + bid;
+
+            System.out.println(httpUrl);
+
+            Request request = new Request.Builder()
+                    .url(httpUrl)
+                    .get()
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                JSONArray jsonArray = new JSONArray(response.body().string());
+                joinedSurveyList = new ArrayList<JoinedSurvey>();
+
+                for(int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    System.out.println(jsonObject.toString());
+
+                    int SID = jsonObject.getInt("s_ID");
+                    String title = jsonObject.getString("title");
+                    int BID = jsonObject.getInt("b_ID");
+                    int OID = jsonObject.getInt("o_ID");
+                    String contents = jsonObject.getString("contents");
+                    int voted = jsonObject.getInt("voted");
+
+                    joinedSurveyList.add(new JoinedSurvey(SID, title, BID, OID, contents, voted));
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return joinedSurveyList;
         }
     }
 
@@ -314,7 +418,6 @@ public class Board_content extends AppCompatActivity {
 
             ((TextView)v.findViewById(R.id.survey_title)).setText("[설문조사] "+survey.getSurveyTitle());
 
-            int count = survey.getSurveyList().length;
             RadioGroup radioGroup = findViewById(R.id.survey_radioGroup);
             LinearLayout surveyList_container = findViewById(R.id.survey_list_container);
 
@@ -323,8 +426,9 @@ public class Board_content extends AppCompatActivity {
                 surveyList_container.setVisibility(View.GONE);
                 ((TextView)findViewById(R.id.survey_button)).setText("투표하기");
 
-                for(int i=0;i<count;i++){
+                for(int i=0;i<size;i++){
                     RadioButton btn = new RadioButton(this);
+                    btn.setId(i);
 
                     LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -343,10 +447,10 @@ public class Board_content extends AppCompatActivity {
                 ((TextView)findViewById(R.id.survey_button)).setText("재 투표하기");
 
                 int max_count = 0;
-                for(int i=0;i<count;i++)
+                for(int i=0;i<size;i++)
                     max_count = Math.max(max_count, survey.getSurveyList_count()[i]);
 
-                for(int i=0;i<count;i++){
+                for(int i=0;i<size;i++){
                     View _v = inflater.inflate(R.layout.survey_list, null);
                     surveyList_container.addView(_v);
 
@@ -366,6 +470,37 @@ public class Board_content extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    //투표 버튼 선택
+    public void surveyOn(View v){
+        RadioGroup rg = (RadioGroup) findViewById(R.id.survey_radioGroup);
+        int selected = rg.getCheckedRadioButtonId();
+
+        int oid = joinedSurveyList.get(selected).O_ID;
+
+
+        OkHttpClient client = new OkHttpClient();
+
+
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:8080/Survey/" + app.getGroupId() + "/voted/" + oid)
+                .get()
+                .addHeader("JWT", app.getJWT())
+                .build();
+
+        try {
+            client.newCall(request).execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        survey_countList[selected]++;
+        survey.setSurveyList_count(survey_countList);
+
+        survey.setSelect(oid);
+        survey_container.removeAllViews();
+        showSurvey();
     }
 
     private void showCommentList(){
