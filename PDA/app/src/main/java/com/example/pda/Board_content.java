@@ -52,7 +52,7 @@ public class Board_content extends AppCompatActivity {
     ArrayList<Board_comment> boardCommentList;
     ArrayList<JoinedSurvey> joinedSurveyList;
     Board_Info boardInfo;
-    int cid;
+    int cid = -1;
     Survey survey = null;
     String[] survey_strList = new String[5];
     int[] survey_countList = new int[5];
@@ -322,7 +322,7 @@ public class Board_content extends AppCompatActivity {
 
         String json = null;
 
-        json = makeJSONString(0, contents, boardInfo.getBoardId(), uid, -1);
+        json = makeJSONString(0, contents, boardInfo.getBoardId(), uid, cid);
 
         System.out.println(json);
 
@@ -348,7 +348,7 @@ public class Board_content extends AppCompatActivity {
         ((EditText)findViewById(R.id.comment)).setText("");
         ((EditText)findViewById(R.id.comment)).setInputType(0);
 
-        cid = 0;
+        cid = -1;
     }
 
     public void updateComment(View v, int cid) {
@@ -379,7 +379,7 @@ public class Board_content extends AppCompatActivity {
         ((EditText)findViewById(R.id.comment)).setText("");
         ((EditText)findViewById(R.id.comment)).setInputType(0);
 
-        cid = 0;
+        cid = -1;
 
     }
 
@@ -780,7 +780,7 @@ public class Board_content extends AppCompatActivity {
 
                         Toast.makeText(toolbar.getActivity(), del, Toast.LENGTH_SHORT).show();
 
-                        cid = 0;
+                        cid = -1;
                         break;
                     case 0:
                         ((Button)findViewById(R.id.postORput)).setText("수정");
