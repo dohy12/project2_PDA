@@ -5,6 +5,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -36,6 +38,9 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     Drawer drawer;
@@ -53,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Board_Info> boardInfoList1 = new ArrayList<Board_Info>();
     ArrayList<Board_Info> boardInfoList2 = new ArrayList<Board_Info>();
+
+    private List<String> result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         board2_Container = findViewById(R.id.board2_container);
 
         inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        showMainImage();
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         BoardCallable boardCallable = new BoardCallable(1);
@@ -313,6 +322,53 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, Board_content.class);
         intent.putExtra("selectedBoard", selectedBoard);
         startActivity(intent);
+    }
+
+    private class ImageSrcRunnable implements Runnable {
+        RetrofitService service;
+        private String GroupId;
+        public ImageSrcRunnable(RetrofitService service, String GroupId) {
+            this.service = service;
+            this.GroupId = GroupId;
+        }
+        public void run() {
+            retrofit2.Call<List<String>> call = service.GetintroImage(GroupId);
+            try {
+                result = call.execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void showMainImage(){
+        String origin = "http://18.206.18.154:8080/";
+        String GroupId = app.getGroupId();
+        RetrofitService service1;
+
+        //Gson gson = new GsonBuilder().setLenient().create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(origin)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        service1 = retrofit.create(RetrofitService.class);
+
+        Runnable r1 = new ImageSrcRunnable(service1, GroupId);
+        Thread thread1 = new Thread(r1);
+
+        thread1.start();
+
+        try {
+            thread1.join();
+        } catch (Exception e) {
+        }
+
+        ImageView mainImageView = findViewById(R.id.mainImg);
+        Glide.with(this).load("http://18.206.18.154:8080/images/" + result.get(0)).into(mainImageView);
+
     }
 
 }
