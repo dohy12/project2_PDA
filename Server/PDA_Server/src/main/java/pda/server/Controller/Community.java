@@ -59,7 +59,9 @@ public class Community {
 
     @RequestMapping(value = "/Community/{GroupId}/next", method = RequestMethod.GET)
     public int nextBID(@PathVariable("GroupId") String GroupId){
-        return board.nextBID(GroupId);
+        int bid = board.nextBID(GroupId);
+
+        return bid;
     }
 
     @RequestMapping(value = "/Community/{GroupId}", method = RequestMethod.POST)
@@ -90,6 +92,7 @@ public class Community {
                 return "작성 권한이 없습니다.";
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return "Error: \"boardPost()\" Failed";
         }
 

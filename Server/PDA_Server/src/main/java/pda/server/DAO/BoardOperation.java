@@ -101,8 +101,14 @@ public interface BoardOperation {
 
     //다음 auto_increment값 읽어오기
     //설문 추가 및 이미지 추가에 사용
-    @Select("select auto_increment from information_schema.tables where table_name = 'board' and table_schema = '${GroupId}'")
+    @Select("select b_id as next from ${GroupId}.board order by b_id desc limit 1")
     public int nextBID(@Param("GroupId") String GroupId);
+
+    @Select("select last_insert_id()")
+    public int next();
+
+    @Delete("delete from ${GroupId}.board where b_id = ${BID}")
+    public void deleteLast(@Param("GroupId") String GroupId, @Param("BID") int BID);
 
 
     //게시글 작성하기, 매개변수 타입 수정 필요

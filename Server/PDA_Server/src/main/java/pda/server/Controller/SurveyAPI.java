@@ -2,6 +2,7 @@ package pda.server.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pda.server.DAO.BoardOperation;
 import pda.server.DAO.SurveyOperation;
 import pda.server.DTO.JoinedSurvey;
 import pda.server.DTO.Option;
@@ -29,12 +30,14 @@ public class SurveyAPI {
 
     @RequestMapping(value = "/Survey/{GroupId}", method = RequestMethod.GET)
     public int nextSID(@PathVariable("GroupId") String GroupId){
-        return survey.nextSID(GroupId);
+        int sid = survey.nextSID(GroupId);
+        return sid;
     }
 
     @RequestMapping(value = "/Survey/{GroupId}/oid", method = RequestMethod.GET)
     public int nextOID(@PathVariable("GroupId") String GroupId){
-        return survey.nextOID(GroupId);
+        int oid = survey.nextOID(GroupId);
+        return oid;
     }
 
     @RequestMapping(value = "/Survey/{GroupId}", method = RequestMethod.POST)
