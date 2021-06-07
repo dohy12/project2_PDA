@@ -314,7 +314,7 @@ public class Board_content extends AppCompatActivity {
 
         String json = null;
 
-        json = makeJSONString(0, contents, boardInfo.getBoardId(), uid, cid);
+        json = makeJSONString(0, contents, boardInfo.getBoardId(), uid, -1);
 
         System.out.println(json);
 
@@ -341,8 +341,6 @@ public class Board_content extends AppCompatActivity {
         ((EditText)findViewById(R.id.comment)).setInputType(0);
 
         cid = 0;
-
-
     }
 
     public void updateComment(View v, int cid) {

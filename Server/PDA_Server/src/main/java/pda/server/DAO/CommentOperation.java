@@ -49,22 +49,22 @@ public interface CommentOperation {
             " end as name" +
             " from ${GroupId}.user) userTable" +
             " On C.U_ID = userTable.U_ID" +
-            " where C_ID = ${CID}")
+            " where C_ID = #{CID}")
     public Comment selectedComment(@Param("GroupId") String GroupId, @Param("CID") int CID);
 
     //profile image url
-    @Select("select profileImg from main.user${Num} where U_ID = ${UID}")
+    @Select("select profileImg from main.user${Num} where U_ID = #{UID}")
     public String getProfileImage(@Param("Num") int Num, @Param("UID") int UID);
 
     //댓글 입력하기
-    @Insert("insert into ${GroupId}.board_comment values(${Comment.C_ID}, \"${Comment.dateTime}\", \"${Comment.contents}\", ${Comment.B_ID}, ${Comment.U_ID}, ${Comment.R_CID})")
+    @Insert("insert into ${GroupId}.board_comment values(#{Comment.C_ID}, #{Comment.dateTime}, #{Comment.contents}, #{Comment.B_ID}, #{Comment.U_ID}, #{Comment.R_CID})")
     public void commentPost(@Param("GroupId") String GroupId, @Param("Comment") Comment Comment);
 
     //댓글 삭제하기
-    @Delete("delete from ${GroupId}.board_comment where C_ID = ${CID}")
+    @Delete("delete from ${GroupId}.board_comment where C_ID = #{CID}")
     public void commentDelete(@Param("GroupId") String GroupId, @Param("CID") int CID);
 
     //댓글 수정하기
-    @Update("update ${GroupId}.board_comment set contents = \"${Comment.contents}\" where C_ID = ${CID}")
+    @Update("update ${GroupId}.board_comment set contents = #{Comment.contents} where C_ID = #{CID}")
     public void commentUpdate(@Param("GroupId") String GroupId, @Param("Comment") Comment Comment, @Param("CID") int CID);
 }

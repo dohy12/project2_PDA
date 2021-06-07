@@ -45,10 +45,19 @@ public class BoardComment {
         int uid = (int)params.get("UID");
         Timestamp dateTime = new Timestamp(System.currentTimeMillis());
         int rcid = (int)params.get("RCID");
+        Comment Comment;
 
-        Comment Comment = new Comment(cid, dateTime, contents, bid, uid, rcid, "name");
+        if(rcid == -1) {
+            Comment = new Comment(cid, dateTime, contents, bid, uid, null, "name");
+        }
+        else
+        {
+            Comment = new Comment(cid, dateTime, contents, bid, uid, rcid, "name");
+        }
 
         try {
+
+
             comment.commentPost(GroupId, Comment);
         } catch (Exception e) {
             e.printStackTrace();
