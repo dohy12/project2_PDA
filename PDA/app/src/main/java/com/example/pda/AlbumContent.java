@@ -77,7 +77,7 @@ public class AlbumContent extends AppCompatActivity {
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .build();
 
-        String Host = "http://10.0.2.2:";
+        String Host = "http://"+ app.getHostip() + ":";
         String port = "8080";
         String AccessPath = "/album/images/";
         String url = Host + port + AccessPath + app.getGroupId() + "/" + PID;
@@ -197,7 +197,7 @@ public class AlbumContent extends AppCompatActivity {
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .build();
 
-        String Host = "http://10.0.2.2:";
+        String Host = "http://" + app.getHostip() + ":";
         String port = "8080";
         String AccessPath = "/album/";
         String url = Host + port + AccessPath + app.getGroupId() + "/" + PID;
