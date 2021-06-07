@@ -143,7 +143,7 @@ public class Board_content extends AppCompatActivity {
         public Integer call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://10.0.2.2:8080/Survey/";
+            String url = "http://18.206.18.154:8080/Survey/";
             String GroupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -172,7 +172,7 @@ public class Board_content extends AppCompatActivity {
         public ArrayList<JoinedSurvey> call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://10.0.2.2:8080/Survey/";
+            String url = "http://18.206.18.154:8080/Survey/";
             String GroupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -338,7 +338,7 @@ public class Board_content extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://10.0.2.2:8080/BoardComment/";
+            String url = "http://18.206.18.154:8080/BoardComment/";
             //빌드 후 ip 수정
             String groupId = app.getGroupId();
             int uid = Integer.parseInt(app.getUid());
@@ -484,7 +484,7 @@ public class Board_content extends AppCompatActivity {
 
 
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8080/Survey/" + app.getGroupId() + "/voted/" + oid)
+                .url("http://18.206.18.154:8080/Survey/" + app.getGroupId() + "/voted/" + oid)
                 .get()
                 .addHeader("JWT", app.getJWT())
                 .build();
