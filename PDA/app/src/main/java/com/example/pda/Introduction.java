@@ -23,6 +23,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Introduction extends AppCompatActivity {
 
@@ -72,11 +73,12 @@ public class Introduction extends AppCompatActivity {
         String GroupId = app.getGroupId();
         RetrofitService service1;
 
-        Gson gson = new GsonBuilder().setLenient().create();
+        //Gson gson = new GsonBuilder().setLenient().create();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(origin)
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         service1 = retrofit.create(RetrofitService.class);
@@ -140,7 +142,7 @@ public class Introduction extends AppCompatActivity {
         public void run() {
             Call<String> call = service.GetintroContents(GroupId);
             try {
-                contents = (String)call.execute().body();
+                contents = call.execute().body().toString();
                 System.out.println("contents" + contents);
             } catch (IOException e) {
                 e.printStackTrace();
