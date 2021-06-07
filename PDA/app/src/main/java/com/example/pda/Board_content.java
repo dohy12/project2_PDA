@@ -313,14 +313,15 @@ public class Board_content extends AppCompatActivity {
         try {
             Response response = client.newCall(request).execute();
             System.out.println(response.body().string());
-            reloadComments();
+            comments_container.removeAllViews();
+            showCommentList();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public void reloadComments()
+    public void reloadComments(View view)
     {
         comments_container.removeAllViews();
         showCommentList();
