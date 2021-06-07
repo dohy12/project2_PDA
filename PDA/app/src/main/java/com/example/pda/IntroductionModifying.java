@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -249,7 +250,10 @@ public class IntroductionModifying extends AppCompatActivity {
         }
 
         for(int i=0; i<bitmapList.size(); i++) {
-            String image_src = "GroupIntroImage" + i + ".png";
+            DateFormat dateFormat = new SimpleDateFormat("ddMMyyyyHHmmss");
+            Date date = new Date();
+            String dateToStr = dateFormat.format(date);
+            String image_src = "GroupIntroImage" + dateToStr + ".png";
 
             uploadImage(image_src, bitmapList.get(i));
             r1 = new SaveImagesrcRunnable(service1, GroupId, image_src);
