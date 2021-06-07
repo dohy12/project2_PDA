@@ -109,7 +109,9 @@ public class Mypage extends AppCompatActivity {
     }
 
     private void setMypage(Member mem) {
-//        ((ImageView)findViewById(R.id.mypage_profileImage)).setImageBitmap(profile);
+        if(UID.equals(app.getUid()))
+        ((ImageView)findViewById(R.id.mypage_profileImage)).setImageBitmap(app.getProfile());
+        else
         Glide.with(this).load(profile).into((ImageView) findViewById(R.id.mypage_profileImage));
         findViewById(R.id.mypage_profileImage).setClipToOutline(true);
 
