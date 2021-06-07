@@ -10,6 +10,6 @@ public class ImageConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
-            .addResourceLocations("file:/home/ubuntu/Server/images");
+            .addResourceLocations("file:/home/ubuntu/Server/images/");
     }
 }
