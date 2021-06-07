@@ -3,6 +3,7 @@ package com.example.pda;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,6 +51,8 @@ public class Mypage extends AppCompatActivity {
     private String Age;
     private String UID;
     private String Receiver;
+    private String profile;
+
 
     AppCompatActivity activity;
     Member mem;
@@ -77,6 +80,7 @@ public class Mypage extends AppCompatActivity {
         Age = intent.getStringExtra("Age");
         UID = intent.getStringExtra("UID");
         Receiver = intent.getStringExtra("Receiver");
+        profile = intent.getStringExtra("profile");
 
         if (IsEnable) {
             if (UID == Receiver)
@@ -105,7 +109,8 @@ public class Mypage extends AppCompatActivity {
     }
 
     private void setMypage(Member mem) {
-        ((ImageView)findViewById(R.id.mypage_profileImage)).setImageBitmap(app.getProfile());
+//        ((ImageView)findViewById(R.id.mypage_profileImage)).setImageBitmap(profile);
+        Glide.with(this).load(profile).into((ImageView) findViewById(R.id.mypage_profileImage));
         findViewById(R.id.mypage_profileImage).setClipToOutline(true);
 
         String str_name_age = mem.getName() + "(" + mem.getAge() + ")";

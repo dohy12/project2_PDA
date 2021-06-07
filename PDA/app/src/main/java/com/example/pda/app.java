@@ -33,6 +33,7 @@ public class app extends Application {
     private static String email = "";
     private static String intro = "";
     private static Bitmap profile;
+    private static String profileString;
     private static String Hostip = "18.206.18.154";
     private static String port = "8080";
     @Override
@@ -216,5 +217,13 @@ public class app extends Application {
 
     public static void setJWT(String JWT) {
         app.JWT = JWT;
+    }
+
+    public static String getProfileString() {
+        return profileString;
+    }
+
+    public static void setProfileString(String profileString) {
+        app.profileString = profileString;
     }
 }

@@ -174,6 +174,7 @@ public class Login extends AppCompatActivity {
                 {
                     byte[] image = response.body().bytes();
                     app.setProfile(BitmapFactory.decodeByteArray(image, 0, image.length));
+                    app.setProfileString(image.toString());
                     logbuthandler.sendMessage(logbuthandler.obtainMessage());
                     startActivity(intent);
                 }

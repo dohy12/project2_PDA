@@ -79,6 +79,7 @@ public class Toolbar {
         intent.putExtra("Age",app.getAge());
         intent.putExtra("UID",app.getUid());
         intent.putExtra("Receiver",app.getUid());
+        intent.putExtra("profile",app.getProfileString());
         activity.startActivity(intent);
     }
 

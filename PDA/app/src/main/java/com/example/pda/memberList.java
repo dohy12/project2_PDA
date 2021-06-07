@@ -128,7 +128,7 @@ public class memberList extends AppCompatActivity {
             l.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goMyPage(view , mem.getName(), mem.getPhone(),mem.getEmail(),mem.getIntro(),String.valueOf(mem.getAge()),String.valueOf(mem.getId()),app.getUid());
+                    goMyPage(view , mem.getName(), mem.getPhone(),mem.getEmail(),mem.getIntro(),String.valueOf(mem.getAge()),String.valueOf(mem.getId()),app.getUid() , mem.getProfileimg());
                 }
             });
             HttpUrl httpUrl = new HttpUrl.Builder()
@@ -155,7 +155,7 @@ public class memberList extends AppCompatActivity {
         }
     }
 
-    public void goMyPage(View view ,String name,String phone,String email,String intro,String age, String RUid , String MyUid ) {
+    public void goMyPage(View view ,String name,String phone,String email,String intro,String age, String RUid , String MyUid ,String ImgURL ) {
         Intent intent = new Intent(this, Mypage.class);
         intent.putExtra("Name",name);
         intent.putExtra("Phone",phone);
@@ -164,6 +164,14 @@ public class memberList extends AppCompatActivity {
         intent.putExtra("Age",age);
         intent.putExtra("Receiver",RUid);
         intent.putExtra("UID",MyUid);
+        HttpUrl httpUrl = new HttpUrl.Builder()
+                .scheme("http")
+                .host(app.getHostip())
+                .port(Integer.parseInt(app.getPort()))
+                .addPathSegment("images")
+                .addPathSegment(ImgURL)
+                .build();
+        intent.putExtra("profile" , httpUrl.toString());
         startActivity(intent);
     }
 
