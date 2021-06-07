@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ import java.util.concurrent.Future;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -47,14 +49,18 @@ public class Board_Writing extends AppCompatActivity {
     int survey_ch=0;
     Board_Info boardInfo;
     int nextbid = 0;
+    int img = 0;
+
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
+    nextBID nextBID = new nextBID();
 
     ArrayList<Survey_Option> options = new ArrayList<Survey_Option>();
     ArrayList<Survey_Result> results = new ArrayList<Survey_Result>();
+    ArrayList<Board_Image> images = new ArrayList<Board_Image>();
+    ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
     Survey_Info survey = null;
 
     Toolbar toolbar;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +90,21 @@ public class Board_Writing extends AppCompatActivity {
 
             System.out.println(beforeContents);
         }
+
     }
 
     //등록 버튼 onClick 메소드
     public void wirteBoard(View v) {
+
+        if(nextbid == 0) {
+            Future<Integer> futureBID = executorService.submit(nextBID);
+            try {
+                nextbid = futureBID.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         if(boardInfo.getBoardId() == 0) {
             String title = ((EditText) findViewById(R.id.title)).getText().toString();
             String contents = ((EditText) findViewById(R.id.contents)).getText().toString();
@@ -118,11 +135,19 @@ public class Board_Writing extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            writeSurvey(survey);
-            for(int i = 0; i < options.size(); i++)
-                writeOption(options.get(i));
-            for(int i = 0; i < results.size(); i++)
-                writeResult(results.get(i));
+            if(survey_ch > 0) {
+                System.out.println("survey upload");
+                writeSurvey(survey);
+                for (int i = 0; i < options.size(); i++)
+                    writeOption(options.get(i));
+                for (int i = 0; i < results.size(); i++)
+                    writeResult(results.get(i));
+            }
+            if(img > 0) {
+                System.out.println("image upload");
+                uploadImages();
+            }
+
         } else {
             String title = ((EditText)findViewById(R.id.title)).getText().toString();
             String contents = ((EditText)findViewById(R.id.contents)).getText().toString();
@@ -160,6 +185,7 @@ public class Board_Writing extends AppCompatActivity {
     //무결성 문제 방지를 위해 게시글 -> 설문 -> 옵션 -> 결과 순으로 저장되어야 함
     //writeBoard 다음에 순서대로 호출될 메소드들
     public void writeSurvey(Survey_Info Survey) {
+
         OkHttpClient client = new OkHttpClient();
 
         String url = "http://" + app.getHostip() + ":8080/Survey/" + app.getGroupId();
@@ -176,6 +202,7 @@ public class Board_Writing extends AppCompatActivity {
 
         try{
             Response response = client.newCall(request).execute();
+            System.out.println(json);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -198,6 +225,7 @@ public class Board_Writing extends AppCompatActivity {
 
         try{
             Response response = client.newCall(request).execute();
+            System.out.println(json);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -220,6 +248,7 @@ public class Board_Writing extends AppCompatActivity {
 
         try{
             Response response = client.newCall(request).execute();
+            System.out.println(json);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -264,6 +293,15 @@ public class Board_Writing extends AppCompatActivity {
 
         return res;
     }
+    //POST 메소드에 전달할 이미지 정보 JSON String
+    public String makeImageJSON(Board_Image sImg) {
+        String res = "{\"I_ID\":" + sImg.I_ID +
+                ",\"image_src\":\"" + sImg.image_src +
+                "\",\"B_ID\":" + sImg.B_ID +
+                "}";
+
+        return res;
+    }
 
     public void addPicture(View view) {
         doTakeAlbumAction();
@@ -277,6 +315,15 @@ public class Board_Writing extends AppCompatActivity {
 
     private void doTakeAlbumAction()
     {
+        //nextbid 설정
+        if(nextbid == 0) {
+            Future<Integer> futureBID = executorService.submit(nextBID);
+            try {
+                nextbid = futureBID.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         // 앨범 호출
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
@@ -286,6 +333,7 @@ public class Board_Writing extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         try {
             //이미지를 하나 골랐을때
             if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && null != data) {
@@ -309,7 +357,12 @@ public class Board_Writing extends AppCompatActivity {
 
                 ImageView iv = v.findViewById(R.id.boardWritingImg_imgView);
                 iv.setImageBitmap(scaled);
+                iv.setId(img);
                 Glide.with(this).load(uri).into(iv);
+
+                images.add(new Board_Image(0, "boardImg_" + nextbid + "(" + img++ + ")", nextbid));
+                bitmaps.add(bitmap);
+                System.out.println(uri.toString());
 
             } else {
                 Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_LONG).show();
@@ -320,6 +373,57 @@ public class Board_Writing extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    //DB에 이미지 정보 넣고 서버에 이미지 업로드하는 함수
+    public void uploadImages() {
+        OkHttpClient client = new OkHttpClient();
+
+        String url;
+
+        //서버 빌드 후 ip 변경
+        for(int i = 0; i < img; i++) {
+            url = "http://" + app.getHostip() + ":8080/BoardImage/" + app.getGroupId();
+
+            String json = makeImageJSON(images.get(i));
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+            RequestBody body = RequestBody.create(JSON, json);
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            try{
+                Response response = client.newCall(request).execute();
+                System.out.println(json);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            url = "http://" + app.getHostip() + ":8080/image/" + images.get(i).image_src;
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
+            bitmaps.get(i).compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+
+            RequestBody reqBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("image", "", RequestBody.create(MultipartBody.FORM, byteArray)).build();
+
+            Request bitReq = new Request.Builder()
+                    .url(url)
+                    .post(reqBody)
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            try{
+                Response response = client.newCall(request).execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     //각각 다음 bid, sid, oid 읽어오는 callable 클래스
@@ -347,7 +451,7 @@ public class Board_Writing extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return result;
+            return result + 1;
         }
     }
 
@@ -374,7 +478,7 @@ public class Board_Writing extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return result;
+            return result + 1;
         }
     }
 
@@ -400,12 +504,13 @@ public class Board_Writing extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return result;
+            return result + 1;
         }
     }
 
     //설문조사 추가하기
     public void addSurvey(View view){
+
 
         if(survey_container.getVisibility() != View.VISIBLE)
         {
@@ -437,28 +542,33 @@ public class Board_Writing extends AppCompatActivity {
     //설문 등록 버튼 OnClick()
     public void createSurvey(View v){
         //v = 설문 등록 버튼
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        nextBID nextBID = new nextBID();
+
         nextSID nextSID = new nextSID();
         nextOID nextOID = new nextOID();
 
-        Future<Integer> futureBID = executorService.submit(nextBID);
+
         Future<Integer> futureSID = executorService.submit(nextSID);
         Future<Integer> futureOID = executorService.submit(nextOID);
 
-        int bid = 0;
         int sid = 0;
         int oid = 0;
 
         try {
-            bid = futureBID.get();
+
             sid = futureSID.get();
             oid = futureOID.get();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        nextbid = bid;
+        if(nextbid == 0) {
+            Future<Integer> futureBID = executorService.submit(nextBID);
+            try {
+                nextbid = futureBID.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
 
         for(int id = 0; id < survey_ch; id++) {
@@ -471,7 +581,7 @@ public class Board_Writing extends AppCompatActivity {
 
         String title = ((EditText)findViewById(R.id.insert_title)).getText().toString();
 
-        survey = new Survey_Info(sid, title, bid);
+        survey = new Survey_Info(sid, title, nextbid);
     }
 
     public void goBoardWriting(View view){

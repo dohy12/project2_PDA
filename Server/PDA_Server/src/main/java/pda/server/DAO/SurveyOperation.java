@@ -17,7 +17,7 @@ public interface SurveyOperation {
 
     //다음 auto_increment값 읽어오는 부분
     //새로운 설문 생성 시 사용
-    @Select("select auto_increment from information_schema.tables where table_name = 'board_survey' and table_schema = '${GroupId}'")
+    @Select("select s_id from ${GroupId}.board_survey order by s_id desc limit 1")
     public int nextSID(@Param("GroupId") String GroupId);
 
     //이 게시글에 설문이 있는가??
@@ -26,8 +26,11 @@ public interface SurveyOperation {
 
     //o_id의 다음 auto_increment값 읽어오는 부분
     //option과 result의 생성을 위해 필요
-    @Select("select auto_increment from information_schema.tables where table_name = 'b_survey_option' and table_schema = '${GroupId}'")
+    @Select("select o_id from ${GroupId}.b_survey_option order by o_id desc limit 1")
     public int nextOID(@Param("GroupId") String GroupId);
+
+    @Select("select last_insert_id()")
+    public int next();
 
     //post 요청시 db에 survey 등록
     @Insert("insert into ${GroupId}.board_survey values(${Survey.S_ID}, '${Survey.title}', now(), now(), ${Survey.B_ID})")
