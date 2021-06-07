@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -57,6 +59,12 @@ public class Board_content extends AppCompatActivity {
     int size = 0;
 
     Toolbar toolbar;
+
+    final Handler rehandler = new Handler(){
+        public void handleMessage(Message msg){
+            reloadComments(null);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -413,8 +421,7 @@ public class Board_content extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 result = response.body().string();
-                comments_container.removeAllViews();
-                showCommentList();
+                rehandler.sendMessage(rehandler.obtainMessage());
             } catch (Exception e) {
                 e.printStackTrace();
             }
