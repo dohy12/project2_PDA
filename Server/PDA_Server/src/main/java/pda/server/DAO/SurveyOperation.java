@@ -21,7 +21,7 @@ public interface SurveyOperation {
     public int nextSID(@Param("GroupId") String GroupId);
 
     //이 게시글에 설문이 있는가??
-    @Select("select ifnull(s_id, 0) as res from ${GroupId}.board_survey where b_id = ${BID}")
+    @Select("select count(*) as res from ${GroupId}.board_survey where b_id = ${BID}")
     public int isExist(@Param("GroupId") String GroupId, @Param("BID") int BID);
 
     //o_id의 다음 auto_increment값 읽어오는 부분

@@ -21,8 +21,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -123,7 +128,7 @@ public class Board_Writing extends AppCompatActivity {
             RequestBody body = RequestBody.create(JSON, json);
 
             Request request = new Request.Builder()
-                    .url("http://" + app.getHostip() + ":8080/Community/" + app.getGroupId())
+                    .url("http://" + "10.0.2.2" + ":8080/Community/" + app.getGroupId())
                     .addHeader("JWT", app.getJWT())
                     .post(body)
                     .build();
@@ -166,7 +171,7 @@ public class Board_Writing extends AppCompatActivity {
             RequestBody body = RequestBody.create(JSON, json);
 
             Request request = new Request.Builder()
-                    .url("http://" + app.getHostip() + ":8080/Community/" + app.getGroupId() + "/" + boardInfo.getBoardId())
+                    .url("http://" + "10.0.2.2" + ":8080/Community/" + app.getGroupId() + "/" + boardInfo.getBoardId())
                     .addHeader("JWT", app.getJWT())
                     .put(body)
                     .build();
@@ -188,7 +193,7 @@ public class Board_Writing extends AppCompatActivity {
 
         OkHttpClient client = new OkHttpClient();
 
-        String url = "http://" + app.getHostip() + ":8080/Survey/" + app.getGroupId();
+        String url = "http://" + "10.0.2.2" + ":8080/Survey/" + app.getGroupId();
         String json = makeSurveyJSON(Survey);
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -211,7 +216,7 @@ public class Board_Writing extends AppCompatActivity {
     public void writeOption(Survey_Option Option) {
         OkHttpClient client = new OkHttpClient();
 
-        String url = "http://" + app.getHostip() + ":8080/Survey/" + app.getGroupId() + "/option";
+        String url = "http://" + "10.0.2.2" + ":8080/Survey/" + app.getGroupId() + "/option";
         String json = makeOptionJSON(Option);
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -234,7 +239,7 @@ public class Board_Writing extends AppCompatActivity {
     public void writeResult(Survey_Result Result) {
         OkHttpClient client = new OkHttpClient();
 
-        String url = "http://" + app.getHostip() + ":8080/Survey/" + app.getGroupId() + "/result";
+        String url = "http://" + "10.0.2.2" + ":8080/Survey/" + app.getGroupId() + "/result";
         String json = makeResultJSON(Result);
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -383,7 +388,7 @@ public class Board_Writing extends AppCompatActivity {
 
         //서버 빌드 후 ip 변경
         for(int i = 0; i < img; i++) {
-            url = "http://" + app.getHostip() + ":8080/BoardImage/" + app.getGroupId();
+            url = "http://" + "10.0.2.2" + ":8080/BoardImage/" + app.getGroupId();
 
             String json = makeImageJSON(images.get(i));
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -403,7 +408,7 @@ public class Board_Writing extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            url = "http://" + app.getHostip() + ":8080/image/" + images.get(i).image_src;
+            url = "http://" + "10.0.2.2" + ":8080/image/" + images.get(i).image_src;
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
             bitmaps.get(i).compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -433,7 +438,7 @@ public class Board_Writing extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + app.getHostip() + ":8080/Community/" + app.getGroupId() + "/next";
+            String url = "http://" + "10.0.2.2" + ":8080/Community/" + app.getGroupId() + "/next";
             //빌드 후 ip 수정
 
             Request request = new Request.Builder()
@@ -460,7 +465,7 @@ public class Board_Writing extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + app.getHostip() + ":8080/Survey/" + app.getGroupId();
+            String url = "http://" + "10.0.2.2" + ":8080/Survey/" + app.getGroupId();
             //빌드 후 ip 수정
 
             Request request = new Request.Builder()
@@ -487,7 +492,7 @@ public class Board_Writing extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + app.getHostip() + ":8080/Survey/" + app.getGroupId() + "/oid";
+            String url = "http://" + "10.0.2.2" + ":8080/Survey/" + app.getGroupId() + "/oid";
 
             Request request = new Request.Builder()
                     .url(url)

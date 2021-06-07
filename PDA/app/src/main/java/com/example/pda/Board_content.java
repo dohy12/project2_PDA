@@ -51,6 +51,7 @@ public class Board_content extends AppCompatActivity {
     ArrayList<Drawable> imageList;
     ArrayList<Board_comment> boardCommentList;
     ArrayList<JoinedSurvey> joinedSurveyList;
+    ArrayList<Board_Image> boardImageList;
     Board_Info boardInfo;
     int cid = -1;
     Survey survey = null;
@@ -97,10 +98,14 @@ public class Board_content extends AppCompatActivity {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         isExist isExist = new isExist();
+        imageExist imageExist = new imageExist();
         Future<Integer> futureExist = executorService.submit(isExist);
+        Future<Integer> futureImg = executorService.submit(imageExist);
         int exist = 0;
+        int img = 0;
         try {
             exist = futureExist.get();
+            img = futureImg.get();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,7 +131,8 @@ public class Board_content extends AppCompatActivity {
         showBoardInfo();
         if(exist > 0)
             showSurvey();
-        showImageList();
+        if(img > 0)
+            showImageList();
         showCommentList();
     }
 
@@ -139,7 +145,7 @@ public class Board_content extends AppCompatActivity {
         RequestBody body = RequestBody.create("body", null);
 
         Request request = new Request.Builder()
-                .url("http://" + app.getHostip() + ":8080/Community/" + app.getGroupId() + "/views/" + board.getBoardId())
+                .url("http://" + "10.0.2.2" + ":8080/Community/" + app.getGroupId() + "/views/" + board.getBoardId())
                 .addHeader("JWT", app.getJWT())
                 .put(body)
                 .build();
@@ -155,7 +161,7 @@ public class Board_content extends AppCompatActivity {
         public Integer call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + app.getHostip() + ":8080/Survey/";
+            String url = "http://" + "10.0.2.2" + ":8080/Survey/";
             String GroupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -180,11 +186,40 @@ public class Board_content extends AppCompatActivity {
         }
     }
 
+    private class imageExist implements Callable<Integer> {
+        public Integer call() {
+            OkHttpClient client = new OkHttpClient();
+
+            String url = "http://" + "10.0.2.2" + ":8080/BoardImage/";
+            String GroupId = app.getGroupId();
+            int bid = boardInfo.getBoardId();
+
+            String httpUrl = url + GroupId + "/" + bid;
+
+            Request request = new Request.Builder()
+                    .url(httpUrl)
+                    .get()
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            int result = 0;
+
+            try {
+                Response response = client.newCall(request).execute();
+                result = Integer.parseInt(response.body().string());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+    }
+
     private class SurveyCallable implements Callable<ArrayList<JoinedSurvey>> {
         public ArrayList<JoinedSurvey> call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + app.getHostip() + ":8080/Survey/";
+            String url = "http://" + "10.0.2.2" + ":8080/Survey/";
             String GroupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -226,11 +261,50 @@ public class Board_content extends AppCompatActivity {
         }
     }
 
+
+    private class ImageCallable implements Callable<ArrayList<Board_Image>> {
+        public ArrayList<Board_Image> call() {
+            OkHttpClient client = new OkHttpClient();
+
+            int bid = boardInfo.getBoardId();
+            String url = "http://" + "10.0.2.2" + ":8080/BoardImage/" + app.getGroupId() + "/" + bid + "/show";
+
+            System.out.println(url);
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .get()
+                    .addHeader("JWT", app.getJWT())
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+
+                JSONArray jsonArray = new JSONArray(response.body().string());
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    int IID = jsonObject.getInt("I_ID");
+                    String image_src = jsonObject.getString("image_src");
+                    int BID = jsonObject.getInt("B_ID");
+
+                    boardImageList.add(new Board_Image(IID, image_src, BID));
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return boardImageList;
+        }
+    }
+
     private class CommentCallable implements Callable<ArrayList<Board_comment>> {
         public ArrayList<Board_comment> call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + app.getHostip() + ":8080/BoardComment/";
+            String url = "http://" + "10.0.2.2" + ":8080/BoardComment/";
             String GroupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -275,7 +349,7 @@ public class Board_content extends AppCompatActivity {
         public String call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + app.getHostip() + ":8080/Community/";
+            String url = "http://" + "10.0.2.2" + ":8080/Community/";
             String groupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -331,7 +405,7 @@ public class Board_content extends AppCompatActivity {
         RequestBody body = RequestBody.create(JSON, json);
 
         Request request = new Request.Builder()
-                .url("http://" + app.getHostip() + ":8080/BoardComment/" + app.getGroupId())
+                .url("http://" + "10.0.2.2" + ":8080/BoardComment/" + app.getGroupId())
                 .post(body)
                 .addHeader("JWT", app.getJWT())
                 .build();
@@ -363,7 +437,7 @@ public class Board_content extends AppCompatActivity {
         RequestBody body = RequestBody.create(JSON, json);
 
         Request request = new Request.Builder()
-                .url("http://" + app.getHostip() + ":8080/BoardComment/" + app.getGroupId() + "/" + cid)
+                .url("http://" + "10.0.2.2" + ":8080/BoardComment/" + app.getGroupId() + "/" + cid)
                 .put(body)
                 .build();
 
@@ -401,7 +475,7 @@ public class Board_content extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + app.getHostip() + ":8080/BoardComment/";
+            String url = "http://" + "10.0.2.2" + ":8080/BoardComment/";
             //빌드 후 ip 수정
             String groupId = app.getGroupId();
             int uid = Integer.parseInt(app.getUid());
@@ -454,7 +528,7 @@ public class Board_content extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String url = "http://" + app.getHostip() + ":8080/images/" + profile;
+        String url = "http://" + "10.0.2.2" + ":8080/images/" + profile;
 
         Glide.with(this).load(url).into((ImageView)findViewById(R.id.profile_image));
         findViewById(R.id.profile_image).setClipToOutline(true);
@@ -481,11 +555,25 @@ public class Board_content extends AppCompatActivity {
     }
 
     private void showImageList(){ //이미지 추가
-        for(int i=0;i<imageList.size();i++) {
+        boardImageList = new ArrayList<Board_Image>();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        ImageCallable imageCallable = new ImageCallable();
+        Future<ArrayList<Board_Image>> future = executorService.submit(imageCallable);
+
+        try {
+            boardImageList = future.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for(int i=0;i<boardImageList.size();i++) {
             View v = inflater.inflate(R.layout.board_image, null);
+
+
+            String url = "http://" + "10.0.2.2" + ":8080/images/" + boardImageList.get(i).image_src;
+            Glide.with(this).load(url).into((ImageView)v.findViewById(R.id.board_image));
             image_container.addView(v);
 
-            ((ImageView)v.findViewById(R.id.board_image)).setImageDrawable(imageList.get(i));
         }
     }
 
@@ -563,7 +651,7 @@ public class Board_content extends AppCompatActivity {
 
 
         Request request = new Request.Builder()
-                .url("http://" + app.getHostip() + ":8080/Survey/" + app.getGroupId() + "/voted/" + oid)
+                .url("http://" + "10.0.2.2" + ":8080/Survey/" + app.getGroupId() + "/voted/" + oid)
                 .get()
                 .addHeader("JWT", app.getJWT())
                 .build();
@@ -609,7 +697,7 @@ public class Board_content extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            String url = "http://" + app.getHostip() + ":8080/images/" + profile;
+            String url = "http://" + "10.0.2.2" + ":8080/images/" + profile;
 
             Glide.with(this).load(url).into((ImageView)v.findViewById(R.id.profile_image));
             v.findViewById(R.id.profile_image).setClipToOutline(true);
@@ -664,7 +752,9 @@ public class Board_content extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + app.getHostip() + ":8080/BoardComment/";
+            String url = "http://" + "10.0.2.2" + ":8080/BoardComment/";
+            int uid = Integer.parseInt(app.getUid());
+
 
             String httpUrl = url + uid;
 
