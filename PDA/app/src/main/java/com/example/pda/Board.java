@@ -130,8 +130,6 @@ public class Board extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
 
             String url = "http://"+ app.getHostip() +":8080/Community/";
-            //서버에 api 빌드 후 경로 수정
-            //comments_num 받아오는 부분이 아직 빌드 되지 않았음
             String GroupId = app.getGroupId() + "/";
 
             String httpUrl = url + GroupId + notice;
