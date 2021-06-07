@@ -171,9 +171,9 @@ public class MainActivity extends AppCompatActivity {
                     int comments_num = jsonObject.getInt("comments_num");
 
                     if(notice == 1)
-                        boardInfoList1.add(new Board_Info(BID, isNotice, title, name, date, views_num, comments_num, contents));
+                        boardInfoList1.add(new Board_Info(BID, isNotice, title, name, date, views_num, comments_num, contents,UID));
                     else
-                        boardInfoList2.add(new Board_Info(BID, isNotice, title, name, date, views_num, comments_num, contents));
+                        boardInfoList2.add(new Board_Info(BID, isNotice, title, name, date, views_num, comments_num, contents,UID));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

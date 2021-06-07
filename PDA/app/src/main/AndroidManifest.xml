@@ -29,7 +29,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".ShowReply" />
         <activity android:name=".memberList" />
         <activity android:name=".Mypage" />
         <activity android:name=".Board" />

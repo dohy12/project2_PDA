@@ -16,8 +16,9 @@ public class Board_Info implements Serializable {
     private int views_num;
     private int comments_num;
     private String contents;
+    private int U_ID;
 
-    public Board_Info(int boardId, Boolean isNotice, String title, String name, LocalDateTime date, int views_num, int comments_num){
+    public Board_Info(int boardId, Boolean isNotice, String title, String name, LocalDateTime date, int views_num, int comments_num, int UID){
         this.boardId = boardId;
         this.isNotice = isNotice;
         this.title =title;
@@ -25,9 +26,10 @@ public class Board_Info implements Serializable {
         this.date = date;
         this.views_num = views_num;
         this.comments_num = comments_num;
+        this.U_ID = UID;
     }
 
-    public Board_Info(int boardId, Boolean isNotice, String title, String name, LocalDateTime date, int views_num, int comments_num, String contents){
+    public Board_Info(int boardId, Boolean isNotice, String title, String name, LocalDateTime date, int views_num, int comments_num, String contents, int UID){
         this.boardId = boardId;
         this.isNotice = isNotice;
         this.title =title;
@@ -36,6 +38,15 @@ public class Board_Info implements Serializable {
         this.views_num = views_num;
         this.comments_num = comments_num;
         this.contents = contents;
+        this.U_ID = UID;
+    }
+
+    public int getU_ID() {
+        return U_ID;
+    }
+
+    public void setU_ID(int u_ID) {
+        U_ID = u_ID;
     }
 
     public int getBoardId() {

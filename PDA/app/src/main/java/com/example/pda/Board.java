@@ -111,7 +111,7 @@ public class Board extends AppCompatActivity {
 
     public void goBoardWriting(View view){
         LocalDateTime date = LocalDateTime.now();
-        Board_Info fake = new Board_Info(0,false, "", "", date, 0, 0);
+        Board_Info fake = new Board_Info(0,false, "", "", date, 0, 0, Integer.parseInt(app.getUid()));
         Intent intent = new Intent(this, Board_Writing.class);
         intent.putExtra("selectedBoard", fake);
         startActivity(intent);
@@ -162,7 +162,7 @@ public class Board extends AppCompatActivity {
                     int views_num = jsonObject.getInt("views_num");
                     int comments_num = jsonObject.getInt("comments_num");
 
-                    boardInfoList.add(new Board_Info(BID, isNotice, title, name, date, views_num, comments_num, contents));
+                    boardInfoList.add(new Board_Info(BID, isNotice, title, name, date, views_num, comments_num, contents, UID));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

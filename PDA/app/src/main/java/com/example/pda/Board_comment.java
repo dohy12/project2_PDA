@@ -9,13 +9,15 @@ public class Board_comment implements Serializable {
     private String name;
     private String comments;
     private LocalDateTime date;
+    private int UID;
 
-    public Board_comment(int commentID, int replyID, String name, String comments, LocalDateTime date){
+    public Board_comment(int commentID, int replyID, String name, String comments, LocalDateTime date, int uid){
         this.commentID = commentID;
         this.replyID = replyID;
         this.name = name;
         this.comments = comments;
         this.date = date;
+        this.UID = uid;
     }
 
     public int getCommentID() {
@@ -36,5 +38,9 @@ public class Board_comment implements Serializable {
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public int getUID() {
+        return UID;
     }
 }

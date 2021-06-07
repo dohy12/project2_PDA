@@ -261,7 +261,7 @@ public class Board_content extends AppCompatActivity {
                     int R_CID = jsonObject.getInt("R_CID");
                     String name = jsonObject.getString("name");
 
-                    boardCommentList.add(new Board_comment(CID, R_CID, name, contents, date));
+                    boardCommentList.add(new Board_comment(CID, R_CID, name, contents, date, UID));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -445,7 +445,7 @@ public class Board_content extends AppCompatActivity {
 
         String profile = null;
         ExecutorService executorService2 = Executors.newSingleThreadExecutor();
-        getURL getUrl = new getURL();
+        getURL getUrl = new getURL(boardInfo.getU_ID());
         Future<String> future2 = executorService2.submit(getUrl);
 
         try {
@@ -600,7 +600,7 @@ public class Board_content extends AppCompatActivity {
 
             String profile = null;
             ExecutorService executorService2 = Executors.newSingleThreadExecutor();
-            getURL getUrl = new getURL();
+            getURL getUrl = new getURL(bc.getUID());
             Future<String> future2 = executorService2.submit(getUrl);
 
             try {
@@ -653,12 +653,18 @@ public class Board_content extends AppCompatActivity {
     }
 
     private class getURL implements Callable<String> {
+        private int uid;
+
+        public getURL(int uid)
+        {
+            this.uid = uid;
+        }
+
         public String call() {
 
             OkHttpClient client = new OkHttpClient();
 
             String url = "http://" + app.getHostip() + ":8080/BoardComment/";
-            int uid = Integer.parseInt(app.getUid());
 
             String httpUrl = url + uid;
 
@@ -685,7 +691,7 @@ public class Board_content extends AppCompatActivity {
 
     public void goBoardWriting(View view){
         LocalDateTime date = LocalDateTime.now();
-        Board_Info fake = new Board_Info(0,false, "", "", date, 0, 0);
+        Board_Info fake = new Board_Info(0,false, "", "", date, 0, 0, Integer.parseInt(app.getUid()));
         Intent intent = new Intent(this, Board_Writing.class);
         intent.putExtra("selectedBoard", fake);
         startActivity(intent);
