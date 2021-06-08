@@ -15,22 +15,19 @@ public interface SurveyOperation {
     @Select("select S.S_ID, S.title, S.B_ID, O.O_ID, O.contents, R.voted from ${GroupId}.board_survey S Left Join (select * from ${GroupId}.b_survey_option) O On S.S_ID = O.S_ID Left Join (select * from ${GroupId}.b_survey_result) R On O.O_ID = R.O_ID where B_ID = ${BID}")
     public List<JoinedSurvey> surveyValue(@Param("GroupId") String GroupId, @Param("BID") int BID);
 
-    //다음 auto_increment값 읽어오는 부분
+    //s_id의 다음 auto_increment값 읽어오는 부분
     //새로운 설문 생성 시 사용
-    @Select("select s_id from ${GroupId}.board_survey order by s_id desc limit 1")
+    @Select("select ifnull((select s_id from ${GroupId}.board_survey order by s_id desc limit 1), 0) as next from ${GroupId}.board_survey union select 0 as next limit 1")
     public int nextSID(@Param("GroupId") String GroupId);
+
+    //o_id의 다음 auto_increment값 읽어오는 부분
+    //option과 result의 생성을 위해 필요
+    @Select("select ifnull((select o_id from ${GroupId}.b_survey_option order by o_id desc limit 1), 0) as next from ${GroupId}.b_survey_option union select 0 as next limit 1")
+    public int nextOID(@Param("GroupId") String GroupId);
 
     //이 게시글에 설문이 있는가??
     @Select("select count(*) as res from ${GroupId}.board_survey where b_id = ${BID}")
     public int isExist(@Param("GroupId") String GroupId, @Param("BID") int BID);
-
-    //o_id의 다음 auto_increment값 읽어오는 부분
-    //option과 result의 생성을 위해 필요
-    @Select("select o_id from ${GroupId}.b_survey_option order by o_id desc limit 1")
-    public int nextOID(@Param("GroupId") String GroupId);
-
-    @Select("select last_insert_id()")
-    public int next();
 
     //post 요청시 db에 survey 등록
     @Insert("insert into ${GroupId}.board_survey values(${Survey.S_ID}, '${Survey.title}', now(), now(), ${Survey.B_ID})")

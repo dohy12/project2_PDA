@@ -24,7 +24,6 @@ public class SurveyAPI {
 
     @RequestMapping(value = "/Survey/{GroupId}/{BID}", method = RequestMethod.GET)
     public List<JoinedSurvey> surveyValue(@PathVariable("GroupId") String GroupId, @PathVariable("BID") int BID) {
-
         return survey.surveyValue(GroupId, BID);
     }
 

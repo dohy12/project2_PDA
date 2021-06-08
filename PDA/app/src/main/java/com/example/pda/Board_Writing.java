@@ -51,7 +51,8 @@ public class Board_Writing extends AppCompatActivity {
     private LinearLayout container;
     private LinearLayout survey_container;
     private LayoutInflater inflater;
-    int survey_ch=0;
+    int survey_ch = 0;
+    int surveyCreated = 0;
     Board_Info boardInfo;
     int nextbid = 0;
     int img = 0;
@@ -140,13 +141,14 @@ public class Board_Writing extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            if(survey_ch > 0) {
+            //설문 등록 버튼이 눌렸는가??
+            if(surveyCreated != 0) {
                 System.out.println("survey upload");
                 writeSurvey(survey);
-                for (int i = 0; i < options.size(); i++)
+                for (int i = 0; i < options.size(); i++) {
                     writeOption(options.get(i));
-                for (int i = 0; i < results.size(); i++)
                     writeResult(results.get(i));
+                }
             }
             if(img > 0) {
                 System.out.println("image upload");
@@ -408,13 +410,14 @@ public class Board_Writing extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            //이미지 파일 서버에 저장해주는 부분
             url = "http://" + "10.0.2.2" + ":8080/image/" + images.get(i).image_src;
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
             bitmaps.get(i).compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
 
-            RequestBody reqBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("image", "", RequestBody.create(MultipartBody.FORM, byteArray)).build();
+            final RequestBody reqBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("image", "", RequestBody.create(MultipartBody.FORM, byteArray)).build();
 
             Request bitReq = new Request.Builder()
                     .url(url)
@@ -425,6 +428,7 @@ public class Board_Writing extends AppCompatActivity {
             try{
                 Response response = client.newCall(request).execute();
             } catch (Exception e) {
+                System.out.println("서버에 이미지 저장 실패");
                 e.printStackTrace();
             }
 
@@ -516,7 +520,6 @@ public class Board_Writing extends AppCompatActivity {
     //설문조사 추가하기
     public void addSurvey(View view){
 
-
         if(survey_container.getVisibility() != View.VISIBLE)
         {
             survey_container.setVisibility(View.VISIBLE);
@@ -527,7 +530,7 @@ public class Board_Writing extends AppCompatActivity {
             for(int i=0;i<2;i++)
             {
                 View _v = inflater.inflate(R.layout.survey_create_list, null);
-                _v.setId(survey_ch);
+                _v.setId(10 * survey_ch);
                 ((LinearLayout)findViewById(R.id.survey_list_container)).addView(_v);
                 ((TextView)_v.findViewById(R.id.survey_create_list_title)).setText("항목 "+(survey_ch++));
             }
@@ -536,7 +539,7 @@ public class Board_Writing extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     View _v = inflater.inflate(R.layout.survey_create_list, null);
-                    _v.setId(survey_ch);
+                    _v.setId(10 * survey_ch);
                     ((LinearLayout)findViewById(R.id.survey_list_container)).addView(_v);
                     ((TextView)_v.findViewById(R.id.survey_create_list_title)).setText("항목 "+(survey_ch++));
                 }
@@ -551,7 +554,6 @@ public class Board_Writing extends AppCompatActivity {
         nextSID nextSID = new nextSID();
         nextOID nextOID = new nextOID();
 
-
         Future<Integer> futureSID = executorService.submit(nextSID);
         Future<Integer> futureOID = executorService.submit(nextOID);
 
@@ -559,7 +561,6 @@ public class Board_Writing extends AppCompatActivity {
         int oid = 0;
 
         try {
-
             sid = futureSID.get();
             oid = futureOID.get();
         } catch (Exception e) {
@@ -575,9 +576,8 @@ public class Board_Writing extends AppCompatActivity {
             }
         }
 
-
         for(int id = 0; id < survey_ch; id++) {
-            View cont = findViewById(id);
+            View cont = findViewById(10 * id);
             String option = ((TextView) cont.findViewById(R.id.option)).getText().toString();
 
             options.add(new Survey_Option(sid, oid, option));
@@ -587,6 +587,9 @@ public class Board_Writing extends AppCompatActivity {
         String title = ((EditText)findViewById(R.id.insert_title)).getText().toString();
 
         survey = new Survey_Info(sid, title, nextbid);
+
+        //글 작성 시 설문이 함께 저장되어야 함을 알려준다.
+        surveyCreated = 1;
     }
 
     public void goBoardWriting(View view){

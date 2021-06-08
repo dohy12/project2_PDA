@@ -101,15 +101,8 @@ public interface BoardOperation {
 
     //다음 auto_increment값 읽어오기
     //설문 추가 및 이미지 추가에 사용
-    @Select("select b_id as next from ${GroupId}.board order by b_id desc limit 1")
+    @Select("select ifnull((select b_id from ${GroupId}.board order by b_id desc limit 1), 0) as next union select 0 as next from ${GroupId}.board limit 1")
     public int nextBID(@Param("GroupId") String GroupId);
-
-    @Select("select last_insert_id()")
-    public int next();
-
-    @Delete("delete from ${GroupId}.board where b_id = ${BID}")
-    public void deleteLast(@Param("GroupId") String GroupId, @Param("BID") int BID);
-
 
     //게시글 작성하기, 매개변수 타입 수정 필요
     @Insert("insert into ${GroupId}.board values(${Board.B_ID}, ${Board.isNotice}, \"${Board.title}\", \"${Board.dateTime}\", \"${Board.contents}\", ${Board.U_ID}, ${Board.views_num})")
