@@ -2,12 +2,22 @@ package pda.server.Controller;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pda.server.DAO.BoardOperation;
+import pda.server.DAO.ImageOperation;
 import pda.server.DTO.Board;
 import pda.server.Handler.UserTableMapping;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +26,8 @@ public class Community {
 
     @Autowired
     BoardOperation board;
+    @Autowired
+    ImageOperation imageOperation;
     Timestamp dateTime;
     //게시글 목록을 보여줄 때 사용
     //상위 20개 게시글 정보를 불러옴
@@ -99,16 +111,48 @@ public class Community {
         return "작성";
     }
 
+
+    @PostMapping("/Community/image/{src}")
+    public Map<String, Object> saveImage(@PathVariable String src, @RequestParam("image") MultipartFile file)
+    {
+        String newSrc = src.replaceAll("'", "");
+
+        Map<String, Object> m = new HashMap<>();
+        try{
+            InputStream in = file.getInputStream();
+            BufferedImage bufferedImage = ImageIO.read(in);
+            ImageIO.write(bufferedImage, "png", new File("/home/ubuntu/Server/images/"+newSrc));
+            throw new RestException(HttpStatus.OK, "이미지 저장 성공");
+        } catch (IOException e) {
+            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 저장 실패");
+        } catch (RestException e) {
+            throw e;
+        }
+    }
+
     @RequestMapping(value = "/Community/{GroupId}/{BID}", method = RequestMethod.DELETE)
     public String boardDelete(@PathVariable("GroupId") String GroupId, @PathVariable("BID") int BID, @RequestAttribute String U_ID){
 
         Board temp = board.selectedBoard(GroupId, BID);
+        ArrayList<File> file = new ArrayList<File>();
+
+        int img = 0;
 
         int authUID = Integer.parseInt(U_ID);
+        img = imageOperation.imageExist(GroupId, BID);
+
+        for(int i=0; i < img; i++) {
+            System.out.println("boardImg_" + BID + "_" + i + ".png is preparing for deletion");
+            file.add(new File("/home/ubuntu/Server/images/" + "boardImg_" + BID + "_" + i + ".png"));
+        }
 
         try {
             if (temp.getU_ID() == authUID) {
                 board.boardDelete(GroupId, BID);
+                for(int i=0; i < img; i++) {
+                    if(file.get(i).delete()) System.out.println("delete");
+                    else System.out.println(file.get(i).exists());
+                }
             } else {
                 return "삭제 권한이 없습니다.";
             }

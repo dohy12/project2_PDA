@@ -48,7 +48,6 @@ public class Board_content extends AppCompatActivity {
     private LinearLayout survey_container;
     private LinearLayout image_container;
     private LayoutInflater inflater;
-    ArrayList<Drawable> imageList;
     ArrayList<Board_comment> boardCommentList;
     ArrayList<JoinedSurvey> joinedSurveyList;
     ArrayList<Board_Image> boardImageList;
@@ -90,10 +89,6 @@ public class Board_content extends AppCompatActivity {
 
         //조회 됐을 때 views_num을 +1 시켜주는 부분
         updateViewsNum(boardInfo);
-
-        imageList = new ArrayList<>();
-        imageList.add(getResources().getDrawable(R.drawable.img1, null));
-        imageList.add(getResources().getDrawable(R.drawable.img5, null));
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -145,7 +140,7 @@ public class Board_content extends AppCompatActivity {
         RequestBody body = RequestBody.create("body", null);
 
         Request request = new Request.Builder()
-                .url("http://" + "10.0.2.2" + ":8080/Community/" + app.getGroupId() + "/views/" + board.getBoardId())
+                .url("http://" + app.getHostip() + ":8080/Community/" + app.getGroupId() + "/views/" + board.getBoardId())
                 .addHeader("JWT", app.getJWT())
                 .put(body)
                 .build();
@@ -161,7 +156,7 @@ public class Board_content extends AppCompatActivity {
         public Integer call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + "10.0.2.2" + ":8080/Survey/";
+            String url = "http://" + app.getHostip() + ":8080/Survey/";
             String GroupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -190,7 +185,7 @@ public class Board_content extends AppCompatActivity {
         public Integer call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + "10.0.2.2" + ":8080/BoardImage/";
+            String url = "http://" + app.getHostip() + ":8080/BoardImage/";
             String GroupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -219,7 +214,7 @@ public class Board_content extends AppCompatActivity {
         public ArrayList<JoinedSurvey> call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + "10.0.2.2" + ":8080/Survey/";
+            String url = "http://" + app.getHostip() + ":8080/Survey/";
             String GroupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -267,7 +262,7 @@ public class Board_content extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
 
             int bid = boardInfo.getBoardId();
-            String url = "http://" + "10.0.2.2" + ":8080/BoardImage/" + app.getGroupId() + "/" + bid + "/show";
+            String url = "http://" + app.getHostip() + ":8080/BoardImage/" + app.getGroupId() + "/" + bid + "/show";
 
             System.out.println(url);
 
@@ -285,9 +280,9 @@ public class Board_content extends AppCompatActivity {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    int IID = jsonObject.getInt("I_ID");
-                    String image_src = jsonObject.getString("image_src");
-                    int BID = jsonObject.getInt("B_ID");
+                    int IID = jsonObject.getInt("i_ID");
+                    String image_src = jsonObject.getString("imageSrc");
+                    int BID = jsonObject.getInt("b_ID");
 
                     boardImageList.add(new Board_Image(IID, image_src, BID));
 
@@ -304,7 +299,7 @@ public class Board_content extends AppCompatActivity {
         public ArrayList<Board_comment> call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + "10.0.2.2" + ":8080/BoardComment/";
+            String url = "http://" + app.getHostip() + ":8080/BoardComment/";
             String GroupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -349,7 +344,7 @@ public class Board_content extends AppCompatActivity {
         public String call() {
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + "10.0.2.2" + ":8080/Community/";
+            String url = "http://" + app.getHostip() + ":8080/Community/";
             String groupId = app.getGroupId();
             int bid = boardInfo.getBoardId();
 
@@ -374,6 +369,8 @@ public class Board_content extends AppCompatActivity {
 
             return result;
         }
+
+
 
     }
 
@@ -405,7 +402,7 @@ public class Board_content extends AppCompatActivity {
         RequestBody body = RequestBody.create(JSON, json);
 
         Request request = new Request.Builder()
-                .url("http://" + "10.0.2.2" + ":8080/BoardComment/" + app.getGroupId())
+                .url("http://" + app.getHostip() + ":8080/BoardComment/" + app.getGroupId())
                 .post(body)
                 .addHeader("JWT", app.getJWT())
                 .build();
@@ -437,7 +434,7 @@ public class Board_content extends AppCompatActivity {
         RequestBody body = RequestBody.create(JSON, json);
 
         Request request = new Request.Builder()
-                .url("http://" + "10.0.2.2" + ":8080/BoardComment/" + app.getGroupId() + "/" + cid)
+                .url("http://" + app.getHostip() + ":8080/BoardComment/" + app.getGroupId() + "/" + cid)
                 .put(body)
                 .build();
 
@@ -475,7 +472,7 @@ public class Board_content extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + "10.0.2.2" + ":8080/BoardComment/";
+            String url = "http://" + app.getHostip() + ":8080/BoardComment/";
             //빌드 후 ip 수정
             String groupId = app.getGroupId();
             int uid = Integer.parseInt(app.getUid());
@@ -528,7 +525,7 @@ public class Board_content extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String url = "http://" + "10.0.2.2" + ":8080/images/" + profile;
+        String url = "http://" + app.getHostip() + ":8080/images/" + profile;
 
         Glide.with(this).load(url).into((ImageView)findViewById(R.id.profile_image));
         findViewById(R.id.profile_image).setClipToOutline(true);
@@ -568,11 +565,14 @@ public class Board_content extends AppCompatActivity {
 
         for(int i=0;i<boardImageList.size();i++) {
             View v = inflater.inflate(R.layout.board_image, null);
-
-
-            String url = "http://" + "10.0.2.2" + ":8080/images/" + boardImageList.get(i).image_src;
-            Glide.with(this).load(url).into((ImageView)v.findViewById(R.id.board_image));
             image_container.addView(v);
+
+            try {
+                String url = "http://" + app.getHostip() + ":8080/images/" + boardImageList.get(i).image_src + ".png";
+                Glide.with(this).load(url).into((ImageView) v.findViewById(R.id.board_image));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }
@@ -651,7 +651,7 @@ public class Board_content extends AppCompatActivity {
 
 
         Request request = new Request.Builder()
-                .url("http://" + "10.0.2.2" + ":8080/Survey/" + app.getGroupId() + "/voted/" + oid)
+                .url("http://" + app.getHostip() + ":8080/Survey/" + app.getGroupId() + "/voted/" + oid)
                 .get()
                 .addHeader("JWT", app.getJWT())
                 .build();
@@ -697,7 +697,7 @@ public class Board_content extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            String url = "http://" + "10.0.2.2" + ":8080/images/" + profile;
+            String url = "http://" + app.getHostip() + ":8080/images/" + profile;
 
             Glide.with(this).load(url).into((ImageView)v.findViewById(R.id.profile_image));
             v.findViewById(R.id.profile_image).setClipToOutline(true);
@@ -752,7 +752,7 @@ public class Board_content extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
-            String url = "http://" + "10.0.2.2" + ":8080/BoardComment/";
+            String url = "http://" + app.getHostip() + ":8080/BoardComment/";
             int uid = Integer.parseInt(app.getUid());
 
 

@@ -1,19 +1,10 @@
 package pda.server.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import pda.server.DAO.AlbumOperation;
 import pda.server.DAO.ImageOperation;
 import pda.server.DTO.Image;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +21,6 @@ public class BoardImage {
 
         Image Image = new Image(I_ID, image_src, B_ID);
         image.insertImg(GroupId, Image);
-
     }
 
     @RequestMapping(value = "/BoardImage/{GroupId}/{BID}", method = RequestMethod.GET)
